@@ -62,5 +62,35 @@ public class ApplicationDbContext : IdentityDbContext
             .WithOne(p => p.Vehicle)
             .HasForeignKey<Vehicle>(v => v.ParkingSpotID)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.Renter)
+            .WithMany()
+            .HasForeignKey(a => a.RenterID)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ApplicationReference>()
+            .HasOne(ar => ar.Application)
+            .WithMany(a => a.ApplicationReferences)
+            .HasForeignKey(ar => ar.ApplicationID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ApplicationReference>()
+            .HasOne(ar => ar.Contact)
+            .WithMany(c => c.ApplicationReferences)
+            .HasForeignKey(ar => ar.ContactID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Contact>()
+            .HasOne(c => c.Renter)
+            .WithMany()
+            .HasForeignKey(c => c.RenterID)
+            .OnDelete(DeleteBehavior.Restrict);
     }
+
+public DbSet<Comp7071_A2.Areas.Housing.Models.Contact> Contact { get; set; } = default!;
+
+public DbSet<Comp7071_A2.Areas.Housing.Models.Application> Application { get; set; } = default!;
+
+public DbSet<Comp7071_A2.Areas.Housing.Models.ApplicationReference> ApplicationReference { get; set; } = default!;
 }

@@ -74,6 +74,25 @@ namespace Comp7071_A2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Application",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RenterID = table.Column<string>(type: "TEXT", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Application", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Application_AspNetUsers_RenterID",
+                        column: x => x.RenterID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -159,6 +178,27 @@ namespace Comp7071_A2.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Contact",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RenterID = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contact", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Contact_AspNetUsers_RenterID",
+                        column: x => x.RenterID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HousingGroups",
                 columns: table => new
                 {
@@ -177,6 +217,31 @@ namespace Comp7071_A2.Data.Migrations
                         column: x => x.ManagerID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationReference",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ApplicationID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ContactID = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationReference", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ApplicationReference_Application_ApplicationID",
+                        column: x => x.ApplicationID,
+                        principalTable: "Application",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationReference_Contact_ContactID",
+                        column: x => x.ContactID,
+                        principalTable: "Contact",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -341,6 +406,21 @@ namespace Comp7071_A2.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Application_RenterID",
+                table: "Application",
+                column: "RenterID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationReference_ApplicationID",
+                table: "ApplicationReference",
+                column: "ApplicationID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationReference_ContactID",
+                table: "ApplicationReference",
+                column: "ContactID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -398,6 +478,11 @@ namespace Comp7071_A2.Data.Migrations
                 column: "HousingGroupID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Contact_RenterID",
+                table: "Contact",
+                column: "RenterID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_HousingGroups_ManagerID",
                 table: "HousingGroups",
                 column: "ManagerID");
@@ -443,6 +528,9 @@ namespace Comp7071_A2.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApplicationReference");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -462,6 +550,12 @@ namespace Comp7071_A2.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
+
+            migrationBuilder.DropTable(
+                name: "Application");
+
+            migrationBuilder.DropTable(
+                name: "Contact");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

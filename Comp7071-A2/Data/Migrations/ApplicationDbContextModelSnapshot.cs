@@ -17,6 +17,49 @@ namespace Comp7071_A2.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RenterID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("RenterID");
+
+                    b.ToTable("Application");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ApplicationReference", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ApplicationID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ContactID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ApplicationID");
+
+                    b.HasIndex("ContactID");
+
+                    b.ToTable("ApplicationReference");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Asset", b =>
                 {
                     b.Property<Guid>("ID")
@@ -72,6 +115,38 @@ namespace Comp7071_A2.Data.Migrations
                     b.HasIndex("HousingGroupID");
 
                     b.ToTable("Buildings");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RenterID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("RenterID");
+
+                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.HousingGroup", b =>
@@ -447,6 +522,36 @@ namespace Comp7071_A2.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                        .WithMany()
+                        .HasForeignKey("RenterID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Renter");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ApplicationReference", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Application", "Application")
+                        .WithMany("ApplicationReferences")
+                        .HasForeignKey("ApplicationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Contact", "Contact")
+                        .WithMany("ApplicationReferences")
+                        .HasForeignKey("ContactID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Contact");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Asset", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.Building", "Building")
@@ -475,6 +580,17 @@ namespace Comp7071_A2.Data.Migrations
                         .HasForeignKey("HousingGroupID");
 
                     b.Navigation("HousingGroup");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                        .WithMany()
+                        .HasForeignKey("RenterID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Renter");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.HousingGroup", b =>
@@ -594,6 +710,16 @@ namespace Comp7071_A2.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
+                {
+                    b.Navigation("ApplicationReferences");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
+                {
+                    b.Navigation("ApplicationReferences");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Locker", b =>
