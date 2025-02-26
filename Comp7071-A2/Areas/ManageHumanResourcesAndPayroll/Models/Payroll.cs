@@ -5,7 +5,7 @@
         public Guid ID { get; set; }
         public Guid EmployeeId { get; set; }
 
-        public ICollection<PayPeriod> PayPeriods { get; set; } = new List<PayPeriod>();
+        public ICollection<PayPeriod> Pay_Periods { get; set; } = new List<PayPeriod>();
         public (float ScheduledHours, float HoursMissed) Attendance { get; set; }
 
         public bool Is_Hourly { get; set; }
