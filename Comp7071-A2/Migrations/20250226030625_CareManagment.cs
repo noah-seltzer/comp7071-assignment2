@@ -44,9 +44,8 @@ namespace Comp7071_A2.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EmergencyContactPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    role = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     Department = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

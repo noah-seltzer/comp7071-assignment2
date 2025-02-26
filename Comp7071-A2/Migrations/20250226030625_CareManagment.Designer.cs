@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comp7071_A2.Migrations
 {
     [DbContext(typeof(CareManageMentDBContext))]
-    [Migration("20250226014813_CareManagment")]
+    [Migration("20250226030625_CareManagment")]
     partial class CareManagment
     {
         /// <inheritdoc />
@@ -105,7 +105,8 @@ namespace Comp7071_A2.Migrations
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<Guid?>("ManagerId")
                         .HasColumnType("uniqueidentifier");
@@ -114,18 +115,13 @@ namespace Comp7071_A2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("role")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ManagerId");
 
                     b.ToTable("Employees");
 
-                    b.HasDiscriminator<string>("role").HasValue("Peasent");
+                    b.HasDiscriminator<string>("JobTitle").HasValue("Peasent");
 
                     b.UseTphMappingStrategy();
                 });

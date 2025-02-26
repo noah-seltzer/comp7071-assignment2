@@ -13,7 +13,7 @@ namespace Comp7071_A2.Areas.ManageCare.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
-                .HasDiscriminator<string>("role")
+                .HasDiscriminator<string>("JobTitle")
                 .HasValue<Employee>("Peasent")
                 .HasValue<Manager>("Noble");
 
