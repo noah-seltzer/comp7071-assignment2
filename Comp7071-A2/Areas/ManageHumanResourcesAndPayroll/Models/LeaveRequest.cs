@@ -2,8 +2,8 @@
 {
     public enum LeaveType
     {
-        sick,
-        vacation
+        Sick,
+        Vacation
     }
     public class LeaveRequest
     {

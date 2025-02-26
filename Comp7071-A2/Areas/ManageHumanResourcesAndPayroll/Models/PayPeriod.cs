@@ -1,7 +1,7 @@
 public enum PayPeriodType
 {
-    hourly,
-    salary
+    Hourly,
+    Salary
 }
 
 namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models

@@ -3,15 +3,18 @@
 
     public enum ShiftStatus
     {
-        upcoming, sick, worked, vacation
+        Upcoming, Sick, Worked, Vacation
     }
     public class Shift
     {
         public float Hours_Worked { get; set; }
-       
+
         public DateTime Start_Time { get; set; }
 
-        public ShiftStatus Status { get; set;
+        public ShiftStatus Status
+        {
+            get; set;
 
+        }
     }
 }
