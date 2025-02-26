@@ -1,15 +1,17 @@
 ﻿namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
 {
+
+    public enum ShiftStatus
+    {
+        upcoming, sick, worked, vacation
+    }
     public class Shift
     {
         public float Hours_Worked { get; set; }
        
         public DateTime Start_Time { get; set; }
 
-        public enum Status
-        {
-            upcoming, sick, worked, vacation
-        }
+        public ShiftStatus Status { get; set;
 
     }
 }

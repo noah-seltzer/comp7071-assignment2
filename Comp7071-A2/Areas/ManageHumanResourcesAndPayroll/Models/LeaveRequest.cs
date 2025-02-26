@@ -1,5 +1,10 @@
 ﻿namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
 {
+    public enum LeaveType
+    {
+        sick,
+        vacation
+    }
     public class LeaveRequest
     {
         public DateTime Start_Date { get; set; }
@@ -8,12 +13,8 @@
         
         public int Total_Days { get; set; }
 
-        public bool approval { get; set; }
+        public bool Approval { get; set; }
 
-        public enum leave_type
-        {
-            sick,
-            vacation
-        }
+        public LeaveType Leave_Type { get; set; }
     }
 }

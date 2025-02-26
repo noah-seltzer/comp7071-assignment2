@@ -2,6 +2,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
 {
+    public enum ScheduleStatus
+    {
+        Scheduled,
+        Cancelled
+    }
+
+    public enum Recurrance
+    {
+        Once,
+        Daily,
+        Weekly,
+        Monthly
+    }
     public class Schedule
     {
         public Guid ID { get; set; }
@@ -12,19 +25,9 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
 
         public float Hours_Scheduled { get; set; }
 
-        public enum Status
-        {
-            Scheduled,
-            Cancelled
-        }
+        public ScheduleStatus Status { get; set; }
 
-        public enum Recurrance
-        {
-            Once,
-            Daily,
-            Weekly,
-            Monthly
-        }
+        public Recurrance Recurrance { get; set; }
 
         public ICollection<Shift> Shifts { get; set; } = new List<Shift>();
 

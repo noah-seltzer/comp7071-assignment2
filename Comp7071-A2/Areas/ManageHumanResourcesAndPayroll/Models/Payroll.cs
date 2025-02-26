@@ -8,7 +8,7 @@
         public ICollection<PayPeriod> PayPeriods { get; set; } = new List<PayPeriod>();
         public (float ScheduledHours, float HoursMissed) Attendance { get; set; }
 
-        public bool isHourly { get; set; }
+        public bool Is_Hourly { get; set; }
         public float Pay_Rate { get; set; }
 
         public float Tax_Deduction { get; set; }

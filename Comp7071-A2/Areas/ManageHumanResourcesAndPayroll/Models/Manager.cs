@@ -1,5 +1,4 @@
 ﻿
-
 namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
 {
     public class Manager: Employee
