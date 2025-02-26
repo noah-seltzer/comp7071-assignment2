@@ -1,0 +1,54 @@
+﻿@model Comp7071_A2.Areas.Housing.Models.Asset
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Asset</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-area="Housing" asp-controller="Assets" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="HousingGroupID" class="control-label"></label>
+                <select asp-for="HousingGroupID" class="form-control" asp-items="ViewBag.HousingGroupID"></select>
+                <span asp-validation-for="HousingGroupID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RenterID" class="control-label"></label>
+                <select asp-for="RenterID" class="form-control" asp-items="ViewBag.RenterID"></select>
+                <span asp-validation-for="RenterID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BuildingID" class="control-label"></label>
+                <select asp-for="BuildingID" class="form-control" asp-items="ViewBag.BuildingID"></select>
+                <span asp-validation-for="BuildingID" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="RentAmount" class="control-label"></label>
+                <input asp-for="RentAmount" class="form-control" />
+                <span asp-validation-for="RentAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-area="Housing" asp-controller="Assets" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
