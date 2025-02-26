@@ -6,5 +6,16 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
     {
         public Guid ID {get; set;}
 
+        public enum PayPeriodType{
+            hourly, 
+            salary
+        }
+
+        public DateTime Start_Date {get; set;}
+
+        public DateTime? End_Date { get; set; }
+
+        public float rate {get; set;}
+
     }
 }
