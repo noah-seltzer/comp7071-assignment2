@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Comp7071_A2.Areas.Housing.Models.Building>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-area="Housing" asp-controller="Buildings" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NumUnits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumLockers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumParking)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HousingGroup)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumUnits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumLockers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumParking)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HousingGroup.ID)
+            </td>
+            <td>
+                <a asp-area="Housing" asp-controller="Buildings" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-area="Housing" asp-controller="Buildings" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-area="Housing" asp-controller="Buildings" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

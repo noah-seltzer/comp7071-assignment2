@@ -1,0 +1,49 @@
+﻿@model Comp7071_A2.Areas.Housing.Models.Locker
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Locker</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-area="Housing" asp-controller="Lockers" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="AssetID" class="control-label"></label>
+                <select asp-for="AssetID" class="form-control" asp-items="ViewBag.AssetID"></select>
+                <span asp-validation-for="AssetID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuiteID" class="control-label"></label>
+                <select asp-for="SuiteID" class="form-control" asp-items="ViewBag.SuiteID"></select>
+                <span asp-validation-for="SuiteID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LockerNumber" class="control-label"></label>
+                <input asp-for="LockerNumber" class="form-control" />
+                <span asp-validation-for="LockerNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LockerSize" class="control-label"></label>
+                <input asp-for="LockerSize" class="form-control" />
+                <span asp-validation-for="LockerSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-area="Housing" asp-controller="Lockers" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

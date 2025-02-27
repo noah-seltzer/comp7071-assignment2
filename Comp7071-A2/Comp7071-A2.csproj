@@ -4,23 +4,41 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Comp7071_A2-2d0df4f1-abd7-43f6-b504-f2ec1b77f514</UserSecretsId>
     <RootNamespace>Comp7071_A2</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\ManageCare\Controllers\" />
-    <Folder Include="Areas\ManageCare\Views\" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Delete.cshtml" />
+    <!-- <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Details.cshtml" /> -->
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Assets\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Assets\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Assets\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Assets\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Assets\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Contacts\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Contacts\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Contacts\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Contacts\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Contacts\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Index.cshtml" />
   </ItemGroup>
 
 </Project>

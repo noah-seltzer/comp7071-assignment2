@@ -1,4 +1,4 @@
-using Comp7071_A2.Areas.ManageCare.Data;
+using Comp7071_A2.Data;
 using Comp7071_A2.Areas.ManageCare.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +7,9 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
 {
     public class ServicesController : ManageCareController
     {
-        private readonly CareManageMentDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ServicesController(CareManageMentDBContext context)
+        public ServicesController(ApplicationDbContext context)
         {
             _context = context;
         }

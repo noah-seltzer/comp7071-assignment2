@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Comp7071_A2.Areas.Housing.Models.ApplicationReference>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-area="Housing" asp-controller="ApplicationReferences" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Application)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contact)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Application.RenterID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contact.Email)
+            </td>
+            <td>
+                <a asp-area="Housing" asp-controller="ApplicationReferences" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-area="Housing" asp-controller="ApplicationReferences" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-area="Housing" asp-controller="ApplicationReferences" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

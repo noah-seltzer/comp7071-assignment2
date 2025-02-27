@@ -1,4 +1,4 @@
-using Comp7071_A2.Areas.ManageCare.Data;
+using Comp7071_A2.Data;
 using Comp7071_A2.Areas.ManageCare.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,9 +8,9 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
 {
     public class InvoicesController : ManageCareController
     {
-        private readonly CareManageMentDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public InvoicesController(CareManageMentDBContext context)
+        public InvoicesController(ApplicationDbContext context)
         {
             _context = context;
         }
