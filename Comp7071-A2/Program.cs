@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Comp7071_A2.Data;
 
+using Comp7071_A2.Areas.ManageCare;
+using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,10 +12,25 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
+builder.Services.AddControllers();
+
+// var secretConnection = builder.Configuration["Database:Connection"];
+
+// var defaultConnection = secretConnection ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Console.WriteLine(defaultConnection);
+
+// builder.Services.AddDbContext<CareManageMentDBContext>(options =>
+//     options.UseSqlServer(defaultConnection));
+
+
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// builder.Services.AddOpenApi();
 
 var app = builder.Build();
 

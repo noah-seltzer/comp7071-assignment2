@@ -25,7 +25,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Create.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Delete.cshtml" />
-    <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Details.cshtml" />
+    <!-- <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Details.cshtml" /> -->
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Applications\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Assets\Create.cshtml" />

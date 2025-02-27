@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Comp7071_A2.Areas.ManageCare.Models;
+using Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models;
 
 namespace Comp7071_A2.Data;
 
@@ -11,6 +13,9 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {}
 
+    /**
+     * Manage Housing
+     */
     public DbSet<Renter> Renters { get; set; }
     public DbSet<Asset> Assets { get; set; }
     public DbSet<Building> Buildings { get; set; }
@@ -19,6 +24,27 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<ParkingSpot> ParkingSpots { get; set; }
     public DbSet<HousingGroup> HousingGroups { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
+    public DbSet<Contact> Contact { get; set; } = default!;
+    public DbSet<Application> Application { get; set; } = default!;
+    public DbSet<ApplicationReference> ApplicationReference { get; set; } = default!;
+
+
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Manager> Managers { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<Schedule> Schedule { get; set; }
+    public DbSet<Service> Services { get; set; }
+    public DbSet<InvoiceLine> InvoiceLines { get; set; }
+
+    /**
+    * Manage Human Resources
+    */
+    public DbSet<HREmployee> HREmployees { get; set; }
+    public DbSet<HRSchedule> HRSchedules { get; set; }
+    public DbSet<Shift> Shifts { get; set; }
+
+    public DbSet<PayPeriod> PayPeriods { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
@@ -93,11 +119,49 @@ public class ApplicationDbContext : IdentityDbContext
             .WithMany()
             .HasForeignKey(c => c.RenterID)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Employee>()
+            .HasDiscriminator<string>("JobTitle")
+            .HasValue<Employee>("Peasent")
+            .HasValue<Manager>("Noble");
+
+
+        modelBuilder.Entity<Invoice>()
+            .HasMany(i => i.Lines)
+            .WithOne(l => l.Invoice)
+            .HasForeignKey(i => i.InvoiceId)
+            .IsRequired();
+
+
+        modelBuilder.Entity<Customer>()
+            .HasMany(c => c.Invoices)
+            .WithOne(i => i.Customer)
+            .HasForeignKey(i => i.CustomerId)
+            .IsRequired();
+
+        modelBuilder.Entity<Customer>()
+            .HasMany(c => c.Schedules)
+            .WithMany(s => s.Customers)
+            .UsingEntity(j => j.ToTable("CustomerSchedule"));
+
+        modelBuilder.Entity<Employee>()
+            .HasMany(e => e.Schedule)
+            .WithMany(s => s.Employees)
+            .UsingEntity(j => j.ToTable("EmployeeSchedule"));
+
+
+        modelBuilder.Entity<Service>()
+            .HasMany(s => s.Schedule)
+            .WithOne(s => s.Service)
+            .HasForeignKey(s => s.ServiceId)
+            .IsRequired();
+
+
+        modelBuilder.Entity<Certification>()
+            .HasMany(c => c.Services)
+            .WithMany(s => s.Certifications)
+            .UsingEntity(j => j.ToTable("ServiceCertification"));
     }
 
-public DbSet<Comp7071_A2.Areas.Housing.Models.Contact> Contact { get; set; } = default!;
 
-public DbSet<Comp7071_A2.Areas.Housing.Models.Application> Application { get; set; } = default!;
-
-public DbSet<Comp7071_A2.Areas.Housing.Models.ApplicationReference> ApplicationReference { get; set; } = default!;
 }

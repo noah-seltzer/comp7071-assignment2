@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comp7071_A2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250226233449_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250227070745_InitialCreate2")]
+    partial class InitialCreate2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,20 +20,47 @@ namespace Comp7071_A2.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
+            modelBuilder.Entity("CertificationEmployee", b =>
+                {
+                    b.Property<Guid>("CertificationsId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EmployeesId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CertificationsId", "EmployeesId");
+
+                    b.HasIndex("EmployeesId");
+
+                    b.ToTable("CertificationEmployee");
+                });
+
+            modelBuilder.Entity("CertificationService", b =>
+                {
+                    b.Property<Guid>("CertificationsId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ServicesId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CertificationsId", "ServicesId");
+
+                    b.HasIndex("ServicesId");
+
+                    b.ToTable("ServiceCertification", (string)null);
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RenterID")
-                        .IsRequired()
+                    b.Property<Guid?>("RenterID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 
@@ -81,7 +108,7 @@ namespace Comp7071_A2.Data.Migrations
                     b.Property<decimal>("RentAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("RenterID")
+                    b.Property<Guid?>("RenterID")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -141,8 +168,7 @@ namespace Comp7071_A2.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RenterID")
-                        .IsRequired()
+                    b.Property<Guid>("RenterID")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -243,6 +269,50 @@ namespace Comp7071_A2.Data.Migrations
                     b.ToTable("ParkingSpots");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ApplicationID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssetID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("BLOB");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ApplicationID")
+                        .IsUnique();
+
+                    b.HasIndex("AssetID")
+                        .IsUnique();
+
+                    b.ToTable("Renters");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Suite", b =>
                 {
                     b.Property<Guid>("ID")
@@ -315,6 +385,295 @@ namespace Comp7071_A2.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Certification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Certification");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Customer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EmergencyContactPhone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ManagerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
+
+                    b.ToTable("Employees");
+
+                    b.HasDiscriminator<string>("JobTitle").HasValue("Peasent");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Invoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Invoices");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.InvoiceLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("InvoiceLines");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Schedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("Schedule");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Service", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Adderess")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Emergency_Contact")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Employment_Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Job_Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HREmployees");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRSchedule", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("End_Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Hours_Scheduled")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Recurrance")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Start_Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HRSchedules");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.PayPeriod", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("End_Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("HREmployeeID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Rate")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("Start_Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("HREmployeeID");
+
+                    b.ToTable("PayPeriods");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.Shift", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("HRScheduleID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Hours_Worked")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("Start_Time")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("HRScheduleID");
+
+                    b.ToTable("Shifts");
+                });
+
+            modelBuilder.Entity("CustomerSchedule", b =>
+                {
+                    b.Property<Guid>("CustomersId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SchedulesId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CustomersId", "SchedulesId");
+
+                    b.HasIndex("SchedulesId");
+
+                    b.ToTable("CustomerSchedule", (string)null);
+                });
+
+            modelBuilder.Entity("EmployeeSchedule", b =>
+                {
+                    b.Property<Guid>("EmployeesId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("EmployeesId", "ScheduleId");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.ToTable("EmployeeSchedule", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -525,13 +884,52 @@ namespace Comp7071_A2.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Manager", b =>
+                {
+                    b.HasBaseType("Comp7071_A2.Areas.ManageCare.Models.Employee");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Noble");
+                });
+
+            modelBuilder.Entity("CertificationEmployee", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Certification", null)
+                        .WithMany()
+                        .HasForeignKey("CertificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CertificationService", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Certification", null)
+                        .WithMany()
+                        .HasForeignKey("CertificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
-                        .HasForeignKey("RenterID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("RenterID");
 
                     b.Navigation("Renter");
                 });
@@ -565,7 +963,7 @@ namespace Comp7071_A2.Data.Migrations
                         .WithMany()
                         .HasForeignKey("HousingGroupID");
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
                         .HasForeignKey("RenterID");
 
@@ -587,7 +985,7 @@ namespace Comp7071_A2.Data.Migrations
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
                         .HasForeignKey("RenterID")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -629,6 +1027,23 @@ namespace Comp7071_A2.Data.Migrations
                     b.Navigation("Asset");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Application", "Application")
+                        .WithOne()
+                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Renter", "ApplicationID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
+                        .WithOne()
+                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Renter", "AssetID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Asset");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Suite", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
@@ -662,6 +1077,90 @@ namespace Comp7071_A2.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParkingSpot");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Employee", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Manager", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("ManagerId");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Invoice", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Customer", "Customer")
+                        .WithMany("Invoices")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.InvoiceLine", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Invoice", "Invoice")
+                        .WithMany("Lines")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Schedule", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Service", "Service")
+                        .WithMany("Schedule")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.PayPeriod", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee", null)
+                        .WithMany("Pay_History")
+                        .HasForeignKey("HREmployeeID");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.Shift", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRSchedule", null)
+                        .WithMany("Shifts")
+                        .HasForeignKey("HRScheduleID");
+                });
+
+            modelBuilder.Entity("CustomerSchedule", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Schedule", null)
+                        .WithMany()
+                        .HasForeignKey("SchedulesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EmployeeSchedule", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Schedule", null)
+                        .WithMany()
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -735,6 +1234,36 @@ namespace Comp7071_A2.Data.Migrations
                     b.Navigation("Suite");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Customer", b =>
+                {
+                    b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Invoice", b =>
+                {
+                    b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Service", b =>
+                {
+                    b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee", b =>
+                {
+                    b.Navigation("Pay_History");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRSchedule", b =>
+                {
+                    b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Manager", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }
