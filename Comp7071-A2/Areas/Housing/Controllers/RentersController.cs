@@ -50,7 +50,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         // GET: Housing/Renters/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status");
+            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "ID");
             ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
             return View();
         }

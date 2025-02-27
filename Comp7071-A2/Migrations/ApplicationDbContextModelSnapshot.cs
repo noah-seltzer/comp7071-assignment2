@@ -53,6 +53,9 @@ namespace Comp7071_A2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("AssetID")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("RenterID")
                         .HasColumnType("TEXT");
 
@@ -60,6 +63,8 @@ namespace Comp7071_A2.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AssetID");
 
                     b.HasIndex("RenterID");
 
@@ -943,9 +948,15 @@ namespace Comp7071_A2.Migrations
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
                 {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetID");
+
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
                         .HasForeignKey("RenterID");
+
+                    b.Navigation("Asset");
 
                     b.Navigation("Renter");
                 });

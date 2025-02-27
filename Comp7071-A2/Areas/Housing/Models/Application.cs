@@ -11,6 +11,11 @@ namespace Comp7071_A2.Areas.Housing.Models
         [ForeignKey("Renter")]
         public Guid? RenterID { get; set; }
 
+        [ForeignKey("Asset")]
+        public Guid? AssetID { get; set; }
+
+        public virtual Asset? Asset { get; set; }
+
         [Required]
         public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;  // Default status
 
