@@ -1,0 +1,102 @@
+@model Service
+
+@{
+    ViewData["Title"] = "Service Details";
+}
+
+<div class="page-header">
+    <h1><i class="bi bi-tools"></i> Service Details</h1>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Rate)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Rate)
+            </dd>
+        </dl>
+    </div>
+</div>
+    
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0"><i class="bi bi-award"></i> Required Certifications</h4>
+    </div>
+    <div class="card-body">
+        @if (Model.Certifications != null && Model.Certifications.Any())
+        {
+            <ul class="list-group">
+                @foreach (var cert in Model.Certifications)
+                {
+                    <li class="list-group-item">@cert.Name</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No certifications required for this service.</p>
+        }
+    </div>
+</div>
+    
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0"><i class="bi bi-calendar-week"></i> Scheduled Services</h4>
+    </div>
+    <div class="card-body">
+        @if (Model.Schedule != null && Model.Schedule.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Customers</th>
+                            <th>Employees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var schedule in Model.Schedule)
+                        {
+                            <tr>
+                                <td>@schedule.StartTime.ToString("g")</td>
+                                <td>@schedule.EndTime.ToString("g")</td>
+                                <td>@(schedule.Customers?.Count ?? 0)</td>
+                                <td>@(schedule.Employees?.Count ?? 0)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No scheduled services.</p>
+        }
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Edit
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div> 

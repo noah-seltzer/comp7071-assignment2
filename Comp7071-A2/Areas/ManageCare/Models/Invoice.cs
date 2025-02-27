@@ -4,19 +4,18 @@ namespace Comp7071_A2.Areas.ManageCare.Models
 {
     public class Invoice
     {
-
         public Guid Id { get; set; }
 
-        public required DateTime StartDate { get; set; } = DateTime.MinValue;
+        [DataType(DataType.Date)]
+        public required DateTime StartDate { get; set; }
 
-        public required DateTime EndDate { get; set; } = DateTime.MaxValue;
+        [DataType(DataType.Date)]
+        public required DateTime EndDate { get; set; }
 
-        [Required]
-        public Guid CustomerId { get; set; }
-        
+        public required Guid CustomerId { get; set; }
 
-        public Customer? Customer { get; set; } 
-    
-        public ICollection<InvoiceLine> Lines { get; set;} = [];
+        public Customer? Customer { get; set; }
+
+        public ICollection<InvoiceLine> Lines { get; set; } = [];
     }
 }

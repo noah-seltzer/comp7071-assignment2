@@ -4,6 +4,7 @@ using Comp7071_A2.Areas.ManageCare.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comp7071_A2.Migrations
 {
     [DbContext(typeof(CareManageMentDBContext))]
-    partial class CareManageMentDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250227022253_AddDescriptionToCertification")]
+    partial class AddDescriptionToCertification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +70,7 @@ namespace Comp7071_A2.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Certifications");
+                    b.ToTable("Certification");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Customer", b =>
@@ -92,20 +95,21 @@ namespace Comp7071_A2.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmergencyContactPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("JobTitle")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<Guid?>("ManagerId")
                         .HasColumnType("uniqueidentifier");
@@ -116,7 +120,13 @@ namespace Comp7071_A2.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ManagerId");
+
                     b.ToTable("Employees");
+
+                    b.HasDiscriminator<string>("JobTitle").HasValue("Peasent");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Invoice", b =>
@@ -198,16 +208,12 @@ namespace Comp7071_A2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Type");
-
                     b.Property<decimal>("Rate")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -244,6 +250,17 @@ namespace Comp7071_A2.Migrations
                     b.ToTable("EmployeeSchedule", (string)null);
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Manager", b =>
+                {
+                    b.HasBaseType("Comp7071_A2.Areas.ManageCare.Models.Employee");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("Noble");
+                });
+
             modelBuilder.Entity("CertificationEmployee", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Certification", null)
@@ -272,6 +289,13 @@ namespace Comp7071_A2.Migrations
                         .HasForeignKey("ServicesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Employee", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.ManageCare.Models.Manager", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("ManagerId");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Invoice", b =>
@@ -350,6 +374,11 @@ namespace Comp7071_A2.Migrations
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Service", b =>
                 {
                     b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Manager", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

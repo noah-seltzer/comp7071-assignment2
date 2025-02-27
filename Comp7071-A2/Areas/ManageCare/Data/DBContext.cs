@@ -10,20 +10,25 @@ namespace Comp7071_A2.Areas.ManageCare.Data
         public CareManageMentDBContext(DbContextOptions<CareManageMentDBContext> options)
         : base(options) { }
 
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Schedule> Schedule { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceLine> InvoiceLines { get; set; }
+        public DbSet<Certification> Certifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
-                .HasDiscriminator<string>("JobTitle")
-                .HasValue<Employee>("Peasent")
-                .HasValue<Manager>("Noble");
-
+                .Property(e => e.JobTitle)
+                .HasMaxLength(50);
 
             modelBuilder.Entity<Invoice>()
                 .HasMany(i => i.Lines)
                 .WithOne(l => l.Invoice)
                 .HasForeignKey(i => i.InvoiceId)
                 .IsRequired();
-
 
             modelBuilder.Entity<Customer>()
                 .HasMany(c => c.Invoices)
@@ -41,26 +46,16 @@ namespace Comp7071_A2.Areas.ManageCare.Data
                 .WithMany(s => s.Employees)
                 .UsingEntity(j => j.ToTable("EmployeeSchedule"));
 
-
             modelBuilder.Entity<Service>()
                 .HasMany(s => s.Schedule)
                 .WithOne(s => s.Service)
                 .HasForeignKey(s => s.ServiceId)
                 .IsRequired();
 
-
             modelBuilder.Entity<Certification>()
                 .HasMany(c => c.Services)
                 .WithMany(s => s.Certifications)
                 .UsingEntity(j => j.ToTable("ServiceCertification"));
         }
-
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Manager> Managers { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<Schedule> Schedule { get; set; }
-        public DbSet<Service> Services { get; set; }
-        public DbSet<InvoiceLine> InvoiceLines { get; set; }
     }
 }
