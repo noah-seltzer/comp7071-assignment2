@@ -18,10 +18,6 @@ builder.Services.AddDbContext<CareManageMentDBContext>(options =>
     options.UseSqlServer(defaultConnection));
 
 
-//Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
-//builder.Services.AddDbContext<ManageHumanResourcesDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
