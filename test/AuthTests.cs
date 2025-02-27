@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,51 @@ namespace test
             Assert.NotNull(userMenu);
         }
 
+        [Fact]
+        public void CreateNewRenter()
+        {
+            _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+
+            var emailInput = _driver.FindElement(By.Id("Input_Email"));
+            emailInput.SendKeys("admin@housing.com");
+
+            var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+            passwordInput.SendKeys("Admin123!");
+
+            var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+            loginButton.Click();
+
+            var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello admin')]"));
+            Assert.NotNull(userMenu);
+
+            _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Renters/Create");
+            var nameInput = _driver.FindElement(By.Id("Name"));
+            nameInput.SendKeys("Test Renter");
+
+            var dateOfBirthInput = _driver.FindElement(By.Id("DateOfBirth"));
+            dateOfBirthInput.SendKeys("1990\t0119");
+
+            var phoneNumberInput = _driver.FindElement(By.Id("PhoneNumber"));
+            phoneNumberInput.SendKeys("1234567890");
+
+            var emailInput2 = _driver.FindElement(By.Id("Email"));
+            emailInput2.SendKeys("testEmaiul5@test.com");
+
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+            var submitButton = wait.Until(driver => driver.FindElement(By.Id("create-button")));
+            /**
+            * Scroll to the submit button before clicking it.
+            * This is necessary because the button is not clickable if it is not on the screen.
+            */
+            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView();", submitButton);
+            Thread.Sleep(500);
+            submitButton.Click();
+
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+
+            var renter = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Renter')]"));
+            Assert.NotNull(renter);
+        }
 
         public void Dispose()
         {

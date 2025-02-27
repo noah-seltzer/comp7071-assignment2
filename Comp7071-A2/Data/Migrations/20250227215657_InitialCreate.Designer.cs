@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comp7071_A2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250227070745_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20250227215657_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,9 @@ namespace Comp7071_A2.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("AssetID")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("RenterID")
                         .HasColumnType("TEXT");
 
@@ -63,6 +66,8 @@ namespace Comp7071_A2.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AssetID");
 
                     b.HasIndex("RenterID");
 
@@ -927,9 +932,15 @@ namespace Comp7071_A2.Data.Migrations
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
                 {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
+                        .WithMany()
+                        .HasForeignKey("AssetID");
+
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
                         .HasForeignKey("RenterID");
+
+                    b.Navigation("Asset");
 
                     b.Navigation("Renter");
                 });
