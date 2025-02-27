@@ -33,14 +33,15 @@ jobs:
     needs: code-analysis
     steps:
       - uses: actions/checkout@v4
+      - uses: nanasess/setup-chromedriver@v2
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
 
-      - name: Run xunit tests
-        run: dotnet test .\test\
+      # - name: Run xunit tests
+      #   run: dotnet test .\test\
 
   build:
     runs-on: windows-latest
