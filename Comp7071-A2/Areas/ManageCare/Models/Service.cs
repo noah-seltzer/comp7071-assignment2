@@ -8,7 +8,7 @@
         public required string Type { get; set; }
 
         public ICollection<Schedule> Schedule { get; set; } = [];
-        
+
         public ICollection<Certification> Certifications { get; set; } = [];
     }
 }
