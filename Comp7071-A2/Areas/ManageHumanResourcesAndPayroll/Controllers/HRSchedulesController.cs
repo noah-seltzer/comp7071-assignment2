@@ -47,6 +47,7 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
         // GET: ManageHumanResourcesAndPayroll/HRSchedules/Create
         public IActionResult Create()
         {
+
             return View();
         }
 
