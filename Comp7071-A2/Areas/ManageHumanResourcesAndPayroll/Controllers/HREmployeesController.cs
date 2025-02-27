@@ -58,8 +58,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name,Adderess,Emergency_Contact,Job_Title,Employment_Type")] HREmployee hREmployee)
         {
-         
-            
+
+
             //gets the user making the changes and checks if they're a manager
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.ID.ToString() == currentUserId);
@@ -67,8 +67,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
             if (currentEmployee == null || currentEmployee.Job_Title != "Manager")
             {
                 ModelState.AddModelError(string.Empty, "Only managers can create new employees.");
-                return View(hREmployee); 
-            } 
+                return View(hREmployee);
+            }
 
             if (ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
                 return NotFound();
             }
 
-            
+
             //gets the user making the changes and checks if they're a manager
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.ID.ToString() == currentUserId);
@@ -116,8 +116,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
             if (currentEmployee == null || currentEmployee.Job_Title != "Manager")
             {
                 ModelState.AddModelError(string.Empty, "Only managers can edit employee details.");
-                return View(hREmployee); 
-            } 
+                return View(hREmployee);
+            }
 
             if (ModelState.IsValid)
             {
@@ -165,7 +165,7 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            
+
             //gets the user making the changes and checks if they're a manager
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.ID.ToString() == currentUserId);
@@ -173,8 +173,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
             if (currentEmployee == null || currentEmployee.Job_Title != "Manager")
             {
                 ModelState.AddModelError(string.Empty, "Only managers can delete employees.");
-                return View(await _context.HREmployees.FindAsync(id)); 
-            } 
+                return View(await _context.HREmployees.FindAsync(id));
+            }
 
             var hREmployee = await _context.HREmployees.FindAsync(id);
             if (hREmployee != null)
