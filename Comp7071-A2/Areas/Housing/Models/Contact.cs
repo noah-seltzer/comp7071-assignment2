@@ -11,7 +11,7 @@ namespace Comp7071_A2.Areas.Housing.Models
 
         [Required]
         [ForeignKey("Renter")]
-        public string? RenterID { get; set; }  // Links to IdentityUser ID
+        public Guid? RenterID { get; set; }  // Links to IdentityUser ID
 
         [Required]
         [MaxLength(100)]
@@ -27,7 +27,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        public virtual IdentityUser Renter { get; set; }
+        public virtual Renter? Renter { get; set; }
         public virtual ICollection<ApplicationReference> ApplicationReferences { get; set; } = new List<ApplicationReference>();
     }
 }

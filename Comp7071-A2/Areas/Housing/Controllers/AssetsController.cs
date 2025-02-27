@@ -52,8 +52,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         public IActionResult Create()
         {
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID");
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email");
             return View();
         }
 
@@ -72,8 +72,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", asset.BuildingID);
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID", asset.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id", asset.RenterID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", asset.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", asset.RenterID);
             return View(asset);
         }
 
@@ -91,8 +91,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", asset.BuildingID);
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID", asset.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id", asset.RenterID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", asset.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", asset.RenterID);
             return View(asset);
         }
 
@@ -129,8 +129,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", asset.BuildingID);
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID", asset.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id", asset.RenterID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", asset.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", asset.RenterID);
             return View(asset);
         }
 

@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 
 namespace Comp7071_A2.Areas.Housing.Models
 {
@@ -9,15 +8,13 @@ namespace Comp7071_A2.Areas.Housing.Models
         [Key]
         public Guid ID { get; set; }
 
-        [Required]
         [ForeignKey("Renter")]
-        public string? RenterID { get; set; }  // Links to IdentityUser ID
+        public Guid? RenterID { get; set; } 
 
         [Required]
-        [MaxLength(10)]
-        public string Status { get; set; } = "Pending";  // Default status
+        public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;  // Default status
 
-        public virtual IdentityUser Renter { get; set; }
+        public virtual Renter? Renter { get; set; }
         public virtual ICollection<ApplicationReference> ApplicationReferences { get; set; } = new List<ApplicationReference>();
     }
 }

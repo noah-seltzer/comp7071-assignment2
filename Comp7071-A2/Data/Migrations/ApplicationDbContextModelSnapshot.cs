@@ -23,14 +23,11 @@ namespace Comp7071_A2.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RenterID")
-                        .IsRequired()
+                    b.Property<Guid?>("RenterID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 
@@ -78,7 +75,7 @@ namespace Comp7071_A2.Data.Migrations
                     b.Property<decimal>("RentAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("RenterID")
+                    b.Property<Guid?>("RenterID")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -138,8 +135,7 @@ namespace Comp7071_A2.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("RenterID")
-                        .IsRequired()
+                    b.Property<Guid>("RenterID")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -238,6 +234,50 @@ namespace Comp7071_A2.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("ParkingSpots");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ApplicationID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AssetID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("BLOB");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ApplicationID")
+                        .IsUnique();
+
+                    b.HasIndex("AssetID")
+                        .IsUnique();
+
+                    b.ToTable("Renters");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Suite", b =>
@@ -524,11 +564,9 @@ namespace Comp7071_A2.Data.Migrations
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
-                        .HasForeignKey("RenterID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("RenterID");
 
                     b.Navigation("Renter");
                 });
@@ -562,7 +600,7 @@ namespace Comp7071_A2.Data.Migrations
                         .WithMany()
                         .HasForeignKey("HousingGroupID");
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
                         .HasForeignKey("RenterID");
 
@@ -584,7 +622,7 @@ namespace Comp7071_A2.Data.Migrations
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Renter")
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
                         .WithMany()
                         .HasForeignKey("RenterID")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -622,6 +660,23 @@ namespace Comp7071_A2.Data.Migrations
                         .HasForeignKey("Comp7071_A2.Areas.Housing.Models.ParkingSpot", "AssetID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Asset");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Application", "Application")
+                        .WithOne()
+                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Renter", "ApplicationID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
+                        .WithOne()
+                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Renter", "AssetID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Application");
 
                     b.Navigation("Asset");
                 });

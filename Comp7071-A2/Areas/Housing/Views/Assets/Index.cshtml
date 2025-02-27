@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-area="Housing" asp-controller="Assets" asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -40,18 +40,18 @@
                 @Html.DisplayFor(modelItem => item.RentAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HousingGroup.ID)
+                @Html.DisplayFor(modelItem => item.HousingGroup.ManagerID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Renter.Id)
+                @Html.DisplayFor(modelItem => item.Renter.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Building.ID)
             </td>
             <td>
-                <a asp-area="Housing" asp-controller="Assets" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-area="Housing" asp-controller="Assets" asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-area="Housing" asp-controller="Assets" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
 }

@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Comp7071_A2.Areas.Housing.Models;
 using Comp7071_A2.Data;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Comp7071_A2.Areas.Housing.Controllers
+namespace Comp7071_A2.Areas.Housing.Models
 {
     [Area("Housing")]
     public class ApplicationsController : Controller
@@ -49,7 +49,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Applications/Create
         public IActionResult Create()
         {
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name");
             return View();
         }
 
@@ -60,14 +60,26 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,RenterID,Status")] Application application)
         {
+            
             if (ModelState.IsValid)
             {
+                // Assign the Renter using RenterID
+                if (application.RenterID.HasValue)
+                {
+                    application.Renter = await _context.Renters.FindAsync(application.RenterID);
+                }
+                else
+                {
+                    application.Renter = null;
+                }
+                
                 application.ID = Guid.NewGuid();
                 _context.Add(application);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id", application.RenterID);
+
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", application.RenterID);
             return View(application);
         }
 
@@ -84,7 +96,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             {
                 return NotFound();
             }
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id", application.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", application.RenterID);
             return View(application);
         }
 
@@ -120,7 +132,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RenterID"] = new SelectList(_context.Users, "Id", "Id", application.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", application.RenterID);
             return View(application);
         }
 

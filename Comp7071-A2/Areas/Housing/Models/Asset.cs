@@ -17,7 +17,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         public Guid? HousingGroupID { get; set; }
 
         [ForeignKey("Renter")]
-        public string? RenterID { get; set; }
+        public Guid? RenterID { get; set; }
 
         [ForeignKey("Building")]
         public Guid? BuildingID { get; set; }
@@ -28,7 +28,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         public decimal RentAmount { get; set; }
 
         public virtual HousingGroup? HousingGroup { get; set; }
-        public virtual IdentityUser? Renter { get; set; }
+        public virtual Renter? Renter { get; set; }
         public virtual Building? Building { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,23 +10,24 @@ using Comp7071_A2.Data;
 namespace Comp7071_A2.Areas.Housing.Models
 {
     [Area("Housing")]
-    public class ContactsController : Controller
+    public class RentersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<RentersController> _logger;
 
-        public ContactsController(ApplicationDbContext context)
+        public RentersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Housing/Contacts
+        // GET: Housing/Renters
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Contact.Include(c => c.Renter);
+            var applicationDbContext = _context.Renters.Include(r => r.Application).Include(r => r.Asset);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Housing/Contacts/Details/5
+        // GET: Housing/Renters/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -34,43 +35,47 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var contact = await _context.Contact
-                .Include(c => c.Renter)
+            var renter = await _context.Renters
+                .Include(r => r.Application)
+                .Include(r => r.Asset)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (contact == null)
+            if (renter == null)
             {
                 return NotFound();
             }
 
-            return View(contact);
+            return View(renter);
         }
 
-        // GET: Housing/Contacts/Create
+        // GET: Housing/Renters/Create
         public IActionResult Create()
         {
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email");
+            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status");
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
             return View();
         }
 
-        // POST: Housing/Contacts/Create
+        // POST: Housing/Renters/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,RenterID,Name,PhoneNumber,Email")] Contact contact)
+        public async Task<IActionResult> Create([Bind("ID,ApplicationID,AssetID,Name,DateOfBirth,Photo,PhoneNumber,Email")] Renter renter)
         {
             if (ModelState.IsValid)
             {
-                contact.ID = Guid.NewGuid();
-                _context.Add(contact);
+                renter.ID = Guid.NewGuid();
+                renter.DateOfBirth = renter.DateOfBirth.Date;
+                _context.Add(renter);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", contact.RenterID);
-            return View(contact);
+            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status", renter.ApplicationID);
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", renter.AssetID);
+            return View(renter);
         }
 
-        // GET: Housing/Contacts/Edit/5
+        // GET: Housing/Renters/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -78,23 +83,24 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact == null)
+            var renter = await _context.Renters.FindAsync(id);
+            if (renter == null)
             {
                 return NotFound();
             }
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", contact.RenterID);
-            return View(contact);
+            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status", renter.ApplicationID);
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", renter.AssetID);
+            return View(renter);
         }
 
-        // POST: Housing/Contacts/Edit/5
+        // POST: Housing/Renters/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,RenterID,Name,PhoneNumber,Email")] Contact contact)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,ApplicationID,AssetID,Name,DateOfBirth,Photo,PhoneNumber,Email")] Renter renter)
         {
-            if (id != contact.ID)
+            if (id != renter.ID)
             {
                 return NotFound();
             }
@@ -103,12 +109,12 @@ namespace Comp7071_A2.Areas.Housing.Models
             {
                 try
                 {
-                    _context.Update(contact);
+                    _context.Update(renter);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ContactExists(contact.ID))
+                    if (!RenterExists(renter.ID))
                     {
                         return NotFound();
                     }
@@ -119,11 +125,12 @@ namespace Comp7071_A2.Areas.Housing.Models
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", contact.RenterID);
-            return View(contact);
+            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status", renter.ApplicationID);
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", renter.AssetID);
+            return View(renter);
         }
 
-        // GET: Housing/Contacts/Delete/5
+        // GET: Housing/Renters/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -131,35 +138,36 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var contact = await _context.Contact
-                .Include(c => c.Renter)
+            var renter = await _context.Renters
+                .Include(r => r.Application)
+                .Include(r => r.Asset)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (contact == null)
+            if (renter == null)
             {
                 return NotFound();
             }
 
-            return View(contact);
+            return View(renter);
         }
 
-        // POST: Housing/Contacts/Delete/5
+        // POST: Housing/Renters/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact != null)
+            var renter = await _context.Renters.FindAsync(id);
+            if (renter != null)
             {
-                _context.Contact.Remove(contact);
+                _context.Renters.Remove(renter);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ContactExists(Guid id)
+        private bool RenterExists(Guid id)
         {
-            return _context.Contact.Any(e => e.ID == id);
+            return _context.Renters.Any(e => e.ID == id);
         }
     }
 }
