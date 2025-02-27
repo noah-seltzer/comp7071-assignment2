@@ -9,7 +9,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         public Guid ID { get; set; }
 
         [ForeignKey("Renter")]
-        public Guid? RenterID { get; set; } 
+        public Guid? RenterID { get; set; }
 
         [Required]
         public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;  // Default status

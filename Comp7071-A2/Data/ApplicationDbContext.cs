@@ -11,7 +11,7 @@ public class ApplicationDbContext : IdentityDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
-    {}
+    { }
 
     /**
      * Manage Housing
@@ -46,20 +46,21 @@ public class ApplicationDbContext : IdentityDbContext
 
     public DbSet<PayPeriod> PayPeriods { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
         base.OnModelCreating(modelBuilder);
 
         // Create Roles
         var housingAdminRole = new IdentityRole("HousingAdmin") { Id = "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456" };
         var userRole = new IdentityRole("User") { Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c6a4" };
         modelBuilder.Entity<IdentityRole>().HasData(housingAdminRole, userRole);
-        
+
         modelBuilder.Entity<Renter>()
             .HasOne(r => r.Asset)
             .WithOne()
             .HasForeignKey<Renter>(r => r.AssetID)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         modelBuilder.Entity<Renter>()
             .HasOne(r => r.Application)
             .WithOne()
