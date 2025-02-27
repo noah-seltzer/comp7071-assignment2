@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Comp7071_A2.Areas.ManageCare.Models;
+using Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models;
 using System.Reflection.Metadata;
 
 namespace Comp7071_A2.Areas.ManageCare.Data
@@ -62,5 +63,15 @@ namespace Comp7071_A2.Areas.ManageCare.Data
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<InvoiceLine> InvoiceLines { get; set; }
+
+        /**
+         * Manage Human Resources
+         */
+
+        public DbSet<HREmployee> HREmployees { get; set; }
+        public DbSet<HRSchedule> HRSchedules { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
+
+        public DbSet<PayPeriod> PayPeriods { get; set; }
     }
 }

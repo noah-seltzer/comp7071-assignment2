@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Comp7071_A2</RootNamespace>
+    <UserSecretsId>3a646921-587b-4881-9cb3-fe41271d742c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

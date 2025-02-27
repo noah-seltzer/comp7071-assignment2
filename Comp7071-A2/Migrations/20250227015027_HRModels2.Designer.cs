@@ -4,6 +4,7 @@ using Comp7071_A2.Areas.ManageCare.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comp7071_A2.Migrations
 {
     [DbContext(typeof(CareManageMentDBContext))]
-    partial class CareManageMentDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250227015027_HRModels2")]
+    partial class HRModels2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

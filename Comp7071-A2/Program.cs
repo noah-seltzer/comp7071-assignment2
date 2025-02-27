@@ -1,13 +1,21 @@
 using Microsoft.EntityFrameworkCore;
 using Comp7071_A2.Areas.ManageCare.Data;
+using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 
+var secretConnection = builder.Configuration["Database:Connection"];
+
+var defaultConnection = secretConnection ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+Console.WriteLine(defaultConnection);
+
 builder.Services.AddDbContext<CareManageMentDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(defaultConnection));
+
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
