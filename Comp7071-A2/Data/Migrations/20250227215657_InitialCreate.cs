@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Comp7071_A2.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate2 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -493,6 +493,7 @@ namespace Comp7071_A2.Data.Migrations
                 {
                     ID = table.Column<Guid>(type: "TEXT", nullable: false),
                     RenterID = table.Column<Guid>(type: "TEXT", nullable: true),
+                    AssetID = table.Column<Guid>(type: "TEXT", nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -706,6 +707,11 @@ namespace Comp7071_A2.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Application_AssetID",
+                table: "Application",
+                column: "AssetID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Application_RenterID",
                 table: "Application",
                 column: "RenterID");
@@ -886,6 +892,13 @@ namespace Comp7071_A2.Data.Migrations
                 unique: true);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Application_Assets_AssetID",
+                table: "Application",
+                column: "AssetID",
+                principalTable: "Assets",
+                principalColumn: "ID");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Application_Renters_RenterID",
                 table: "Application",
                 column: "RenterID",
@@ -912,12 +925,16 @@ namespace Comp7071_A2.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Application_Renters_RenterID",
+                name: "FK_Application_Assets_AssetID",
                 table: "Application");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Assets_Renters_RenterID",
-                table: "Assets");
+                name: "FK_Renters_Assets_AssetID",
+                table: "Renters");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Application_Renters_RenterID",
+                table: "Application");
 
             migrationBuilder.DropTable(
                 name: "ApplicationReference");
@@ -1001,12 +1018,6 @@ namespace Comp7071_A2.Data.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Renters");
-
-            migrationBuilder.DropTable(
-                name: "Application");
-
-            migrationBuilder.DropTable(
                 name: "Assets");
 
             migrationBuilder.DropTable(
@@ -1017,6 +1028,12 @@ namespace Comp7071_A2.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Renters");
+
+            migrationBuilder.DropTable(
+                name: "Application");
         }
     }
 }
