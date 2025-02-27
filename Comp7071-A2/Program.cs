@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Comp7071_A2.Areas.ManageCare.Data;
 using Microsoft.Extensions.Options;
-//using Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
