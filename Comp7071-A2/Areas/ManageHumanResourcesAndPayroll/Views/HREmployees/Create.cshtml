@@ -1,0 +1,59 @@
+﻿@model Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>HREmployee</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Adderess" class="control-label"></label>
+                <input asp-for="Adderess" class="form-control" />
+                <span asp-validation-for="Adderess" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Emergency_Contact" class="control-label"></label>
+                <input asp-for="Emergency_Contact" class="form-control" />
+                <span asp-validation-for="Emergency_Contact" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Job_Title" class="control-label"></label>
+                <select asp-for="Job_Title" class="form-control">
+                    <option value="Employee">Employee</option>
+                    <option value="Manager">Manager</option>
+                </select>
+                <span asp-validation-for="Job_Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Employment_Type" class="control-label"></label>
+                <select asp-for="Employment_Type" class="form-control">
+                    <option value="hourly">Hourly</option>
+                    <option value="salary">Salary</option>
+                </select>
+                <span asp-validation-for="Employment_Type" class="text-danger"></span>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
