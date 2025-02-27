@@ -15,7 +15,7 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
         Weekly,
         Monthly
     }
-    public class Schedule
+    public class HRSchedule
     {
         public Guid ID { get; set; }
 

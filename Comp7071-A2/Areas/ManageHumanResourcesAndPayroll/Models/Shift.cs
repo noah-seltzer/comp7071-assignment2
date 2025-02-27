@@ -7,6 +7,8 @@
     }
     public class Shift
     {
+
+        public Guid ID { get; set; }
         public float Hours_Worked { get; set; }
 
         public DateTime Start_Time { get; set; }

@@ -16,5 +16,7 @@
         public bool Approval { get; set; }
 
         public LeaveType Leave_Type { get; set; }
+
+        public HREmployee Requesting_Employee { get; set; }
     }
 }
