@@ -14,7 +14,7 @@ namespace Comp7071_A2.Areas.ManageCare.Models
         public required string Email { get; set; }
 
         public required string EmergencyContactPhone { get; set; }
-    
+
         public required string JobTitle { get; set; }
 
         public ICollection<Schedule> Schedule { get; set; } = [];
