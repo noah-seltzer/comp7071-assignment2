@@ -54,34 +54,44 @@ namespace Comp7071_A2.Areas.Housing.Models
         }
 
         // POST: Housing/Applications/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,RenterID,Status")] Application application)
         {
-            
             if (ModelState.IsValid)
             {
-                // Assign the Renter using RenterID
+                // Assign a new unique ID for the Application
+                application.ID = Guid.NewGuid();
+
+                // Ensure the application has a valid renter
                 if (application.RenterID.HasValue)
                 {
-                    application.Renter = await _context.Renters.FindAsync(application.RenterID);
+                    var renter = await _context.Renters.FindAsync(application.RenterID);
+                    if (renter != null)
+                    {
+                        application.Renter = renter;  // Link the Renter to Application
+
+                        // 🔹 Update Renter's ApplicationID
+                        renter.ApplicationID = application.ID;
+                        _context.Update(renter);  // Ensure the renter's record is updated
+                    }
                 }
                 else
                 {
                     application.Renter = null;
                 }
-                
-                application.ID = Guid.NewGuid();
+
+                // Add and save the application
                 _context.Add(application);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", application.RenterID);
             return View(application);
         }
+
 
         // GET: Housing/Applications/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
