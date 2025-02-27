@@ -61,7 +61,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,RenterID,Status")] Application application)
         {
-            
+
             if (ModelState.IsValid)
             {
                 // Assign the Renter using RenterID
@@ -73,7 +73,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 {
                     application.Renter = null;
                 }
-                
+
                 application.ID = Guid.NewGuid();
                 _context.Add(application);
                 await _context.SaveChangesAsync();

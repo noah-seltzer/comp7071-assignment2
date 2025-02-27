@@ -33,9 +33,9 @@ namespace Comp7071_A2.Areas.Housing.Models
         {
             Asset = new Asset
             {
-                ID = Guid.NewGuid(), 
+                ID = Guid.NewGuid(),
                 IsAvailable = true,
-                RentAmount = 0 
+                RentAmount = 0
             };
             AssetID = Asset.ID;
         }

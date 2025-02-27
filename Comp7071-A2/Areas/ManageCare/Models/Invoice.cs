@@ -13,10 +13,10 @@ namespace Comp7071_A2.Areas.ManageCare.Models
 
         [Required]
         public Guid CustomerId { get; set; }
-        
 
-        public Customer? Customer { get; set; } 
-    
-        public ICollection<InvoiceLine> Lines { get; set;} = [];
+
+        public Customer? Customer { get; set; }
+
+        public ICollection<InvoiceLine> Lines { get; set; } = [];
     }
 }

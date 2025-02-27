@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Adderess)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Emergency_Contact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Job_Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employment_Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Adderess)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Emergency_Contact)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Job_Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employment_Type)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> |
+                <a asp-controller="HRSchedulesController" asp-action="Details" asp-route-id="@item.ID">Schedule</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

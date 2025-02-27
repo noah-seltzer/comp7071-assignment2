@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Comp7071_A2.Areas.Housing.Models
 {
-public class ParkingSpot
+    public class ParkingSpot
     {
         [Key]
         public Guid ID { get; set; }
