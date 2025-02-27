@@ -23,7 +23,7 @@ using (var scope = app.Services.CreateScope())
     await SeedData.SeedUsersAndRoles(services);
 }
 
-// Configure the HTTP request pipeline.
+// Test Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -51,3 +51,4 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
+
