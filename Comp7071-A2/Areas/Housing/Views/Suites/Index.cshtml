@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Comp7071_A2.Areas.Housing.Models.Suite>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-area="Housing" asp-controller="Suites" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Floor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Occupants)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rooms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bathrooms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Locker)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParkingSpot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Asset)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Floor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Occupants)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rooms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bathrooms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Locker.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParkingSpot.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Asset.ID)
+            </td>
+            <td>
+                <a asp-area="Housing" asp-controller="Suites" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-area="Housing" asp-controller="Suites" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-area="Housing" asp-controller="Suites" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,4 +1,4 @@
-using Comp7071_A2.Areas.ManageCare.Data;
+using Comp7071_A2.Data;
 using Comp7071_A2.Areas.ManageCare.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,9 +8,9 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
 {
     public class ScheduleController : ManageCareController
     {
-        private readonly CareManageMentDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ScheduleController(CareManageMentDBContext context)
+        public ScheduleController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -51,6 +51,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         // GET: ManageCare/Schedule/Create
         public IActionResult Create()
         {
+            //var employees = _context.Customers, "Id", "Name"
             ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name");
             ViewData["Employees"] = new MultiSelectList(_context.Employees, "Id", "Name");
             ViewData["Customers"] = new MultiSelectList(_context.Customers, "Id", "Name");
@@ -93,7 +94,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             
             ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name", schedule.ServiceId);
             ViewData["Employees"] = new MultiSelectList(_context.Employees, "Id", "Name", selectedEmployees);
-            ViewData["Customers"] = new MultiSelectList(_context.Customers, "Id", "Name", selectedCustomers);
+             ViewData["Customers"] = new MultiSelectList(_context.Customers, "Id", "Name", selectedCustomers);
             return View(schedule);
         }
 

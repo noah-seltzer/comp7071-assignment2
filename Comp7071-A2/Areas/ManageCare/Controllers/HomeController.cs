@@ -1,4 +1,4 @@
-using Comp7071_A2.Areas.ManageCare.Data;
+using Comp7071_A2.Data;
 using Comp7071_A2.Areas.ManageCare.Models;
 using Comp7071_A2.Areas.ManageCare.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +12,9 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
 {
     public class HomeController : ManageCareController
     {
-        private readonly CareManageMentDBContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(CareManageMentDBContext context)
+        public HomeController(ApplicationDbContext context)
         {
             _context = context;
         }

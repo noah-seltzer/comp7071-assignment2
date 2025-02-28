@@ -1,0 +1,49 @@
+﻿@model Comp7071_A2.Areas.Housing.Models.Building
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Building</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-area="Housing" asp-controller="Buildings" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="HousingGroupID" class="control-label"></label>
+                <select asp-for="HousingGroupID" class="form-control" asp-items="ViewBag.HousingGroupID"></select>
+                <span asp-validation-for="HousingGroupID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumUnits" class="control-label"></label>
+                <input asp-for="NumUnits" class="form-control" />
+                <span asp-validation-for="NumUnits" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumLockers" class="control-label"></label>
+                <input asp-for="NumLockers" class="form-control" />
+                <span asp-validation-for="NumLockers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumParking" class="control-label"></label>
+                <input asp-for="NumParking" class="form-control" />
+                <span asp-validation-for="NumParking" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-area="Housing" asp-controller="Buildings" asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
