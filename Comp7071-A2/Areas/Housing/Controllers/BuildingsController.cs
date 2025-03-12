@@ -49,7 +49,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Buildings/Create
         public IActionResult Create()
         {
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name");
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,HousingGroupID,NumUnits,NumLockers,NumParking")] Building building)
+        public async Task<IActionResult> Create([Bind("ID,HousingGroupID,NumUnits,NumLockers,NumParking,Address,City,PostalCode")] Building building)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID", building.HousingGroupID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", building.HousingGroupID);
             return View(building);
         }
 
@@ -84,7 +84,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             {
                 return NotFound();
             }
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID", building.HousingGroupID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", building.HousingGroupID);
             return View(building);
         }
 
@@ -93,7 +93,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,HousingGroupID,NumUnits,NumLockers,NumParking")] Building building)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,HousingGroupID,NumUnits,NumLockers,NumParking,Address,City,PostalCode")] Building building)
         {
             if (id != building.ID)
             {
@@ -120,7 +120,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ID", building.HousingGroupID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", building.HousingGroupID);
             return View(building);
         }
 

@@ -19,13 +19,16 @@
                 @Html.DisplayNameFor(model => model.RentAmount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HousingGroup)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Renter)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Building)
+                @Html.DisplayNameFor(model => model.HousingGroup)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HousingGroup!.Address)
+            </th>
+            <th>
+                AssetType
             </th>
             <th></th>
         </tr>
@@ -40,13 +43,16 @@
                 @Html.DisplayFor(modelItem => item.RentAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HousingGroup.ManagerID)
+                @Html.Raw(item.Renter != null ? item.Renter.Name : "None")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Renter.IdentityID)
+                @Html.DisplayFor(modelItem => item.HousingGroup!.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Building.ID)
+                @Html.Raw(item.HousingGroup != null ? item.HousingGroup!.Address : "None")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssetType2)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

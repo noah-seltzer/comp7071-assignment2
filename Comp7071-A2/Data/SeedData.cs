@@ -108,7 +108,10 @@ namespace Comp7071_A2.Data
                 HousingGroupID = housingGroup.ID,
                 NumUnits = 10,
                 NumLockers = 10,
-                NumParking = 10
+                NumParking = 10,
+                Address = "123 Building St",
+                City = "Richmond",
+                PostalCode = "V7E4H4"
             };
             context.Buildings.Add(building);
 
