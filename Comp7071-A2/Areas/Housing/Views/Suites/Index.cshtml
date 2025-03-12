@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-area="Housing" asp-controller="Suites" asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -34,7 +34,19 @@
                 @Html.DisplayNameFor(model => model.ParkingSpot)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Asset)
+                @Html.DisplayNameFor(model => model.IsAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HousingGroup)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Renter)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Building)
             </th>
             <th></th>
         </tr>
@@ -58,18 +70,24 @@
                 @Html.DisplayFor(modelItem => item.Bathrooms)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Locker.ID)
+                @Html.DisplayFor(modelItem => item.IsAvailable)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ParkingSpot.ID)
+                @Html.DisplayFor(modelItem => item.RentAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Asset.ID)
+                @Html.DisplayFor(modelItem => item.HousingGroup.ManagerID)
             </td>
             <td>
-                <a asp-area="Housing" asp-controller="Suites" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-area="Housing" asp-controller="Suites" asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-area="Housing" asp-controller="Suites" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                @Html.DisplayFor(modelItem => item.Renter.IdentityID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Building.ID)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
 }

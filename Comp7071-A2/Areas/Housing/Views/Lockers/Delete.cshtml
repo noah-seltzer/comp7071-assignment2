@@ -24,22 +24,46 @@
             @Html.DisplayFor(model => model.LockerSize)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Asset)
+            @Html.DisplayNameFor(model => model.SuiteID)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Asset.ID)
+            @Html.DisplayFor(model => model.SuiteID)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Suite)
+            @Html.DisplayNameFor(model => model.IsAvailable)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Suite.ID)
+            @Html.DisplayFor(model => model.IsAvailable)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RentAmount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RentAmount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HousingGroup)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HousingGroup.ManagerID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Renter)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Renter.IdentityID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Building)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Building.ID)
         </dd>
     </dl>
     
-    <form asp-area="Housing" asp-controller="Lockers" asp-action="Delete">
+    <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-area="Housing" asp-controller="Lockers" asp-action="Index">Back to List</a>
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>

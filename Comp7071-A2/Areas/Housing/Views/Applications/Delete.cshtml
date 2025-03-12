@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.Renter)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Renter.Email)
+            @Html.DisplayFor(model => model.Renter != null && model.Renter.Identity != null ? model.Renter.Identity.Email : "N/A")
         </dd>
     </dl>
     

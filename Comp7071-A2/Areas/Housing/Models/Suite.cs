@@ -3,20 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Comp7071_A2.Areas.Housing.Models
 {
-    public class Suite
+    public class Suite : Asset
     {
-        [Key]
-        public Guid ID { get; set; }
-
         [ForeignKey("Locker")]
         public Guid? LockerID { get; set; }
 
         [ForeignKey("ParkingSpot")]
         public Guid? ParkingSpotID { get; set; }
-
-        [Required]
-        [ForeignKey("Asset")]
-        public Guid AssetID { get; set; }
 
         public int UnitNumber { get; set; }
         public int Floor { get; set; }
@@ -26,18 +19,5 @@ namespace Comp7071_A2.Areas.Housing.Models
 
         public virtual Locker? Locker { get; set; }
         public virtual ParkingSpot? ParkingSpot { get; set; }
-        public virtual Asset Asset { get; set; }
-
-        // Constructor to ensure Asset creation
-        public Suite()
-        {
-            Asset = new Asset
-            {
-                ID = Guid.NewGuid(),
-                IsAvailable = true,
-                RentAmount = 0
-            };
-            AssetID = Asset.ID;
-        }
     }
 }

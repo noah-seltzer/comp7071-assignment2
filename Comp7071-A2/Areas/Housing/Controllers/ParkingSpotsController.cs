@@ -23,7 +23,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ParkingSpots
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ParkingSpots.Include(p => p.Asset).Include(p => p.Suite).Include(p => p.Vehicle);
+            var applicationDbContext = _context.ParkingSpots.Include(p => p.Building).Include(p => p.HousingGroup).Include(p => p.Renter);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,9 +36,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var parkingSpot = await _context.ParkingSpots
-                .Include(p => p.Asset)
-                .Include(p => p.Suite)
-                .Include(p => p.Vehicle)
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
+                .Include(p => p.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)
             {
@@ -51,9 +51,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ParkingSpots/Create
         public IActionResult Create()
         {
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID");
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID");
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID");
             return View();
         }
 
@@ -62,7 +62,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,AssetID,SuiteID,VehicleID,SpotNumber")] ParkingSpot parkingSpot)
+        public async Task<IActionResult> Create([Bind("SpotNumber,SuiteID,VehicleID,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] ParkingSpot parkingSpot)
         {
             if (ModelState.IsValid)
             {
@@ -71,9 +71,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", parkingSpot.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", parkingSpot.SuiteID);
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID", parkingSpot.VehicleID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", parkingSpot.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", parkingSpot.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", parkingSpot.RenterID);
             return View(parkingSpot);
         }
 
@@ -90,9 +90,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             {
                 return NotFound();
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", parkingSpot.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", parkingSpot.SuiteID);
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID", parkingSpot.VehicleID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", parkingSpot.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", parkingSpot.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", parkingSpot.RenterID);
             return View(parkingSpot);
         }
 
@@ -101,7 +101,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,AssetID,SuiteID,VehicleID,SpotNumber")] ParkingSpot parkingSpot)
+        public async Task<IActionResult> Edit(Guid id, [Bind("SpotNumber,SuiteID,VehicleID,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] ParkingSpot parkingSpot)
         {
             if (id != parkingSpot.ID)
             {
@@ -128,9 +128,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", parkingSpot.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", parkingSpot.SuiteID);
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID", parkingSpot.VehicleID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", parkingSpot.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", parkingSpot.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", parkingSpot.RenterID);
             return View(parkingSpot);
         }
 
@@ -143,9 +143,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var parkingSpot = await _context.ParkingSpots
-                .Include(p => p.Asset)
-                .Include(p => p.Suite)
-                .Include(p => p.Vehicle)
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
+                .Include(p => p.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)
             {

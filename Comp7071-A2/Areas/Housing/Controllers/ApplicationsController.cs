@@ -23,7 +23,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         // GET: Housing/Applications
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Application.Include(a => a.Renter);
+            var applicationDbContext = _context.Applications.Include(a => a.Renter);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var application = await _context.Application
+            var application = await _context.Applications
                 .Include(a => a.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (application == null)
@@ -64,15 +64,15 @@ namespace Comp7071_A2.Areas.Housing.Models
 
             if (ModelState.IsValid)
             {
-                // Assign the Renter using RenterID
-                if (application.RenterID.HasValue)
-                {
-                    application.Renter = await _context.Renters.FindAsync(application.RenterID);
-                }
-                else
-                {
-                    application.Renter = null;
-                }
+                // // Assign the Renter using RenterID
+                // if (application.RenterID != null)
+                // {
+                //     application.Renter = await _context.Renters.FindAsync(application.RenterID);
+                // }
+                // else
+                // {
+                //     application.Renter = null;
+                // }
 
                 application.ID = Guid.NewGuid();
                 _context.Add(application);
@@ -92,7 +92,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var application = await _context.Application.FindAsync(id);
+            var application = await _context.Applications.FindAsync(id);
             if (application == null)
             {
                 return NotFound();
@@ -145,8 +145,9 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var application = await _context.Application
+            var application = await _context.Applications
                 .Include(a => a.Renter)
+                .ThenInclude(b => b.Identity)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (application == null)
             {
@@ -161,10 +162,10 @@ namespace Comp7071_A2.Areas.Housing.Models
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var application = await _context.Application.FindAsync(id);
+            var application = await _context.Applications.FindAsync(id);
             if (application != null)
             {
-                _context.Application.Remove(application);
+                _context.Applications.Remove(application);
             }
 
             await _context.SaveChangesAsync();
@@ -173,7 +174,7 @@ namespace Comp7071_A2.Areas.Housing.Models
 
         private bool ApplicationExists(Guid id)
         {
-            return _context.Application.Any(e => e.ID == id);
+            return _context.Applications.Any(e => e.ID == id);
         }
     }
 }

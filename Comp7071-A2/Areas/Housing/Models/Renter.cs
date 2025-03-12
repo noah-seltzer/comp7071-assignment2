@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace Comp7071_A2.Areas.Housing.Models
 {
@@ -8,11 +9,10 @@ namespace Comp7071_A2.Areas.Housing.Models
         [Key]
         public Guid ID { get; set; }
 
-        [ForeignKey("Application")]
-        public Guid? ApplicationID { get; set; }
+        [Required]
+        public string? IdentityID { get; set; }
 
-        [ForeignKey("Asset")]
-        public Guid? AssetID { get; set; }
+        public virtual IdentityUser? Identity { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -29,12 +29,10 @@ namespace Comp7071_A2.Areas.Housing.Models
         [Phone]
         public string PhoneNumber { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        public virtual Asset? Asset { get; set; }
-        public virtual Application? Application { get; set; }
+        // This is in the IdentityUser
+        // [Required]
+        // [MaxLength(100)]
+        // [EmailAddress]
+        // public string Email { get; set; }
     }
 }

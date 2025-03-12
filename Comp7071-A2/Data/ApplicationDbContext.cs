@@ -13,20 +13,22 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     { }
 
-    /**
+    /************************************************************************************
      * Manage Housing
-     */
+    *************************************************************************************/
     public DbSet<Renter> Renters { get; set; }
-    public DbSet<Asset> Assets { get; set; }
     public DbSet<Building> Buildings { get; set; }
+    public DbSet<Asset> Assets { get; set; }
     public DbSet<Suite> Suites { get; set; }
     public DbSet<Locker> Lockers { get; set; }
     public DbSet<ParkingSpot> ParkingSpots { get; set; }
     public DbSet<HousingGroup> HousingGroups { get; set; }
     public DbSet<Vehicle> Vehicles { get; set; }
-    public DbSet<Contact> Contact { get; set; } = default!;
-    public DbSet<Application> Application { get; set; } = default!;
-    public DbSet<ApplicationReference> ApplicationReference { get; set; } = default!;
+    public DbSet<Contact> Contacts { get; set; } = default!;
+    public DbSet<Application> Applications { get; set; } = default!;
+    public DbSet<ApplicationReference> ApplicationReferences { get; set; } = default!;
+
+    //***********************************************************************************
 
 
     public DbSet<Employee> Employees { get; set; }
@@ -53,25 +55,17 @@ public class ApplicationDbContext : IdentityDbContext
         // Create Roles
         var housingAdminRole = new IdentityRole("HousingAdmin") { Id = "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456" };
         var userRole = new IdentityRole("User") { Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c6a4" };
-        modelBuilder.Entity<IdentityRole>().HasData(housingAdminRole, userRole);
+        var renterRole = new IdentityRole("Renter") { Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c234" };
+        modelBuilder.Entity<IdentityRole>().HasData(housingAdminRole, userRole, renterRole);
 
-        modelBuilder.Entity<Renter>()
-            .HasOne(r => r.Asset)
-            .WithOne()
-            .HasForeignKey<Renter>(r => r.AssetID)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Renter>()
-            .HasOne(r => r.Application)
-            .WithOne()
-            .HasForeignKey<Renter>(r => r.ApplicationID)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Suite>()
-            .HasOne(s => s.Asset)
-            .WithOne()
-            .HasForeignKey<Suite>(s => s.AssetID)
-            .OnDelete(DeleteBehavior.Cascade);
+        /********************************************************************
+        * Manage Housing
+        *********************************************************************/
+        modelBuilder.Entity<Asset>()
+            .HasDiscriminator<string>("AssetType")
+            .HasValue<Locker>("Locker")
+            .HasValue<ParkingSpot>("ParkingSpot")
+            .HasValue<Suite>("Suite");
 
         modelBuilder.Entity<Suite>()
             .HasOne(s => s.Locker)
@@ -84,18 +78,6 @@ public class ApplicationDbContext : IdentityDbContext
             .WithOne(p => p.Suite)
             .HasForeignKey<Suite>(s => s.ParkingSpotID)
             .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Locker>()
-            .HasOne(l => l.Asset)
-            .WithOne()
-            .HasForeignKey<Locker>(l => l.AssetID)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<ParkingSpot>()
-            .HasOne(p => p.Asset)
-            .WithOne()
-            .HasForeignKey<ParkingSpot>(p => p.AssetID)
-            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Vehicle>()
             .HasOne(v => v.ParkingSpot)
@@ -120,6 +102,9 @@ public class ApplicationDbContext : IdentityDbContext
             .WithMany()
             .HasForeignKey(c => c.RenterID)
             .OnDelete(DeleteBehavior.Restrict);
+
+        //********************************************************************
+
 
         modelBuilder.Entity<Employee>()
             .HasDiscriminator<string>("JobTitle")

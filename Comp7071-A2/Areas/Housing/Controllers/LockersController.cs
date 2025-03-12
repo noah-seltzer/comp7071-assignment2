@@ -23,7 +23,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Lockers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Lockers.Include(l => l.Asset).Include(l => l.Suite);
+            var applicationDbContext = _context.Lockers.Include(l => l.Building).Include(l => l.HousingGroup).Include(l => l.Renter);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,8 +36,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var locker = await _context.Lockers
-                .Include(l => l.Asset)
-                .Include(l => l.Suite)
+                .Include(l => l.Building)
+                .Include(l => l.HousingGroup)
+                .Include(l => l.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (locker == null)
             {
@@ -50,8 +51,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Lockers/Create
         public IActionResult Create()
         {
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID");
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID");
             return View();
         }
 
@@ -60,7 +62,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,AssetID,SuiteID,LockerNumber,LockerSize")] Locker locker)
+        public async Task<IActionResult> Create([Bind("LockerNumber,LockerSize,SuiteID,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] Locker locker)
         {
             if (ModelState.IsValid)
             {
@@ -69,8 +71,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", locker.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", locker.SuiteID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", locker.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", locker.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", locker.RenterID);
             return View(locker);
         }
 
@@ -87,8 +90,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             {
                 return NotFound();
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", locker.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", locker.SuiteID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", locker.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", locker.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", locker.RenterID);
             return View(locker);
         }
 
@@ -97,7 +101,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,AssetID,SuiteID,LockerNumber,LockerSize")] Locker locker)
+        public async Task<IActionResult> Edit(Guid id, [Bind("LockerNumber,LockerSize,SuiteID,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] Locker locker)
         {
             if (id != locker.ID)
             {
@@ -124,8 +128,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", locker.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", locker.SuiteID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", locker.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", locker.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", locker.RenterID);
             return View(locker);
         }
 
@@ -138,8 +143,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var locker = await _context.Lockers
-                .Include(l => l.Asset)
-                .Include(l => l.Suite)
+                .Include(l => l.Building)
+                .Include(l => l.HousingGroup)
+                .Include(l => l.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (locker == null)
             {

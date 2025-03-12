@@ -23,7 +23,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Suites
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Suites.Include(s => s.Asset).Include(s => s.Locker).Include(s => s.ParkingSpot);
+            var applicationDbContext = _context.Suites.Include(s => s.Building).Include(s => s.HousingGroup).Include(s => s.Renter).Include(s => s.Locker).Include(s => s.ParkingSpot);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +36,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var suite = await _context.Suites
-                .Include(s => s.Asset)
+                .Include(s => s.Building)
+                .Include(s => s.HousingGroup)
+                .Include(s => s.Renter)
                 .Include(s => s.Locker)
                 .Include(s => s.ParkingSpot)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -51,9 +53,11 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Suites/Create
         public IActionResult Create()
         {
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
-            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "ID");
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID");
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID");
+            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "AssetType");
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "AssetType");
             return View();
         }
 
@@ -62,7 +66,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,LockerID,ParkingSpotID,AssetID,UnitNumber,Floor,Occupants,Rooms,Bathrooms")] Suite suite)
+        public async Task<IActionResult> Create([Bind("LockerID,ParkingSpotID,UnitNumber,Floor,Occupants,Rooms,Bathrooms,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] Suite suite)
         {
             if (ModelState.IsValid)
             {
@@ -71,9 +75,11 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", suite.AssetID);
-            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "ID", suite.LockerID);
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID", suite.ParkingSpotID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", suite.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", suite.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", suite.RenterID);
+            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "AssetType", suite.LockerID);
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "AssetType", suite.ParkingSpotID);
             return View(suite);
         }
 
@@ -90,9 +96,11 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             {
                 return NotFound();
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", suite.AssetID);
-            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "ID", suite.LockerID);
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID", suite.ParkingSpotID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", suite.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", suite.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", suite.RenterID);
+            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "AssetType", suite.LockerID);
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "AssetType", suite.ParkingSpotID);
             return View(suite);
         }
 
@@ -101,7 +109,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,LockerID,ParkingSpotID,AssetID,UnitNumber,Floor,Occupants,Rooms,Bathrooms")] Suite suite)
+        public async Task<IActionResult> Edit(Guid id, [Bind("LockerID,ParkingSpotID,UnitNumber,Floor,Occupants,Rooms,Bathrooms,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] Suite suite)
         {
             if (id != suite.ID)
             {
@@ -128,9 +136,11 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", suite.AssetID);
-            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "ID", suite.LockerID);
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID", suite.ParkingSpotID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", suite.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", suite.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", suite.RenterID);
+            ViewData["LockerID"] = new SelectList(_context.Lockers, "ID", "AssetType", suite.LockerID);
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "AssetType", suite.ParkingSpotID);
             return View(suite);
         }
 
@@ -143,7 +153,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var suite = await _context.Suites
-                .Include(s => s.Asset)
+                .Include(s => s.Building)
+                .Include(s => s.HousingGroup)
+                .Include(s => s.Renter)
                 .Include(s => s.Locker)
                 .Include(s => s.ParkingSpot)
                 .FirstOrDefaultAsync(m => m.ID == id);

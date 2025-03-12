@@ -8,11 +8,13 @@ namespace Comp7071_A2.Areas.Housing.Models
         [Key]
         public Guid ID { get; set; }
 
+        [Required]
         [ForeignKey("Renter")]
-        public Guid? RenterID { get; set; }
+        public Guid RenterID { get; set; }
 
+        [Required]
         [ForeignKey("Asset")]
-        public Guid? AssetID { get; set; }
+        public Guid AssetID { get; set; }
 
         public virtual Asset? Asset { get; set; }
 

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Comp7071_A2.Areas.Housing.Models;
 using Comp7071_A2.Data;
+using Comp7071_A2.Areas.Housing.Models;
 
 namespace Comp7071_A2.Areas.Housing.Controllers
 {
@@ -53,7 +53,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         {
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
             ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID");
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID");
             return View();
         }
 
@@ -73,7 +73,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", asset.BuildingID);
             ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", asset.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", asset.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", asset.RenterID);
             return View(asset);
         }
 
@@ -92,7 +92,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", asset.BuildingID);
             ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", asset.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", asset.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", asset.RenterID);
             return View(asset);
         }
 
@@ -130,7 +130,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
             ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", asset.BuildingID);
             ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", asset.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", asset.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", asset.RenterID);
             return View(asset);
         }
 
