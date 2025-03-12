@@ -53,6 +53,16 @@
                                 <a class="nav-link" asp-area="Housing" asp-controller="Renters" asp-action="Index">Renters</a>
                             </li>
                         }
+                        
+                        @if (ViewContext.RouteData.Values["area"]?.ToString() == "ManageHumanResourcesAndPayroll")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="ManageHumanResourcesAndPayroll" asp-controller="HREmployees" asp-action="Index">Employees</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="ManageHumanResourcesAndPayroll" asp-controller="HRSchedules" asp-action="Index">Schedules</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
