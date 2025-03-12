@@ -25,15 +25,16 @@ namespace Comp7071_A2.Data
                 return;
             }
 
+            // These get created by the migration
             // Create roles if they don't exist
-            string[] roleNames = { "HousingAdmin", "User", "Renter" };
-            foreach (var roleName in roleNames)
-            {
-                if (!await roleManager.RoleExistsAsync(roleName))
-                {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
+            // string[] roleNames = { "HousingAdmin", "User", "Renter" };
+            // foreach (var roleName in roleNames)
+            // {
+            //     if (!await roleManager.RoleExistsAsync(roleName))
+            //     {
+            //         await roleManager.CreateAsync(new IdentityRole(roleName));
+            //     }
+            // }
 
             /****************************************************************************************
             *  Seed Data for Housing Management

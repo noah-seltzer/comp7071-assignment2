@@ -53,9 +53,9 @@ public class ApplicationDbContext : IdentityDbContext
         base.OnModelCreating(modelBuilder);
 
         // Create Roles
-        var housingAdminRole = new IdentityRole("HousingAdmin") { Id = "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456" };
-        var userRole = new IdentityRole("User") { Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c6a4" };
-        var renterRole = new IdentityRole("Renter") { Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c234" };
+        var housingAdminRole = new IdentityRole("HousingAdmin") { Id = "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456", NormalizedName = "HOUSINGADMIN" };
+        var userRole = new IdentityRole("User") { Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c6a4", NormalizedName = "USER" };
+        var renterRole = new IdentityRole("Renter") { Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c234", NormalizedName = "RENTER" };
         modelBuilder.Entity<IdentityRole>().HasData(housingAdminRole, userRole, renterRole);
 
         /********************************************************************
