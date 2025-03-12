@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Comp7071_A2.Areas.Housing.Models;
 using Comp7071_A2.Data;
 
@@ -14,10 +15,12 @@ namespace Comp7071_A2.Areas.Housing.Controllers
     public class RentersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RentersController(ApplicationDbContext context)
+        public RentersController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Housing/Renters
@@ -47,9 +50,20 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         }
 
         // GET: Housing/Renters/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["IdentityID"] = new SelectList(_context.Users, "Id", "Id");
+            var renters = await _context.Renters.Select(r => r.IdentityID).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
+            var availableUsers = users
+                .Where(u => !renters.Contains(u.Id))
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Email
+                })
+                .ToList();
+
+            ViewData["IdentityID"] = new SelectList(availableUsers, "Value", "Text");
             return View();
         }
 
@@ -65,9 +79,29 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 renter.ID = Guid.NewGuid();
                 _context.Add(renter);
                 await _context.SaveChangesAsync();
+
+                var user = await _userManager.FindByIdAsync(renter.IdentityID);
+                if (user != null && !await _userManager.IsInRoleAsync(user, "Renter"))
+                {
+                    await _userManager.AddToRoleAsync(user, "Renter");
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityID"] = new SelectList(_context.Users, "Id", "Id", renter.IdentityID);
+            
+            var renters = await _context.Renters.Select(r => r.IdentityID).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
+            var availableUsers = users
+                .Where(u => !renters.Contains(u.Id))
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Email
+                })
+                .ToList();
+
+            ViewData["IdentityID"] = new SelectList(availableUsers, "Value", "Text");
+
             return View(renter);
         }
 
@@ -79,7 +113,10 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
 
-            var renter = await _context.Renters.FindAsync(id);
+            var renter = await _context.Renters
+                .Include(r => r.Identity)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (renter == null)
             {
                 return NotFound();
