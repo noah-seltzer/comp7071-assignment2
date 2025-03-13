@@ -30,8 +30,11 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             }
 
             var service = await _context.Services
-                .Include(s => s.Schedule)
                 .Include(s => s.Certifications)
+                .Include(e => e.Schedule)
+                .ThenInclude(s => s.Customers)
+                .Include(e => e.Schedule)
+                .ThenInclude(s => s.Employees)
                 .FirstOrDefaultAsync(m => m.Id == id);
                 
             if (service == null)
