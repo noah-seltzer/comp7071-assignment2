@@ -30,7 +30,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         public virtual HousingGroup? HousingGroup { get; set; }
         public virtual Renter? Renter { get; set; }
         public virtual Building? Building { get; set; }
-        
+        public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
         public virtual ICollection<AssetDamage>? AssetDamages { get; set; }
 
         [NotMapped] 

@@ -1,40 +1,55 @@
-﻿@using Comp7071_A2.Areas.Housing.Models
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model Comp7071_A2.Areas.Housing.Models.Application
+﻿@model Comp7071_A2.Areas.Housing.Models.Application
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Application";
 }
 
-<h1>Create</h1>
+<h2>Create Application</h2>
 
-<h4>Application</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="RenterID" class="control-label"></label>
-                <select asp-for="RenterID" class ="form-control" asp-items="ViewBag.RenterID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<ApplicationStatus>()"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AssetID" class="control-label"></label>
-                <select asp-for="AssetID" class ="form-control" asp-items="ViewBag.AssetID"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="RenterID" class="control-label">Renter</label>
+        <select asp-for="RenterID" class="form-control" asp-items="ViewBag.RenterID"></select>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="AssetID" class="control-label">Asset</label>
+        <select asp-for="AssetID" class="form-control" asp-items="ViewBag.AssetID" id="assetDropdown"></select>
+    </div>
 
+    <div class="form-group">
+        <label class="control-label">Monthly Rent</label>
+        <input type="text" id="monthlyRent" class="form-control" readonly value="Select an asset to see rent" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status" class="control-label"></label>
+        <input asp-for="Status" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("assetDropdown").addEventListener("change", function () {
+            var selectedAssetId = this.value;
+            var rentField = document.getElementById("monthlyRent");
+
+            if (selectedAssetId) {
+                fetch(`/Housing/Applications/GetRentAmount?assetId=${selectedAssetId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        rentField.value = `$${data.toFixed(2)}`;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching rent amount:", error);
+                        rentField.value = "Error loading rent";
+                    });
+            } else {
+                rentField.value = "Select an asset to see rent";
+            }
+        });
+    </script>
+}

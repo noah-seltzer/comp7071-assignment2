@@ -26,9 +26,15 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Renters
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Renters.Include(r => r.Identity);
-            return View(await applicationDbContext.ToListAsync());
+            var renters = await _context.Renters
+                .Include(r => r.Identity)
+                .Include(r => r.Applications) 
+                .ThenInclude(a => a.Asset)      
+                .ToListAsync();
+
+            return View(renters);
         }
+
 
         // GET: Housing/Renters/Details/5
         public async Task<IActionResult> Details(Guid? id)
