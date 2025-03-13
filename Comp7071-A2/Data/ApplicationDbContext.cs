@@ -30,6 +30,7 @@ public class ApplicationDbContext : IdentityDbContext
 
 
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<Certification> Certifications { get; set; }
     public DbSet<Manager> Managers { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
@@ -41,6 +42,7 @@ public class ApplicationDbContext : IdentityDbContext
     * Manage Human Resources
     */
     public DbSet<HREmployee> HREmployees { get; set; }
+    public DbSet<HRManager> HRManagers { get; set; }
     public DbSet<HRSchedule> HRSchedules { get; set; }
     public DbSet<Shift> Shifts { get; set; }
 
@@ -49,6 +51,12 @@ public class ApplicationDbContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+       
+        modelBuilder.Entity<HREmployee>().ToTable("HREmployees");
+        
+        modelBuilder.Entity<HRManager>()
+            .ToTable("HRManagers");
 
         // Create Roles
         var housingAdminRole = new IdentityRole("HousingAdmin") { Id = "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456" };

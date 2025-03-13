@@ -4,108 +4,305 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Care Management System</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
         }
         
         body {
-            background-color: #f8f9fa;
+            background-color: var(--gray-100);
             color: var(--dark-color);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            position: relative;
+            padding-bottom: 160px; /* Add space for footer */
+        }
+        
+        main {
+            flex: 1 0 auto;
         }
         
         .navbar {
-            background-color: var(--primary-color) !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+            padding: 1rem 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
         
-        .navbar-brand, .nav-link {
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.4rem;
             color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
         
-        .nav-link:hover {
-            color: var(--light-color) !important;
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 4px;
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            padding: 0.7rem 1rem !important;
+            margin: 0 0.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            background-color: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            padding: 0 1.5rem;
         }
         
         .card {
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-        
-        .btn-danger {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-        
-        .btn-danger:hover {
-            background-color: #c0392b;
-            border-color: #c0392b;
-        }
-        
-        .table {
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            background: white;
             overflow: hidden;
         }
         
-        .table thead {
-            background-color: var(--primary-color);
-            color: white;
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1.25rem 1.5rem;
         }
         
-        footer {
-            background-color: var(--secondary-color);
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 1rem 0;
-            margin-top: 2rem;
+            box-shadow: 0 2px 4px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-edit:hover {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-details {
+            background: linear-gradient(135deg, #00b4d8, #0096c7);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 180, 216, 0.2);
+        }
+
+        .btn-details:hover {
+            background: linear-gradient(135deg, #0096c7, #00b4d8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 180, 216, 0.3);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            box-shadow: 0 2px 4px rgba(231, 76, 60, 0.2);
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+        }
+
+        /* Add styles for disabled state */
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .table thead th {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 1rem;
+        }
+        
+        .table tbody tr {
+            transition: all 0.2s ease;
+        }
+        
+        .table tbody tr:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
         }
         
         .page-header {
-            border-bottom: 2px solid var(--primary-color);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        .page-header h1 {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        
+        footer .container {
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        footer .bi {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        footer p {
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        
+        /* Responsive Adjustments */
+        @@media (max-width: 768px) {
+            .navbar-collapse {
+                background: rgba(255,255,255,0.1);
+                border-radius: 12px;
+                padding: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .nav-link {
+                padding: 0.8rem 1rem !important;
+                margin: 0.2rem 0;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
         }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="ManageCare" asp-controller="Home" asp-action="Index">Care Management</a>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-area="ManageCare" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-heart-pulse me-2"></i>
+                    Care Management
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Home" ? "active" : "")" 
                                asp-area="ManageCare" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door"></i> Home
+                                <i class="bi bi-house-door"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
@@ -123,13 +320,13 @@
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Services" ? "active" : "")" 
                                asp-area="ManageCare" asp-controller="Services" asp-action="Index">
-                                <i class="bi bi-tools"></i> Services
+                                <i class="bi bi-gear"></i> Services
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Schedule" ? "active" : "")" 
                                asp-area="ManageCare" asp-controller="Schedule" asp-action="Index">
-                                <i class="bi bi-calendar-week"></i> Schedule
+                                <i class="bi bi-calendar-check"></i> Schedule
                             </a>
                         </li>
                         <li class="nav-item">
@@ -149,19 +346,22 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container mt-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center py-3">
-            &copy; @DateTime.Now.Year - Care Management System
+    <footer>
+        <div class="container text-center">
+            <i class="bi bi-heart-pulse"></i>
+            <p>Care Management System</p>
+            <p class="small">&copy; @DateTime.Now.Year - All rights reserved</p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
