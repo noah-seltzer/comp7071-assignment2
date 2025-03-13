@@ -1,4 +1,5 @@
-﻿@model Comp7071_A2.Areas.Housing.Models.Application
+﻿@using Comp7071_A2.Areas.Housing.Models
+@model Comp7071_A2.Areas.Housing.Models.Application
 
 @{
     ViewData["Title"] = "Create Application";
@@ -24,7 +25,8 @@
 
     <div class="form-group">
         <label asp-for="Status" class="control-label"></label>
-        <input asp-for="Status" class="form-control" />
+        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<ApplicationStatus>()"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Create</button>
