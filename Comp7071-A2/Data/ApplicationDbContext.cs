@@ -123,16 +123,14 @@ public class ApplicationDbContext : IdentityDbContext
 
         modelBuilder.Entity<Employee>()
             .HasDiscriminator<string>("JobTitle")
-            .HasValue<Employee>("Peasent")
-            .HasValue<Manager>("Noble");
-
+            .HasValue<Employee>("Employee")
+            .HasValue<Manager>("Manager");
 
         modelBuilder.Entity<Invoice>()
             .HasMany(i => i.Lines)
             .WithOne(l => l.Invoice)
             .HasForeignKey(i => i.InvoiceId)
             .IsRequired();
-
 
         modelBuilder.Entity<Customer>()
             .HasMany(c => c.Invoices)

@@ -1,0 +1,122 @@
+@model Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<div class="page-header">
+    <h1><i class="bi bi-person-badge"></i> Employee Details</h1>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.EmergencyContactPhone)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.EmergencyContactPhone)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.JobTitle)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.JobTitle)
+            </dd>
+        </dl>
+    </div>
+</div>
+    
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0"><i class="bi bi-award"></i> Certifications</h4>
+    </div>
+    <div class="card-body">
+        @if (Model.Certifications != null && Model.Certifications.Any())
+        {
+            <ul class="list-group">
+                @foreach (var cert in Model.Certifications)
+                {
+                    <li class="list-group-item">@cert.Name</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted">No certifications for this employee.</p>
+        }
+    </div>
+</div>
+    
+<div class="card mb-4">
+    <div class="card-header">
+        <h4 class="mb-0"><i class="bi bi-calendar-week"></i> Schedule</h4>
+    </div>
+    <div class="card-body">
+        @if (Model.Schedule != null && Model.Schedule.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Service</th>
+                        <th>Customers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var schedule in Model.Schedule)
+                    {
+                        <tr>
+                            <td>@schedule.StartTime.ToShortDateString()</td>
+                            <td>@schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</td>
+                            <td>@schedule.Service?.Name</td>
+                            <td>
+                                @if (schedule.Customers != null && schedule.Customers.Any())
+                                {
+                                    <ul class="list-unstyled mb-0">
+                                        @foreach (var customer in schedule.Customers)
+                                        {
+                                            <li>@customer.Name</li>
+                                        }
+                                    </ul>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">No scheduled services for this employee.</p>
+        }
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Edit
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div> 

@@ -3,19 +3,16 @@ using System;
 using Comp7071_A2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Comp7071_A2.Data.Migrations
+namespace Comp7071_A2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250227215657_InitialCreate")]
-    partial class InitialCreate
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
@@ -398,6 +395,9 @@ namespace Comp7071_A2.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -429,20 +429,20 @@ namespace Comp7071_A2.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EmergencyContactPhone")
-                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EmployeeType")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
-                        .HasMaxLength(8)
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ManagerId")
@@ -458,7 +458,7 @@ namespace Comp7071_A2.Data.Migrations
 
                     b.ToTable("Employees");
 
-                    b.HasDiscriminator<string>("JobTitle").HasValue("Peasent");
+                    b.HasDiscriminator<string>("JobTitle").HasValue("Employee");
 
                     b.UseTphMappingStrategy();
                 });
@@ -494,7 +494,17 @@ namespace Comp7071_A2.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("InvoiceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -532,8 +542,15 @@ namespace Comp7071_A2.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Type")
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Type");
+
+                    b.Property<decimal>("Rate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -578,16 +595,22 @@ namespace Comp7071_A2.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("End_Date")
+                    b.Property<DateTime>("End_Date")
                         .HasColumnType("TEXT");
 
                     b.Property<float>("Hours_Scheduled")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Recurrance")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Start_Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly>("Start_Time")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -632,8 +655,14 @@ namespace Comp7071_A2.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("End_Time")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("HRScheduleID")
                         .HasColumnType("TEXT");
+
+                    b.Property<float>("Hours_Scheduled")
+                        .HasColumnType("REAL");
 
                     b.Property<float>("Hours_Worked")
                         .HasColumnType("REAL");
@@ -894,10 +923,9 @@ namespace Comp7071_A2.Data.Migrations
                     b.HasBaseType("Comp7071_A2.Areas.ManageCare.Models.Employee");
 
                     b.Property<string>("Department")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasDiscriminator().HasValue("Noble");
+                    b.HasDiscriminator().HasValue("Manager");
                 });
 
             modelBuilder.Entity("CertificationEmployee", b =>
