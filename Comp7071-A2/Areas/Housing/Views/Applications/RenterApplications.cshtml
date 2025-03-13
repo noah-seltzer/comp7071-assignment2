@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Comp7071_A2.Areas.Housing.Models.Application>
+
+@{
+    ViewData["Title"] = "Renter Applications";
+}
+
+<h2>Renter Applications</h2>
+
+@if (!Model.Any())
+{
+    <p>No applications found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Asset Name</th>
+                <th>Status</th>
+                <th>Monthly Rent</th> <!-- Rent column -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@(application.Asset != null ? application.Asset.ReadableName : "N/A")</td>
+                    <td>@application.Status</td>
+                    <td>
+                        @(application.Asset != null ? $"${application.Asset.RentAmount:N2}" : "N/A")
+                    </td> <!-- Display Rent from Asset -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-controller="Renters" asp-action="Index" class="btn btn-secondary">Back to Renters</a>

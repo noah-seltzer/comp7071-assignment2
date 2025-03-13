@@ -22,6 +22,12 @@ namespace Comp7071_A2.Areas.Housing.Models
         public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;  // Default status
 
         public virtual Renter? Renter { get; set; }
+
         public virtual ICollection<ApplicationReference> ApplicationReferences { get; set; } = new List<ApplicationReference>();
+
+        [Required]
+        [Display(Name = "Monthly Rent")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        public decimal RentAmount { get; set; }
     }
 }
