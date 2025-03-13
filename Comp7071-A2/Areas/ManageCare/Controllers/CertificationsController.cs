@@ -18,7 +18,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         // GET: ManageCare/Certifications
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Set<Certification>().ToListAsync());
+            return View(await _context.Set<Certification>().Include(c => c.Services).ToListAsync());
         }
 
         // GET: ManageCare/Certifications/Details/5
