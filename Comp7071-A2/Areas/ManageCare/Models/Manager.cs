@@ -6,6 +6,6 @@ namespace Comp7071_A2.Areas.ManageCare.Models
     {
         public string? Department { get; set; }
 
-        public ICollection<Employee> Employees { get; set; } = [];
+        public ICollection<Employee> Employees { get; set;} = [];
     }
 }
