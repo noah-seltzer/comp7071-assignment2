@@ -4,31 +4,78 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    th a {
+        text-decoration: none;  
+        color: inherit;         
+        font-weight: bold;      
+        padding: 5px;           
+        display: inline-block;  
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+    th a:hover {
+        text-decoration: underline; 
+        color: #0056b3;
+    }
+</style>
+
+<h1>Assets</h1>
+
+<form method="get" class="mb-3">
+    <input type="hidden" name="sortOrder" value="@ViewData["CurrentSort"]" />
+
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" name="search" value="@ViewData["SearchFilter"]" class="form-control" placeholder="Search...">
+        </div>
+        <div class="col-md-4">
+            <select name="assetType" class="form-control">
+                <option value="">All Asset Types</option>
+                <option value="Suite" selected="@(ViewData["AssetTypeFilter"] as string == "Suite")">Suite</option>
+                <option value="Locker" selected="@(ViewData["AssetTypeFilter"] as string == "Locker")">Locker</option>
+                <option value="ParkingSpot" selected="@(ViewData["AssetTypeFilter"] as string == "ParkingSpot")">Parking Spot</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Reset</a>
+        </div>
+    </div>
+</form>
+
+
+<table class="table table table-striped table-hover">
+    <thead class="table-primary">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IsAvailable)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AvailabilitySort"]" asp-route-search="@ViewData["SearchFilter"]" asp-route-assetType="@ViewData["AssetTypeFilter"]">
+                    @Html.DisplayNameFor(model => model.IsAvailable)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RentAmount)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["RentSort"]" asp-route-search="@ViewData["SearchFilter"]" asp-route-assetType="@ViewData["AssetTypeFilter"]">
+                    @Html.DisplayNameFor(model => model.RentAmount)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Renter)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["RenterSort"]" asp-route-search="@ViewData["SearchFilter"]" asp-route-assetType="@ViewData["AssetTypeFilter"]">
+                    @Html.DisplayNameFor(model => model.Renter)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HousingGroup)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["HousingGroupSort"]" asp-route-search="@ViewData["SearchFilter"]" asp-route-assetType="@ViewData["AssetTypeFilter"]">
+                    @Html.DisplayNameFor(model => model.HousingGroup)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HousingGroup!.Address)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressSort"]" asp-route-search="@ViewData["SearchFilter"]" asp-route-assetType="@ViewData["AssetTypeFilter"]">
+                    @Html.DisplayNameFor(model => model.HousingGroup!.Address)
+                </a>
             </th>
             <th>
-                AssetType
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressSort"]" asp-route-search="@ViewData["SearchFilter"]" asp-route-assetType="@ViewData["AssetTypeFilter"]">
+                    AssetType
+                </a>
             </th>
             <th></th>
         </tr>
@@ -55,9 +102,18 @@
                 @Html.DisplayFor(modelItem => item.AssetType2)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                @{
+                    var controllerName = item.AssetType2 switch
+                    {
+                        "Suite" => "Suites",
+                        "Locker" => "Lockers",
+                        "ParkingSpot" => "ParkingSpots",
+                        _ => "Assets"
+                    };
+                }
+                <a asp-area="Housing" asp-controller="@controllerName" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-area="Housing" asp-controller="@controllerName" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-area="Housing" asp-controller="@controllerName" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
 }

@@ -19,12 +19,65 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         {
             _context = context;
         }
-
-        // GET: Housing/Assets
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index(string search, string assetType, string sortOrder)
         {
-            var applicationDbContext = _context.Assets.Include(a => a.Building).Include(a => a.HousingGroup).Include(a => a.Renter);
-            return View(await applicationDbContext.ToListAsync());
+            var assets = _context.Assets
+                .Include(a => a.Renter)
+                .Include(a => a.HousingGroup)
+                .AsQueryable();
+
+            // Searching across multiple columns
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToLower();
+                assets = assets.Where(a =>
+                    (a.Renter != null && EF.Functions.Like(a.Renter.Name.ToLower(), $"%{search}%")) ||
+                    (a.HousingGroup != null && EF.Functions.Like(a.HousingGroup.Name.ToLower(), $"%{search}%")) ||
+                    (a.HousingGroup != null && EF.Functions.Like(a.HousingGroup.Address.ToLower(), $"%{search}%"))
+                );
+            }
+
+            // Sorting Logic (Preserve existing filters)
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["SearchFilter"] = search;
+            ViewData["AssetTypeFilter"] = assetType;
+
+            ViewData["AvailabilitySort"] = sortOrder == "availability_asc" ? "availability_desc" : "availability_asc";
+            ViewData["RentSort"] = sortOrder == "rentAmount_asc" ? "rentAmount_desc" : "rentAmount_asc";
+            ViewData["RenterSort"] = sortOrder == "renter_asc" ? "renter_desc" : "renter_asc";
+            ViewData["HousingGroupSort"] = sortOrder == "housingGroup_asc" ? "housingGroup_desc" : "housingGroup_asc";
+            ViewData["AddressSort"] = sortOrder == "address_asc" ? "address_desc" : "address_asc";
+            ViewData["AssetTypeSort"] = sortOrder == "assetType_asc" ? "assetType_desc" : "assetType_asc";
+
+            // Sorting Logic
+            assets = sortOrder switch
+            {
+                "availability_asc" => assets.OrderBy(a => a.IsAvailable),
+                "availability_desc" => assets.OrderByDescending(a => a.IsAvailable),
+                "rentAmount_asc" => assets.OrderBy(a => (double)a.RentAmount),
+                "rentAmount_desc" => assets.OrderByDescending(a => (double)a.RentAmount), 
+                "renter_asc" => assets.OrderBy(a => a.Renter != null ? a.Renter.Name : ""),
+                "renter_desc" => assets.OrderByDescending(a => a.Renter != null ? a.Renter.Name : ""),
+                "housingGroup_asc" => assets.OrderBy(a => a.HousingGroup != null ? a.HousingGroup.Name : ""),
+                "housingGroup_desc" => assets.OrderByDescending(a => a.HousingGroup != null ? a.HousingGroup.Name : ""),
+                _ => assets.OrderBy(a => a.ID),
+            };
+
+            // This is a custom filter for the AssetType2 property is not part of the database
+            var assetList = await assets.ToListAsync();
+            assetList = assetList.Where(a => assetType == null || a.AssetType2 == assetType).ToList();
+            if (sortOrder != null && sortOrder.StartsWith("assetType"))
+            {
+                assetList = assetList.OrderBy(a => a.AssetType2).ToList();
+                if (sortOrder.EndsWith("_desc"))
+                {
+                    assetList.Reverse();
+                }
+            }
+
+
+            return View(assetList);
         }
 
         // GET: Housing/Assets/Details/5
