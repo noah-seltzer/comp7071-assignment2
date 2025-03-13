@@ -138,7 +138,9 @@ namespace Comp7071_A2.Data
                 BuildingID = context.Buildings.FirstOrDefault()?.ID,
                 IsAvailable = true,
                 RentAmount = 50,
-                SuiteID = suite.ID
+                SuiteID = suite.ID,
+                LockerSize = "Small",
+                LockerNumber = 1
             };
             context.Lockers.Add(locker);
             suite.LockerID = locker.ID;
@@ -150,7 +152,8 @@ namespace Comp7071_A2.Data
                 BuildingID = context.Buildings.FirstOrDefault()?.ID,
                 IsAvailable = true,
                 RentAmount = 100,
-                SuiteID = suite.ID
+                SuiteID = suite.ID,
+                SpotNumber = 1
             };
             context.ParkingSpots.Add(parkingSpot);
             suite.ParkingSpotID = parkingSpot.ID;

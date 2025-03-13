@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="LockerSize" class="control-label"></label>
-                <input asp-for="LockerSize" class="form-control" />
+                <select asp-for="LockerSize" class="form-control" asp-items="ViewBag.LockerSizeOptions"></select>
                 <span asp-validation-for="LockerSize" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,18 +30,20 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="HousingGroupID" class="control-label"></label>
-                <select asp-for="HousingGroupID" class="form-control" asp-items="ViewBag.HousingGroupID"></select>
+                <select id="HousingGroupDropdown" asp-for="HousingGroupID" class="form-control" asp-items="ViewBag.HousingGroupID"></select>
                 <span asp-validation-for="HousingGroupID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BuildingID" class="control-label"></label>
+                <select id="BuildingDropdown" asp-for="BuildingID" class="form-control" asp-items="ViewBag.BuildingID" id="BuildingDropdown">
+                    <option value="">Select a Building</option>
+                </select>
+                <span asp-validation-for="BuildingID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RenterID" class="control-label"></label>
                 <select asp-for="RenterID" class="form-control" asp-items="ViewBag.RenterID"></select>
                 <span asp-validation-for="RenterID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BuildingID" class="control-label"></label>
-                <select asp-for="BuildingID" class="form-control" asp-items="ViewBag.BuildingID"></select>
-                <span asp-validation-for="BuildingID" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -66,4 +68,32 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const housingGroupDropdown = document.getElementById("HousingGroupDropdown");
+            const buildingDropdown = document.getElementById("BuildingDropdown");
+
+            housingGroupDropdown.addEventListener("change", function () {
+                const selectedHousingGroupId = this.value;
+
+                // Clear existing options
+                buildingDropdown.innerHTML = '<option value="">Select a Building</option>';
+
+                if (selectedHousingGroupId) {
+                    fetch(`/Housing/Lockers/GetBuildingsByHousingGroup?housingGroupId=${selectedHousingGroupId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(building => {
+                                const option = document.createElement("option");
+                                option.value = building.value;
+                                option.textContent = building.text;
+                                buildingDropdown.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error("Error fetching buildings:", error));
+                }
+            });
+        });
+    </script>
 }

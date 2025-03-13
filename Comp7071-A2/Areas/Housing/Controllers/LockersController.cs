@@ -23,7 +23,12 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Lockers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Lockers.Include(l => l.Building).Include(l => l.HousingGroup).Include(l => l.Renter);
+            var applicationDbContext = _context.Lockers
+                .Include(l => l.Building)
+                .Include(l => l.HousingGroup)
+                .Include(l => l.Suite)
+                .Include(l => l.Renter)
+                .ThenInclude(r => r.Identity);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,7 +43,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var locker = await _context.Lockers
                 .Include(l => l.Building)
                 .Include(l => l.HousingGroup)
+                .Include(l => l.Suite)
                 .Include(l => l.Renter)
+                .ThenInclude(r => r.Identity)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (locker == null)
             {
@@ -48,12 +55,29 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             return View(locker);
         }
 
-        // GET: Housing/Lockers/Create
         public IActionResult Create()
         {
-            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID");
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID");
+            // Locker Size Options
+            ViewBag.LockerSizeOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Small", Text = "Small" },
+                new SelectListItem { Value = "Medium", Text = "Medium" },
+                new SelectListItem { Value = "Large", Text = "Large" }
+            };
+
+            // Housing Group Dropdown
+            ViewBag.HousingGroupID = new SelectList(_context.HousingGroups, "ID", "Name");
+
+            // Renter Dropdown (Include "None" option)
+            var renters = _context.Renters.Include(r => r.Identity)
+                .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Identity.Email })
+                .ToList();
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" }); // Allow "None"
+            ViewBag.RenterID = new SelectList(renters, "Value", "Text");
+
+            // Buildings Dropdown (Initially empty, updates dynamically)
+            ViewBag.BuildingID = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
+
             return View();
         }
 
@@ -85,15 +109,51 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
 
-            var locker = await _context.Lockers.FindAsync(id);
+            var locker = await _context.Lockers
+                .Include(l => l.Building)
+                .Include(l => l.HousingGroup)
+                .Include(l => l.Suite)
+                .Include(l => l.Renter)
+                // .ThenInclude(r => r.Identity)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (locker == null)
             {
                 return NotFound();
             }
-            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", locker.BuildingID);
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", locker.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", locker.RenterID);
+            // Locker size dropdown options
+            ViewBag.LockerSizeOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Small", Text = "Small" },
+                new SelectListItem { Value = "Medium", Text = "Medium" },
+                new SelectListItem { Value = "Large", Text = "Large" }
+            };
+
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", locker.HousingGroupID);
+            // Buildings filtered by selected Housing Group
+            var buildings = _context.Buildings
+                .Where(b => b.HousingGroupID == locker.HousingGroupID)
+                .Select(b => new SelectListItem { Value = b.ID.ToString(), Text = b.Address })
+                .ToList();
+            ViewBag.BuildingID = new SelectList(buildings, "Value", "Text", locker.BuildingID);
+
+            var renters = _context.Renters.Include(r => r.Identity)
+                .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Identity.Email })
+                .ToList();
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["RenterID"] = new SelectList(renters, "Value", "Text", locker.RenterID);
+    
             return View(locker);
+        }
+
+        [HttpGet]
+        public JsonResult GetBuildingsByHousingGroup(Guid housingGroupId)
+        {
+            var buildings = _context.Buildings
+                .Where(b => b.HousingGroupID == housingGroupId)
+                .Select(b => new SelectListItem { Value = b.ID.ToString(), Text = b.Address })
+                .ToList();
+
+            return Json(buildings);
         }
 
         // POST: Housing/Lockers/Edit/5
@@ -145,7 +205,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var locker = await _context.Lockers
                 .Include(l => l.Building)
                 .Include(l => l.HousingGroup)
+                .Include(l => l.Suite)
                 .Include(l => l.Renter)
+                .ThenInclude(r => r.Identity)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (locker == null)
             {
