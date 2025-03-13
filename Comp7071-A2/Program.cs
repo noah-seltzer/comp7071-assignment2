@@ -56,7 +56,7 @@ else
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-);
+).RequireAuthorization();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
