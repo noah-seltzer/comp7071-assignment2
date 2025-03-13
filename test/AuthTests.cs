@@ -107,11 +107,9 @@ namespace test
             var phoneNumberInput = _driver.FindElement(By.Id("PhoneNumber"));
             phoneNumberInput.SendKeys("1234567890");
 
-            var emailInput2 = _driver.FindElement(By.Id("Email"));
-            emailInput2.SendKeys("testEmaiul5@test.com");
-
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
             var submitButton = wait.Until(driver => driver.FindElement(By.Id("create-button")));
+    
             /**
             * Scroll to the submit button before clicking it.
             * This is necessary because the button is not clickable if it is not on the screen.
@@ -163,7 +161,7 @@ namespace test
             descriptionInput.SendKeys("Test Damage");
 
             var damageDateInput = _driver.FindElement(By.Id("RecordedDate"));
-            damageDateInput.SendKeys("2025\0313");
+            damageDateInput.SendKeys("2025\t0313");
 
             var submitButton = _driver.FindElement(By.Id("create-asset-damage"));
             submitButton.Click();
