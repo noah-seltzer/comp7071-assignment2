@@ -51,6 +51,13 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         public IActionResult Create()
         {
             ViewData["Certifications"] = new SelectList(_context.Set<Certification>(), "Id", "Name");
+
+            var jobTitles = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Manager", Text = "Manager" },
+                new SelectListItem { Value = "Employee", Text = "Employee" }
+            };
+            ViewData["JobTitles"] = new SelectList(jobTitles, "Value", "Text");
             return View();
         }
 

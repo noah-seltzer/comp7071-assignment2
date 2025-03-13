@@ -41,7 +41,7 @@
                     
                     <div class="mb-3">
                         <label asp-for="JobTitle" class="form-label"></label>
-                        <input asp-for="JobTitle" class="form-control" />
+                        <select asp-for="JobTitle" name="JobTitle" class="form-control" asp-items="ViewBag.JobTitles"></select>
                         <span asp-validation-for="JobTitle" class="text-danger"></span>
                     </div>
                     
