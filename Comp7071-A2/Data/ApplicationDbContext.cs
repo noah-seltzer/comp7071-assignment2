@@ -27,6 +27,10 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Contact> Contacts { get; set; } = default!;
     public DbSet<Application> Applications { get; set; } = default!;
     public DbSet<ApplicationReference> ApplicationReferences { get; set; } = default!;
+    
+    public DbSet<AssetDamage> AssetDamages { get; set; }
+    
+    public DbSet<DamageImage> DamageImages { get; set; }
 
     //***********************************************************************************
 
@@ -102,6 +106,26 @@ public class ApplicationDbContext : IdentityDbContext
             .WithMany()
             .HasForeignKey(c => c.RenterID)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Asset>()
+            .HasMany(a => a.AssetDamages)
+            .WithOne(ad => ad.Asset)
+            .HasForeignKey(ad => ad.AssetID)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AssetDamage>()
+            .HasMany(ad => ad.DamageImages)
+            .WithOne(d => d.AssetDamage)
+            .HasForeignKey(d => d.AssetDamageID)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Renter>()
+            .HasMany(r => r.AssetDamages)
+            .WithOne(ad => ad.Renter)
+            .HasForeignKey(ad => ad.RenterID)
+            .IsRequired();
 
         //********************************************************************
 

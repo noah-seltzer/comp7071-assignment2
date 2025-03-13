@@ -25,8 +25,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var assets = _context.Assets
                 .Include(a => a.Renter)
                 .Include(a => a.HousingGroup)
+                .Include(a => a.AssetDamages)
                 .AsQueryable();
-
+            
             // Searching across multiple columns
             if (!string.IsNullOrEmpty(search))
             {

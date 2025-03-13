@@ -77,6 +77,9 @@
                     AssetType
                 </a>
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssetDamages)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -100,6 +103,23 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.AssetType2)
+            </td>
+            <td>
+                @if (item.AssetDamages != null && item.AssetDamages.Any())
+                {
+                    @foreach (var damage in item.AssetDamages)
+                    {
+                        <li>
+                            <a asp-action="Details" asp-controller="AssetDamages" asp-route-id="@damage.ID">
+                                @damage.Description
+                            </a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    @:No damages
+                }
             </td>
             <td>
                 @{

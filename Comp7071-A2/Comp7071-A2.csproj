@@ -41,4 +41,8 @@
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Index.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="app.db" />
+  </ItemGroup>
+
 </Project>

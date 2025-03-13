@@ -28,6 +28,8 @@ namespace Comp7071_A2.Areas.Housing.Models
         [MaxLength(100)]
         [Phone]
         public string PhoneNumber { get; set; }
+        
+        public virtual ICollection<AssetDamage>? AssetDamages { get; set; }
 
         // This is in the IdentityUser
         // [Required]
