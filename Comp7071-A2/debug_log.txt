@@ -1,6 +1,0 @@
-2025-03-13 1:34:40 AM: User created with ID: f17744f7-c30e-4aac-b523-0651e7e79fc8
-2025-03-13 1:34:40 AM: Storing UserId in TempData: f17744f7-c30e-4aac-b523-0651e7e79fc8
-2025-03-13 1:34:40 AM: Redirecting to: /Identity/Account/AdditionalInfo?userId=f17744f7-c30e-4aac-b523-0651e7e79fc8
-2025-03-13 10:26:44 AM: User created with ID: b0c1ea3f-9ca5-44b7-b7f2-ca254bbabaf5
-2025-03-13 10:26:44 AM: Storing UserId in TempData: b0c1ea3f-9ca5-44b7-b7f2-ca254bbabaf5
-2025-03-13 10:26:44 AM: Redirecting to: /Identity/Account/AdditionalInfo?userId=b0c1ea3f-9ca5-44b7-b7f2-ca254bbabaf5
