@@ -51,7 +51,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/AssetDamages/Create
         public IActionResult Create()
         {
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "AssetType2");
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ReadableName");
             ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name");
             return View();
         }
@@ -92,7 +92,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "AssetType2", assetDamage.AssetID);
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ReadableName", assetDamage.AssetID);
             ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", assetDamage.RenterID);
             return View(assetDamage);
         }
@@ -112,7 +112,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             {
                 return NotFound();
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "AssetType2", assetDamage.AssetID);
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ReadableName", assetDamage.AssetID);
             ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", assetDamage.RenterID);
             return View(assetDamage);
         }
@@ -170,7 +170,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "AssetType", assetDamage.AssetID);
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ReadableName", assetDamage.AssetID);
             ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", assetDamage.RenterID);
             return View(assetDamage);
         }

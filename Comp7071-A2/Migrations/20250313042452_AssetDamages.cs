@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Comp7071_A2.Migrations
 {
     /// <inheritdoc />
-    public partial class caremanagementv1 : Migration
+    public partial class AssetDamages : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -276,6 +276,28 @@ namespace Comp7071_A2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Renters",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IdentityID = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Photo = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Renters", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Renters_AspNetUsers_IdentityID",
+                        column: x => x.IdentityID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Invoices",
                 columns: table => new
                 {
@@ -412,7 +434,10 @@ namespace Comp7071_A2.Migrations
                     HousingGroupID = table.Column<Guid>(type: "TEXT", nullable: true),
                     NumUnits = table.Column<int>(type: "INTEGER", nullable: false),
                     NumLockers = table.Column<int>(type: "INTEGER", nullable: false),
-                    NumParking = table.Column<int>(type: "INTEGER", nullable: false)
+                    NumParking = table.Column<int>(type: "INTEGER", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    City = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    PostalCode = table.Column<string>(type: "TEXT", maxLength: 6, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -422,6 +447,27 @@ namespace Comp7071_A2.Migrations
                         column: x => x.HousingGroupID,
                         principalTable: "HousingGroups",
                         principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contacts",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RenterID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contacts", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Contacts_Renters_RenterID",
+                        column: x => x.RenterID,
+                        principalTable: "Renters",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -495,39 +541,6 @@ namespace Comp7071_A2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Application",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    RenterID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    AssetID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Application", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApplicationReference",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ApplicationID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ContactID = table.Column<Guid>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationReference", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_ApplicationReference_Application_ApplicationID",
-                        column: x => x.ApplicationID,
-                        principalTable: "Application",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Assets",
                 columns: table => new
                 {
@@ -536,11 +549,37 @@ namespace Comp7071_A2.Migrations
                     RenterID = table.Column<Guid>(type: "TEXT", nullable: true),
                     BuildingID = table.Column<Guid>(type: "TEXT", nullable: true),
                     IsAvailable = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RentAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    RentAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AssetType = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
+                    LockerNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    LockerSize = table.Column<string>(type: "TEXT", maxLength: 10, nullable: true),
+                    SuiteID = table.Column<Guid>(type: "TEXT", nullable: true),
+                    SpotNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    ParkingSpot_SuiteID = table.Column<Guid>(type: "TEXT", nullable: true),
+                    VehicleID = table.Column<Guid>(type: "TEXT", nullable: true),
+                    LockerID = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ParkingSpotID = table.Column<Guid>(type: "TEXT", nullable: true),
+                    UnitNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    Floor = table.Column<int>(type: "INTEGER", nullable: true),
+                    Occupants = table.Column<int>(type: "INTEGER", nullable: true),
+                    Rooms = table.Column<int>(type: "INTEGER", nullable: true),
+                    Bathrooms = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Assets", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Assets_Assets_LockerID",
+                        column: x => x.LockerID,
+                        principalTable: "Assets",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Assets_Assets_ParkingSpotID",
+                        column: x => x.ParkingSpotID,
+                        principalTable: "Assets",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Assets_Buildings_BuildingID",
                         column: x => x.BuildingID,
@@ -551,115 +590,65 @@ namespace Comp7071_A2.Migrations
                         column: x => x.HousingGroupID,
                         principalTable: "HousingGroups",
                         principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_Assets_Renters_RenterID",
+                        column: x => x.RenterID,
+                        principalTable: "Renters",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lockers",
+                name: "Applications",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RenterID = table.Column<Guid>(type: "TEXT", nullable: false),
                     AssetID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SuiteID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    LockerNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    LockerSize = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false)
+                    Status = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lockers", x => x.ID);
+                    table.PrimaryKey("PK_Applications", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Lockers_Assets_AssetID",
-                        column: x => x.AssetID,
-                        principalTable: "Assets",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ParkingSpots",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AssetID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SuiteID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    VehicleID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    SpotNumber = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ParkingSpots", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_ParkingSpots_Assets_AssetID",
-                        column: x => x.AssetID,
-                        principalTable: "Assets",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Renters",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ApplicationID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    AssetID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Photo = table.Column<byte[]>(type: "BLOB", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Renters", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Renters_Application_ApplicationID",
-                        column: x => x.ApplicationID,
-                        principalTable: "Application",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Renters_Assets_AssetID",
-                        column: x => x.AssetID,
-                        principalTable: "Assets",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Suites",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    LockerID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    ParkingSpotID = table.Column<Guid>(type: "TEXT", nullable: true),
-                    AssetID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UnitNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    Floor = table.Column<int>(type: "INTEGER", nullable: false),
-                    Occupants = table.Column<int>(type: "INTEGER", nullable: false),
-                    Rooms = table.Column<int>(type: "INTEGER", nullable: false),
-                    Bathrooms = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Suites", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Suites_Assets_AssetID",
+                        name: "FK_Applications_Assets_AssetID",
                         column: x => x.AssetID,
                         principalTable: "Assets",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Suites_Lockers_LockerID",
-                        column: x => x.LockerID,
-                        principalTable: "Lockers",
+                        name: "FK_Applications_Renters_RenterID",
+                        column: x => x.RenterID,
+                        principalTable: "Renters",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AssetDamages",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AssetID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RenterID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    RecordedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FixedDate = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssetDamages", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Suites_ParkingSpots_ParkingSpotID",
-                        column: x => x.ParkingSpotID,
-                        principalTable: "ParkingSpots",
+                        name: "FK_AssetDamages_Assets_AssetID",
+                        column: x => x.AssetID,
+                        principalTable: "Assets",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AssetDamages_Renters_RenterID",
+                        column: x => x.RenterID,
+                        principalTable: "Renters",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -676,32 +665,61 @@ namespace Comp7071_A2.Migrations
                 {
                     table.PrimaryKey("PK_Vehicles", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Vehicles_ParkingSpots_ParkingSpotID",
+                        name: "FK_Vehicles_Assets_ParkingSpotID",
                         column: x => x.ParkingSpotID,
-                        principalTable: "ParkingSpots",
+                        principalTable: "Assets",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Contact",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    RenterID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contact", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Contact_Renters_RenterID",
+                        name: "FK_Vehicles_Renters_RenterID",
                         column: x => x.RenterID,
                         principalTable: "Renters",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationReferences",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ApplicationID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ContactID = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationReferences", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ApplicationReferences_Applications_ApplicationID",
+                        column: x => x.ApplicationID,
+                        principalTable: "Applications",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationReferences_Contacts_ContactID",
+                        column: x => x.ContactID,
+                        principalTable: "Contacts",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DamageImages",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AssetDamageID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Photo = table.Column<byte[]>(type: "BLOB", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DamageImages", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_DamageImages_AssetDamages_AssetDamageID",
+                        column: x => x.AssetDamageID,
+                        principalTable: "AssetDamages",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -709,29 +727,30 @@ namespace Comp7071_A2.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6a4d3c5f-95df-4e18-bc3b-0e69c457c6a4", null, "User", null },
-                    { "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456", null, "HousingAdmin", null }
+                    { "6a4d3c5f-95df-4e18-bc3b-0e69c457c234", null, "Renter", "RENTER" },
+                    { "6a4d3c5f-95df-4e18-bc3b-0e69c457c6a4", null, "User", "USER" },
+                    { "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456", null, "HousingAdmin", "HOUSINGADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Application_AssetID",
-                table: "Application",
-                column: "AssetID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Application_RenterID",
-                table: "Application",
-                column: "RenterID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ApplicationReference_ApplicationID",
-                table: "ApplicationReference",
+                name: "IX_ApplicationReferences_ApplicationID",
+                table: "ApplicationReferences",
                 column: "ApplicationID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationReference_ContactID",
-                table: "ApplicationReference",
+                name: "IX_ApplicationReferences_ContactID",
+                table: "ApplicationReferences",
                 column: "ContactID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_AssetID",
+                table: "Applications",
+                column: "AssetID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_RenterID",
+                table: "Applications",
+                column: "RenterID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -771,6 +790,16 @@ namespace Comp7071_A2.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AssetDamages_AssetID",
+                table: "AssetDamages",
+                column: "AssetID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssetDamages_RenterID",
+                table: "AssetDamages",
+                column: "RenterID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Assets_BuildingID",
                 table: "Assets",
                 column: "BuildingID");
@@ -779,6 +808,18 @@ namespace Comp7071_A2.Migrations
                 name: "IX_Assets_HousingGroupID",
                 table: "Assets",
                 column: "HousingGroupID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assets_LockerID",
+                table: "Assets",
+                column: "LockerID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assets_ParkingSpotID",
+                table: "Assets",
+                column: "ParkingSpotID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assets_RenterID",
@@ -796,14 +837,19 @@ namespace Comp7071_A2.Migrations
                 column: "EmployeesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contact_RenterID",
-                table: "Contact",
+                name: "IX_Contacts_RenterID",
+                table: "Contacts",
                 column: "RenterID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerSchedule_SchedulesId",
                 table: "CustomerSchedule",
                 column: "SchedulesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DamageImages_AssetDamageID",
+                table: "DamageImages",
+                column: "AssetDamageID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_ManagerId",
@@ -831,33 +877,14 @@ namespace Comp7071_A2.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lockers_AssetID",
-                table: "Lockers",
-                column: "AssetID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ParkingSpots_AssetID",
-                table: "ParkingSpots",
-                column: "AssetID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PayPeriods_HREmployeeID",
                 table: "PayPeriods",
                 column: "HREmployeeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Renters_ApplicationID",
+                name: "IX_Renters_IdentityID",
                 table: "Renters",
-                column: "ApplicationID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Renters_AssetID",
-                table: "Renters",
-                column: "AssetID",
-                unique: true);
+                column: "IdentityID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schedule_ServiceId",
@@ -875,76 +902,22 @@ namespace Comp7071_A2.Migrations
                 column: "HRScheduleID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Suites_AssetID",
-                table: "Suites",
-                column: "AssetID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Suites_LockerID",
-                table: "Suites",
-                column: "LockerID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Suites_ParkingSpotID",
-                table: "Suites",
-                column: "ParkingSpotID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_ParkingSpotID",
                 table: "Vehicles",
                 column: "ParkingSpotID",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Application_Assets_AssetID",
-                table: "Application",
-                column: "AssetID",
-                principalTable: "Assets",
-                principalColumn: "ID");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Application_Renters_RenterID",
-                table: "Application",
-                column: "RenterID",
-                principalTable: "Renters",
-                principalColumn: "ID");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationReference_Contact_ContactID",
-                table: "ApplicationReference",
-                column: "ContactID",
-                principalTable: "Contact",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Assets_Renters_RenterID",
-                table: "Assets",
-                column: "RenterID",
-                principalTable: "Renters",
-                principalColumn: "ID");
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_RenterID",
+                table: "Vehicles",
+                column: "RenterID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Application_Assets_AssetID",
-                table: "Application");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Renters_Assets_AssetID",
-                table: "Renters");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Application_Renters_RenterID",
-                table: "Application");
-
             migrationBuilder.DropTable(
-                name: "ApplicationReference");
+                name: "ApplicationReferences");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -968,6 +941,9 @@ namespace Comp7071_A2.Migrations
                 name: "CustomerSchedule");
 
             migrationBuilder.DropTable(
+                name: "DamageImages");
+
+            migrationBuilder.DropTable(
                 name: "EmployeeSchedule");
 
             migrationBuilder.DropTable(
@@ -983,16 +959,19 @@ namespace Comp7071_A2.Migrations
                 name: "Shifts");
 
             migrationBuilder.DropTable(
-                name: "Suites");
-
-            migrationBuilder.DropTable(
                 name: "Vehicles");
 
             migrationBuilder.DropTable(
-                name: "Contact");
+                name: "Applications");
+
+            migrationBuilder.DropTable(
+                name: "Contacts");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AssetDamages");
 
             migrationBuilder.DropTable(
                 name: "Employees");
@@ -1013,10 +992,7 @@ namespace Comp7071_A2.Migrations
                 name: "HRSchedules");
 
             migrationBuilder.DropTable(
-                name: "Lockers");
-
-            migrationBuilder.DropTable(
-                name: "ParkingSpots");
+                name: "Assets");
 
             migrationBuilder.DropTable(
                 name: "Services");
@@ -1025,22 +1001,16 @@ namespace Comp7071_A2.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Assets");
+                name: "Buildings");
 
             migrationBuilder.DropTable(
-                name: "Buildings");
+                name: "Renters");
 
             migrationBuilder.DropTable(
                 name: "HousingGroups");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Renters");
-
-            migrationBuilder.DropTable(
-                name: "Application");
         }
     }
 }

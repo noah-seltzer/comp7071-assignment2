@@ -44,5 +44,17 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return "Unknown";
             }
         }
+
+        [NotMapped]
+        public string ReadableName
+        {
+            get
+            {
+                if (this is Locker locker) return $"Locker {locker.LockerNumber}";
+                if (this is ParkingSpot parkingSpot) return $"Parking Spot {parkingSpot.SpotNumber}";
+                if (this is Suite suite) return $"Suite {suite.UnitNumber}";
+                return "Unknown";
+            }
+        }
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Comp7071_A2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250313033402_VehicleFix")]
-    partial class VehicleFix
+    [Migration("20250313042452_AssetDamages")]
+    partial class AssetDamages
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,6 +136,37 @@ namespace Comp7071_A2.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetDamage", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AssetID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("FixedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RecordedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RenterID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AssetID");
+
+                    b.HasIndex("RenterID");
+
+                    b.ToTable("AssetDamages");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Building", b =>
                 {
                     b.Property<Guid>("ID")
@@ -205,6 +236,25 @@ namespace Comp7071_A2.Migrations
                     b.HasIndex("RenterID");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.DamageImage", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AssetDamageID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("BLOB");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AssetDamageID");
+
+                    b.ToTable("DamageImages");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.HousingGroup", b =>
@@ -1007,6 +1057,25 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Renter");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetDamage", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
+                        .WithMany("AssetDamages")
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
+                        .WithMany("AssetDamages")
+                        .HasForeignKey("RenterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Renter");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Building", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.HousingGroup", "HousingGroup")
@@ -1025,6 +1094,17 @@ namespace Comp7071_A2.Migrations
                         .IsRequired();
 
                     b.Navigation("Renter");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.DamageImage", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.AssetDamage", "AssetDamage")
+                        .WithMany("DamageImages")
+                        .HasForeignKey("AssetDamageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssetDamage");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.HousingGroup", b =>
@@ -1224,9 +1304,24 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("ApplicationReferences");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Asset", b =>
+                {
+                    b.Navigation("AssetDamages");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetDamage", b =>
+                {
+                    b.Navigation("DamageImages");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
                 {
                     b.Navigation("ApplicationReferences");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
+                {
+                    b.Navigation("AssetDamages");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Customer", b =>
