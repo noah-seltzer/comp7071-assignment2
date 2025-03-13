@@ -108,12 +108,15 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
                 return NotFound();
             }
 
-
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.UserId == currentUserId);
             if (currentEmployee == null || currentEmployee.Job_Title != "Manager")
             {
                 ModelState.AddModelError(string.Empty, "Only managers can edit employee details.");
+                return View(hREmployee);
+            } else if (currentEmployee.ID == id)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot edit yourself");
                 return View(hREmployee);
             }
 
