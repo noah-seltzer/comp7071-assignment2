@@ -1,8 +1,43 @@
 ﻿@model IEnumerable<Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRSchedule>
+@using Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
 
 @{
+
+
+
     ViewData["Title"] = "Index";
+
 }
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script>
+    var model = @Html.Raw(Json.Serialize(@Model))
+
+    var shifts = []
+    model.forEach((m,i)=> {
+        m.shifts.forEach(s => {
+            shifts.push({
+                title: m.name,
+                id: s.id,
+                start: s.start_Time,
+                startStr: s.start_Time,
+                end:s.end_Time,
+                endStr:s.end_Time,
+            })
+        })
+    })
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        selectable: false,
+        events: shifts
+      });
+      calendar.render();
+    });
+
+</script>
+
 
 <h1>Index</h1>
 
@@ -54,6 +89,7 @@
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
-}
+}       
     </tbody>
 </table>
+<div id="calendar"></div>

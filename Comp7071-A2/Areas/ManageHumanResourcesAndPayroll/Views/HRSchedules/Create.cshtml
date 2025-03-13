@@ -1,7 +1,10 @@
 ﻿@model Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRSchedule
+@using Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Enums
 
 @{
+
     ViewData["Title"] = "Create";
+
 }
 
 <h1>Create</h1>
@@ -13,14 +16,24 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Start_Date" class="control-label"></label>
-                <input asp-for="Start_Date" class="form-control" />
+                <input type="date" asp-for="Start_Date" class="form-control" />
                 <span asp-validation-for="Start_Date" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="End_Date" class="control-label"></label>
-                <input asp-for="End_Date" class="form-control" />
+                <input type="date" asp-for="End_Date" class="form-control" />
                 <span asp-validation-for="End_Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Start_Time" class="control-label"></label>
+                <input type="time" asp-for="Start_Time" class="form-control" />
+                <span asp-validation-for="Start_Time" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Hours_Scheduled" class="control-label"></label>
@@ -29,16 +42,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
+                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<ScheduleStatus>()"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Recurrance" class="control-label"></label>
-                <select asp-for="Recurrance" class="form-control"></select>
+            <select asp-for="Recurrance" 
+                    class="form-control" 
+                    asp-items="Html.GetEnumSelectList<Recurrence>()"></select>
                 <span asp-validation-for="Recurrance" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <span class="text-danger">@Html.ValidationSummary(false)</span>
             </div>
         </form>
     </div>

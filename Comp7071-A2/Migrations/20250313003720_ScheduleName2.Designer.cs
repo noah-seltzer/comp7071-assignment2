@@ -3,16 +3,19 @@ using System;
 using Comp7071_A2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Comp7071_A2.Migrations
+namespace Comp7071_A2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250313003720_ScheduleName2")]
+    partial class ScheduleName2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
@@ -395,9 +398,6 @@ namespace Comp7071_A2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -429,20 +429,20 @@ namespace Comp7071_A2.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EmergencyContactPhone")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EmployeeType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(8)
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ManagerId")
@@ -458,7 +458,7 @@ namespace Comp7071_A2.Migrations
 
                     b.ToTable("Employees");
 
-                    b.HasDiscriminator<string>("JobTitle").HasValue("Employee");
+                    b.HasDiscriminator<string>("JobTitle").HasValue("Peasent");
 
                     b.UseTphMappingStrategy();
                 });
@@ -494,17 +494,7 @@ namespace Comp7071_A2.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("InvoiceId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("UnitPrice")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -542,15 +532,8 @@ namespace Comp7071_A2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Type");
-
-                    b.Property<decimal>("Rate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -576,9 +559,6 @@ namespace Comp7071_A2.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("HRManagerID")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Job_Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -587,16 +567,9 @@ namespace Comp7071_A2.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("ID");
 
-                    b.HasIndex("HRManagerID");
-
-                    b.ToTable("HREmployees", (string)null);
-
-                    b.UseTptMappingStrategy();
+                    b.ToTable("HREmployees");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRSchedule", b =>
@@ -612,15 +585,13 @@ namespace Comp7071_A2.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Recurrance")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Start_Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<TimeOnly>("Start_Time")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -665,14 +636,8 @@ namespace Comp7071_A2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("End_Time")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid?>("HRScheduleID")
                         .HasColumnType("TEXT");
-
-                    b.Property<float>("Hours_Scheduled")
-                        .HasColumnType("REAL");
 
                     b.Property<float>("Hours_Worked")
                         .HasColumnType("REAL");
@@ -933,16 +898,10 @@ namespace Comp7071_A2.Migrations
                     b.HasBaseType("Comp7071_A2.Areas.ManageCare.Models.Employee");
 
                     b.Property<string>("Department")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasDiscriminator().HasValue("Manager");
-                });
-
-            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRManager", b =>
-                {
-                    b.HasBaseType("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee");
-
-                    b.ToTable("HRManagers", (string)null);
+                    b.HasDiscriminator().HasValue("Noble");
                 });
 
             modelBuilder.Entity("CertificationEmployee", b =>
@@ -1175,13 +1134,6 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee", b =>
-                {
-                    b.HasOne("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRManager", null)
-                        .WithMany("ManagedEmployees")
-                        .HasForeignKey("HRManagerID");
-                });
-
             modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.PayPeriod", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee", null)
@@ -1277,15 +1229,6 @@ namespace Comp7071_A2.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRManager", b =>
-                {
-                    b.HasOne("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee", null)
-                        .WithOne()
-                        .HasForeignKey("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRManager", "ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
                 {
                     b.Navigation("ApplicationReferences");
@@ -1336,11 +1279,6 @@ namespace Comp7071_A2.Migrations
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Manager", b =>
                 {
                     b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRManager", b =>
-                {
-                    b.Navigation("ManagedEmployees");
                 });
 #pragma warning restore 612, 618
         }
