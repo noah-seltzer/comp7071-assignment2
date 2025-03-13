@@ -6,17 +6,17 @@
 
 <style>
     th a {
-        text-decoration: none;  
-        color: inherit;         
-        font-weight: bold;      
-        padding: 5px;           
-        display: inline-block;  
+        text-decoration: none;
+        color: inherit;
+        font-weight: bold;
+        padding: 5px;
+        display: inline-block;
     }
 
-    th a:hover {
-        text-decoration: underline; 
-        color: #0056b3;
-    }
+        th a:hover {
+            text-decoration: underline;
+            color: #0056b3;
+        }
 </style>
 
 <h1>Assets</h1>
@@ -43,8 +43,7 @@
     </div>
 </form>
 
-
-<table class="table table table-striped table-hover">
+<table class="table table-striped table-hover">
     <thead class="table-primary">
         <tr>
             <th>
@@ -74,68 +73,81 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["AssetTypeSort"]" asp-route-search="@ViewData["SearchFilter"]" asp-route-assetType="@ViewData["AssetTypeFilter"]">
-                    AssetType
+                    Asset Type
                 </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AssetDamages)
             </th>
+            <th>View Applications</th> <!-- New Column -->
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RentAmount)
-            </td>
-            <td>
-                @Html.Raw(item.Renter != null ? item.Renter.Name : "None")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HousingGroup!.Name)
-            </td>
-            <td>
-                @Html.Raw(item.HousingGroup != null ? item.HousingGroup!.Address : "None")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AssetType2)
-            </td>
-            <td>
-                @if (item.AssetDamages != null && item.AssetDamages.Any())
-                {
-                    @foreach (var damage in item.AssetDamages)
+        @foreach (var item in Model)
+        {
+            var hasApplications = item.Applications != null && item.Applications.Any();
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAvailable)
+                </td>
+                <td>
+                    $@item.RentAmount.ToString("N2")
+                </td>
+                <td>
+                    @Html.Raw(item.Renter != null ? item.Renter.Name : "None")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HousingGroup!.Name)
+                </td>
+                <td>
+                    @Html.Raw(item.HousingGroup != null ? item.HousingGroup!.Address : "None")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssetType2)
+                </td>
+                <td>
+                    @if (item.AssetDamages != null && item.AssetDamages.Any())
                     {
-                        <li>
-                            <a asp-action="Details" asp-controller="AssetDamages" asp-route-id="@damage.ID">
-                                @damage.Description
-                            </a>
-                        </li>
+                        @foreach (var damage in item.AssetDamages)
+                        {
+                            <li>
+                                <a asp-action="Details" asp-controller="AssetDamages" asp-route-id="@damage.ID">
+                                    @damage.Description
+                                </a>
+                            </li>
+                        }
                     }
-                }
-                else
-                {
-                    @:No damages
-                }
-            </td>
-            <td>
-                @{
-                    var controllerName = item.AssetType2 switch
+                    else
                     {
-                        "Suite" => "Suites",
-                        "Locker" => "Lockers",
-                        "ParkingSpot" => "ParkingSpots",
-                        _ => "Assets"
-                    };
-                }
-                <a asp-area="Housing" asp-controller="@controllerName" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-area="Housing" asp-controller="@controllerName" asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-area="Housing" asp-controller="@controllerName" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+                        @:No damages
+                    }
+                </td>
+                <td>
+                    @if (hasApplications)
+                    {
+                        <a asp-controller="Applications" asp-action="ByAsset" asp-route-assetId="@item.ID">View Applications</a>
+                    }
+                    else
+                    {
+                        <span>No Applications</span>
+                    }
+                </td>
+                <td>
+                    @{
+                        var controllerName = item.AssetType2 switch
+                        {
+                            "Suite" => "Suites",
+                            "Locker" => "Lockers",
+                            "ParkingSpot" => "ParkingSpots",
+                            _ => "Assets"
+                        };
+                    }
+                    <a asp-area="Housing" asp-controller="@controllerName" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-area="Housing" asp-controller="@controllerName" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-area="Housing" asp-controller="@controllerName" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

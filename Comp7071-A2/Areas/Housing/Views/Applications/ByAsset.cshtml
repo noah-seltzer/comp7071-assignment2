@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Comp7071_A2.Areas.Housing.Models.Application>
+
+@{
+    ViewData["Title"] = "Applications for Asset";
+}
+
+<h2>Applications for Asset</h2>
+
+@if (!Model.Any())
+{
+    <p>No applications found for this asset.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Renter ID</th>
+                <th>Renter Name</th>
+                <th>Application Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.RenterID</td>
+                    <td>@(application.Renter != null ? application.Renter.Name : "N/A")</td>
+                    <td>@application.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-controller="Assets" asp-action="Index" class="btn btn-secondary">Back to Assets</a>

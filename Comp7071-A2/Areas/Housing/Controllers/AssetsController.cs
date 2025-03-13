@@ -26,6 +26,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 .Include(a => a.Renter)
                 .Include(a => a.HousingGroup)
                 .Include(a => a.AssetDamages)
+                .Include(a => a.Applications) // Include Applications
                 .AsQueryable();
             
             // Searching across multiple columns
