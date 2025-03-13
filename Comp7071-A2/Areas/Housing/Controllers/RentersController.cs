@@ -28,8 +28,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         {
             var renters = await _context.Renters
                 .Include(r => r.Identity)
-                .Include(r => r.Applications)  // Include Applications
-                .ThenInclude(a => a.Asset)      // Include Asset details for each application
+                .Include(r => r.Applications) 
+                .ThenInclude(a => a.Asset)      
                 .ToListAsync();
 
             return View(renters);
