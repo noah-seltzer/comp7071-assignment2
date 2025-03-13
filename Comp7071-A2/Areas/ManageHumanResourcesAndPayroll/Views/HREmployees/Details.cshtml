@@ -3,7 +3,33 @@
 @{
     ViewData["Title"] = "Details";
 }
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script>
+    var model = @Html.Raw(Json.Serialize(@Model))
 
+    var shifts = []
+    model.shifts.forEach(s => {
+        shifts.push({
+            title: m.name,
+            id: s.id,
+            start: s.start_Time,
+            startStr: s.start_Time,
+            end:s.end_Time,
+            endStr:s.end_Time,
+        })
+    })
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        selectable: false,
+        events: shifts
+      });
+      calendar.render();
+    });
+
+</script>
 <h1>Details</h1>
 
 <div>
@@ -46,3 +72,4 @@
     <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+<div id="calendar"></div>
