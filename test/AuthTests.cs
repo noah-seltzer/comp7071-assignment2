@@ -94,6 +94,10 @@ namespace test
             Assert.NotNull(userMenu);
 
             _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Renters/Create");
+            IWebElement selectElement = _driver.FindElement(By.Id("IdentityID"));
+            SelectElement select = new SelectElement(selectElement);
+            select.SelectByIndex(1);
+            
             var nameInput = _driver.FindElement(By.Id("Name"));
             nameInput.SendKeys("Test Renter");
 
@@ -113,13 +117,59 @@ namespace test
             * This is necessary because the button is not clickable if it is not on the screen.
             */
             ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView();", submitButton);
-            Thread.Sleep(500);
             submitButton.Click();
 
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
 
             var renter = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Renter')]"));
             Assert.NotNull(renter);
+        }
+        
+        [Fact]
+        public void AssetDamageTest()
+        {
+            _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+
+            var emailInput = _driver.FindElement(By.Id("Input_Email"));
+            emailInput.SendKeys("admin@housing.com");
+
+            var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+            passwordInput.SendKeys("Admin123!");
+
+            var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+            loginButton.Click();
+            
+            // Go to create new asset damage
+            Thread.Sleep(500);
+            _driver.FindElement(By.LinkText("Housing")).Click();
+            Thread.Sleep(500);
+            _driver.FindElement(By.LinkText("Assets")).Click();
+            Thread.Sleep(500);
+            _driver.FindElement(By.LinkText("Asset Damages")).Click();
+            Thread.Sleep(500);
+            _driver.FindElement(By.LinkText("Create New")).Click();
+            Thread.Sleep(500);
+            
+            // Fill out create new form
+            IWebElement selectAssetElement = _driver.FindElement(By.Id("AssetID"));
+            SelectElement selectAsset = new SelectElement(selectAssetElement);
+            selectAsset.SelectByIndex(1);
+            
+            IWebElement selectRenterElement = _driver.FindElement(By.Id("RenterID"));
+            SelectElement selectRenter = new SelectElement(selectRenterElement);
+            selectRenter.SelectByIndex(1);
+            
+            var descriptionInput = _driver.FindElement(By.Id("Description"));
+            descriptionInput.SendKeys("Test Damage");
+
+            var damageDateInput = _driver.FindElement(By.Id("RecordedDate"));
+            damageDateInput.SendKeys("2025\0313");
+
+            var submitButton = _driver.FindElement(By.Id("create-asset-damage"));
+            submitButton.Click();
+            
+            var assetDamage = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Damage')]"));
+            Assert.NotNull(assetDamage);
         }
 
         public void Dispose()
