@@ -3,6 +3,7 @@ using Comp7071_A2.Areas.ManageCare.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 
 namespace Comp7071_A2.Areas.ManageCare.Controllers
 {
@@ -52,10 +53,22 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         // POST: ManageCare/Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Address,Email,EmergencyContactPhone,JobTitle")] Employee employee)
+        public async Task<IActionResult> Create([Bind("Name,Address,Email,EmergencyContactPhone,JobTitle")] Employee employee, Guid[] selectedCertifications)
         {
             if (ModelState.IsValid)
             {
+
+                var certSet = new HashSet<Guid>(selectedCertifications);
+                var certs =
+                    (from certification in _context.Certifications
+                    where certSet.Any(c => certification.Id == c)
+                    select certification).ToList();
+
+                if (certs.Count() != certSet.Count())
+                    return NotFound("Certification not found");
+
+
+                employee.Certifications = certs; 
                 employee.Id = Guid.NewGuid();
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
@@ -73,19 +86,28 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
+            var employee = await (
+                from e in _context.Employees.Include(e => e.Certifications)
+                where e.Id == id
+                select e
+            ).FirstOrDefaultAsync();
+
             if (employee == null)
             {
                 return NotFound();
             }
-            ViewData["Certifications"] = new SelectList(_context.Set<Certification>(), "Id", "Name");
+
+            foreach (var item in employee.Certifications)
+            {
+                Console.WriteLine(item);
+            }
+            ViewData["Certifications"] = new MultiSelectList(_context.Certifications, "Id", "Name", employee.Certifications.Select(c => c.Id));
             return View(employee);
         }
 
-        // POST: ManageCare/Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Address,Email,EmergencyContactPhone,JobTitle")] Employee employee)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Address,Email,EmergencyContactPhone,JobTitle")] Employee employee, Guid[] selectedCertifications)
         {
             if (id != employee.Id)
             {
@@ -94,9 +116,55 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
 
             if (ModelState.IsValid)
             {
+                // Load the employee with their existing certifications
+                var employeeToUpdate = await _context.Employees
+                    .Include(e => e.Certifications)
+                    .FirstOrDefaultAsync(e => e.Id == id);
+
+                if (employeeToUpdate == null)
+                {
+                    return NotFound();
+                }
+
+                // Update scalar properties
+                employeeToUpdate.Name = employee.Name;
+                employeeToUpdate.Address = employee.Address;
+                employeeToUpdate.Email = employee.Email;
+                employeeToUpdate.EmergencyContactPhone = employee.EmergencyContactPhone;
+                employeeToUpdate.JobTitle = employee.JobTitle;
+
+                // Get the selected certifications
+                var certSet = new HashSet<Guid>(selectedCertifications);
+                var certs = await _context.Certifications
+                    .Where(c => certSet.Contains(c.Id))
+                    .ToListAsync();
+
+                if (certs.Count != certSet.Count)
+                {
+                    return NotFound("Certification not found");
+                }
+
+                // Remove existing certifications that are not in the selected list
+                var certificationsToRemove = employeeToUpdate.Certifications
+                    .Where(c => !certSet.Contains(c.Id))
+                    .ToList();
+
+                foreach (var cert in certificationsToRemove)
+                {
+                    employeeToUpdate.Certifications.Remove(cert);
+                }
+
+                // Add new certifications that are not already associated with the employee
+                foreach (var cert in certs)
+                {
+                    if (!employeeToUpdate.Certifications.Any(c => c.Id == cert.Id))
+                    {
+                        employeeToUpdate.Certifications.Add(cert);
+                    }
+                }
+
                 try
                 {
-                    _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -112,6 +180,8 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // If ModelState is invalid, repopulate the certifications dropdown
             ViewData["Certifications"] = new SelectList(_context.Set<Certification>(), "Id", "Name");
             return View(employee);
         }

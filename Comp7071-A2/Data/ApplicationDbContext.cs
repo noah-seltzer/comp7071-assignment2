@@ -30,6 +30,7 @@ public class ApplicationDbContext : IdentityDbContext
 
 
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<Certification> Certifications { get; set; }
     public DbSet<Manager> Managers { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
