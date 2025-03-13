@@ -1,0 +1,56 @@
+﻿@model Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.Shift
+@using Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Enums
+@using System.Net
+@{
+    ViewData["Title"] = "Edit";
+
+}
+<h1>Edit</h1>
+
+<h4>Shift</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        
+        <form asp-action="Edit" asp-route-returnMethod="@Context.Request.Query["returnMethod"]" asp-route-returnController="@Context.Request.Query["returnController"]">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="Hours_Worked" class="control-label"></label>
+                <input asp-for="Hours_Worked" class="form-control" />
+                <span asp-validation-for="Hours_Worked" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hours_Scheduled" class="control-label"></label>
+                <input asp-for="Hours_Scheduled" class="form-control" />
+                <span asp-validation-for="Hours_Scheduled" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Start_Time" class="control-label"></label>
+                <input asp-for="Start_Time" class="form-control" />
+                <span asp-validation-for="Start_Time" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="End_Time" class="control-label"></label>
+                <input asp-for="End_Time" class="form-control" />
+                <span asp-validation-for="End_Time" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<ShiftStatus>()"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
