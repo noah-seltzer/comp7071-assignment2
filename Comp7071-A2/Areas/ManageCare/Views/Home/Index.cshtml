@@ -1,0 +1,183 @@
+@model Comp7071_A2.Areas.ManageCare.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="page-header">
+    <h1><i class="bi bi-speedometer2"></i> Dashboard</h1>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">Customers</h5>
+                        <h2 class="mb-0">@Model.CustomerCount</h2>
+                    </div>
+                    <i class="bi bi-people fs-1"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-primary-dark">
+                <a asp-controller="Customers" asp-action="Index" class="text-white text-decoration-none">
+                    <small>View Details <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">Employees</h5>
+                        <h2 class="mb-0">@Model.EmployeeCount</h2>
+                    </div>
+                    <i class="bi bi-person-badge fs-1"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-success-dark">
+                <a asp-controller="Employees" asp-action="Index" class="text-white text-decoration-none">
+                    <small>View Details <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">Services</h5>
+                        <h2 class="mb-0">@Model.ServiceCount</h2>
+                    </div>
+                    <i class="bi bi-tools fs-1"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-info-dark">
+                <a asp-controller="Services" asp-action="Index" class="text-white text-decoration-none">
+                    <small>View Details <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">Revenue</h5>
+                        <h2 class="mb-0">@Model.TotalRevenue.ToString("C0")</h2>
+                    </div>
+                    <i class="bi bi-cash-stack fs-1"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-warning-dark">
+                <a asp-controller="Invoices" asp-action="Index" class="text-white text-decoration-none">
+                    <small>View Details <i class="bi bi-arrow-right"></i></small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-calendar-week"></i> Upcoming Appointments</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.UpcomingSchedules.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Service</th>
+                                    <th>Customers</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var schedule in Model.UpcomingSchedules)
+                                {
+                                    <tr>
+                                        <td>@schedule.StartTime.ToShortDateString()</td>
+                                        <td>@schedule.StartTime.ToShortTimeString() - @schedule.EndTime.ToShortTimeString()</td>
+                                        <td>@schedule.Service?.Name</td>
+                                        <td>@(schedule.Customers?.Count ?? 0)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No upcoming appointments.</p>
+                }
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Schedule" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                    View All Appointments
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-receipt"></i> Recent Invoices</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentInvoices.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var invoice in Model.RecentInvoices)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-controller="Invoices" asp-action="Details" asp-route-id="@invoice.Id">
+                                                @invoice.Id.ToString().Substring(0, 8).ToUpper()
+                                            </a>
+                                        </td>
+                                        <td>@invoice.Customer?.Name</td>
+                                        <td>@invoice.StartDate.ToShortDateString()</td>
+                                        <td>@(invoice.Lines?.Sum(l => l.Amount).ToString("C") ?? "$0.00")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No recent invoices.</p>
+                }
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Invoices" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                    View All Invoices
+                </a>
+            </div>
+        </div>
+    </div>
+</div> 
