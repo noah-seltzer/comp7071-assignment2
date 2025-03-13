@@ -142,7 +142,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 employeeToUpdate.Address = employee.Address;
                 employeeToUpdate.Email = employee.Email;
                 employeeToUpdate.EmergencyContactPhone = employee.EmergencyContactPhone;
-                employeeToUpdate.JobTitle = employee.JobTitle;
+                // employeeToUpdate.JobTitle = employee.JobTitle;
 
                 // Get the selected certifications
                 var certSet = new HashSet<Guid>(selectedCertifications);
