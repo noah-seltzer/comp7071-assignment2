@@ -87,7 +87,6 @@ namespace Comp7071_A2.Areas.Housing.Models
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the asset to get the rent amount
                 var asset = await _context.Assets.FindAsync(application.AssetID);
                 if (asset == null)
                 {
@@ -186,7 +185,7 @@ namespace Comp7071_A2.Areas.Housing.Models
 
             var application = await _context.Applications
                 .Include(a => a.Renter)
-                .ThenInclude(r => r.Identity)  // Ensure Identity is included
+                .ThenInclude(r => r.Identity)  
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (application == null)

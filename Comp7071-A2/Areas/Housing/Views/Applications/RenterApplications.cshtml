@@ -17,7 +17,7 @@ else
             <tr>
                 <th>Asset Name</th>
                 <th>Status</th>
-                <th>Monthly Rent</th> <!-- Rent column -->
+                <th>Monthly Rent</th> 
             </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@ else
                     <td>@application.Status</td>
                     <td>
                         @(application.Asset != null ? $"${application.Asset.RentAmount:N2}" : "N/A")
-                    </td> <!-- Display Rent from Asset -->
+                    </td> 
                 </tr>
             }
         </tbody>
