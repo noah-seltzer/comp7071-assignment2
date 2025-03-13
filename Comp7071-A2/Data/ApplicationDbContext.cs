@@ -64,7 +64,7 @@ public class ApplicationDbContext : IdentityDbContext
             .HasOne(r => r.Application)
             .WithOne()
             .HasForeignKey<Renter>(r => r.ApplicationID)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Suite>()
             .HasOne(s => s.Asset)

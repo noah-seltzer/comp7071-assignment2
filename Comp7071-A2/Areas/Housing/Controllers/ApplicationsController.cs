@@ -50,6 +50,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         public IActionResult Create()
         {
             ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name");
+            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
             return View();
         }
 
