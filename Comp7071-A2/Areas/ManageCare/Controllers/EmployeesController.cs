@@ -19,7 +19,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         // GET: ManageCare/Employees
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.Employees.Include(e => e.Certifications).ToListAsync());
         }
 
         // GET: ManageCare/Employees/Details/5
