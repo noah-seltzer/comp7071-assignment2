@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>ParkingSpot Spots</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -16,13 +16,13 @@
                 @Html.DisplayNameFor(model => model.SpotNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SuiteID)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.VehicleID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Renter)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RentAmount)
@@ -31,10 +31,10 @@
                 @Html.DisplayNameFor(model => model.HousingGroup)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Renter)
+                @Html.DisplayNameFor(model => model.Building)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Building)
+                Unit Number
             </th>
             <th></th>
         </tr>
@@ -46,25 +46,25 @@
                 @Html.DisplayFor(modelItem => item.SpotNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SuiteID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleID)
+                @Html.DisplayFor(modelItem => item.Vehicle.LicensePlate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsAvailable)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Renter.Identity.Email)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.RentAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HousingGroup.ManagerID)
+                @Html.DisplayFor(modelItem => item.HousingGroup.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Renter.IdentityID)
+                @Html.DisplayFor(modelItem => item.Building.Address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Building.ID)
+                @Html.DisplayFor(modelItem => item.Suite.UnitNumber)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

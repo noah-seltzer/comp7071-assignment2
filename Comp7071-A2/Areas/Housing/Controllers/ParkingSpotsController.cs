@@ -23,7 +23,13 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ParkingSpots
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ParkingSpots.Include(p => p.Building).Include(p => p.HousingGroup).Include(p => p.Renter);
+            var applicationDbContext = _context.ParkingSpots
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
+                .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
+                .Include(p => p.Renter)
+                .ThenInclude(r => r.Identity);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,6 +44,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var parkingSpot = await _context.ParkingSpots
                 .Include(p => p.Building)
                 .Include(p => p.HousingGroup)
+                .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
                 .Include(p => p.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)
@@ -51,9 +59,25 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ParkingSpots/Create
         public IActionResult Create()
         {
-            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID");
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID");
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID");
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name");
+            var renters = _context.Renters
+                .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Name })
+                .ToList();
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["RenterID"] = new SelectList(renters, "Value", "Text");
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text");
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text");
             return View();
         }
 
@@ -71,10 +95,26 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", parkingSpot.BuildingID);
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", parkingSpot.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", parkingSpot.RenterID);
-            return View(parkingSpot);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name");
+            var renters = _context.Renters
+                .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Name })
+                .ToList();
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["RenterID"] = new SelectList(renters, "Value", "Text");
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text");
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text");
+            return View();
         }
 
         // GET: Housing/ParkingSpots/Edit/5
@@ -85,14 +125,34 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
 
-            var parkingSpot = await _context.ParkingSpots.FindAsync(id);
+            var parkingSpot = await _context.ParkingSpots
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
+                .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
+                .Include(p => p.Renter)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)
             {
                 return NotFound();
             }
-            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", parkingSpot.BuildingID);
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", parkingSpot.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", parkingSpot.RenterID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address", parkingSpot.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", parkingSpot.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", parkingSpot.RenterID);
+
+            // Suites filtered by selected Housing Group
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text", parkingSpot.SuiteID);
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text", parkingSpot.VehicleID);
             return View(parkingSpot);
         }
 
@@ -128,9 +188,24 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "ID", parkingSpot.BuildingID);
-            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "ManagerID", parkingSpot.HousingGroupID);
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", parkingSpot.RenterID);
+
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address", parkingSpot.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", parkingSpot.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", parkingSpot.RenterID);
+
+            // Suites filtered by selected Housing Group
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text", parkingSpot.SuiteID);
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text", parkingSpot.VehicleID);
             return View(parkingSpot);
         }
 
@@ -145,6 +220,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var parkingSpot = await _context.ParkingSpots
                 .Include(p => p.Building)
                 .Include(p => p.HousingGroup)
+                .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
                 .Include(p => p.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)

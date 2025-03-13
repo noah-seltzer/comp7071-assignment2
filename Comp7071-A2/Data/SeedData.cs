@@ -119,7 +119,7 @@ namespace Comp7071_A2.Data
             var suite = new Suite
             {
                 HousingGroupID = housingGroup.ID,
-                BuildingID = context.Buildings.FirstOrDefault()?.ID,
+                BuildingID = building.ID,
                 IsAvailable = true,
                 RentAmount = 1000,
 
@@ -135,7 +135,7 @@ namespace Comp7071_A2.Data
             var locker = new Locker
             {
                 HousingGroupID = housingGroup.ID,
-                BuildingID = context.Buildings.FirstOrDefault()?.ID,
+                BuildingID = building.ID,
                 IsAvailable = true,
                 RentAmount = 50,
                 SuiteID = suite.ID,
@@ -149,7 +149,7 @@ namespace Comp7071_A2.Data
             var parkingSpot = new ParkingSpot
             {
                 HousingGroupID = housingGroup.ID,
-                BuildingID = context.Buildings.FirstOrDefault()?.ID,
+                BuildingID = building.ID,
                 IsAvailable = true,
                 RentAmount = 100,
                 SuiteID = suite.ID,

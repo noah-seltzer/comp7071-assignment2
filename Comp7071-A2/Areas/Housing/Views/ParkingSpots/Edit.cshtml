@@ -19,12 +19,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="SuiteID" class="control-label"></label>
-                <input asp-for="SuiteID" class="form-control" />
+                <select asp-for="SuiteID" class="form-control" asp-items="ViewBag.SuiteID" ></select>
                 <span asp-validation-for="SuiteID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="VehicleID" class="control-label"></label>
-                <input asp-for="VehicleID" class="form-control" />
+                <select asp-for="VehicleID" class="form-control" asp-items="ViewBag.VehicleID" ></select>
                 <span asp-validation-for="VehicleID" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="ID" />
