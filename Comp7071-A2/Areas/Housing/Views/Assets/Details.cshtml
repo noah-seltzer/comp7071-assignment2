@@ -26,19 +26,35 @@
             @Html.DisplayNameFor(model => model.HousingGroup)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HousingGroup.ManagerID)
+            @Html.DisplayFor(model => model.HousingGroup.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Renter)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Renter.Email)
+            @Html.DisplayFor(model => model.Renter.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Building)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Building.ID)
+            @Html.DisplayFor(model => model.Building.Address)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AssetDamages)
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.AssetDamages != null && Model.AssetDamages.Any())
+            {
+                @foreach (var damage in Model.AssetDamages)
+                {
+                    <li>@damage.Description</li>
+                }
+            }
+            else
+            {
+                @:No damages reported
+            }
         </dd>
     </dl>
 </div>

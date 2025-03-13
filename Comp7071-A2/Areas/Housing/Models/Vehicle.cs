@@ -21,5 +21,6 @@ namespace Comp7071_A2.Areas.Housing.Models
         public string LicensePlate { get; set; } = string.Empty;
 
         public virtual ParkingSpot? ParkingSpot { get; set; }
+        public virtual Renter? Renter { get; set; }
     }
 }

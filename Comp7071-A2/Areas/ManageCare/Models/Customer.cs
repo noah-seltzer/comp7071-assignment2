@@ -7,7 +7,7 @@ namespace Comp7071_A2.Areas.ManageCare.Models
 
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Customer name required")]
+        [Required( ErrorMessage = "Customer name required")]
         public required string Name { get; set; }
 
 

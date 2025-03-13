@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Comp7071_A2.Areas.Housing.Models;
 using Comp7071_A2.Data;
 
-namespace Comp7071_A2.Areas.Housing.Models
+namespace Comp7071_A2.Areas.Housing.Controllers
 {
     [Area("Housing")]
     public class ContactsController : Controller
@@ -22,7 +23,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         // GET: Housing/Contacts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Contact.Include(c => c.Renter);
+            var applicationDbContext = _context.Contacts.Include(c => c.Renter);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +35,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var contact = await _context.Contact
+            var contact = await _context.Contacts
                 .Include(c => c.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (contact == null)
@@ -48,7 +49,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         // GET: Housing/Contacts/Create
         public IActionResult Create()
         {
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID");
             return View();
         }
 
@@ -66,7 +67,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", contact.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", contact.RenterID);
             return View(contact);
         }
 
@@ -78,12 +79,12 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var contact = await _context.Contact.FindAsync(id);
+            var contact = await _context.Contacts.FindAsync(id);
             if (contact == null)
             {
                 return NotFound();
             }
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", contact.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", contact.RenterID);
             return View(contact);
         }
 
@@ -119,7 +120,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Email", contact.RenterID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "IdentityID", contact.RenterID);
             return View(contact);
         }
 
@@ -131,7 +132,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var contact = await _context.Contact
+            var contact = await _context.Contacts
                 .Include(c => c.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (contact == null)
@@ -147,10 +148,10 @@ namespace Comp7071_A2.Areas.Housing.Models
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var contact = await _context.Contact.FindAsync(id);
+            var contact = await _context.Contacts.FindAsync(id);
             if (contact != null)
             {
-                _context.Contact.Remove(contact);
+                _context.Contacts.Remove(contact);
             }
 
             await _context.SaveChangesAsync();
@@ -159,7 +160,7 @@ namespace Comp7071_A2.Areas.Housing.Models
 
         private bool ContactExists(Guid id)
         {
-            return _context.Contact.Any(e => e.ID == id);
+            return _context.Contacts.Any(e => e.ID == id);
         }
     }
 }

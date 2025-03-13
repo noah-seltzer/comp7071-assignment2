@@ -14,11 +14,18 @@ html {
 
 html {
   position: relative;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 body {
-  margin-bottom: 60px;
+  min-height: calc(100vh - 30px);
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  flex: 1; /* Pushes footer to bottom when content is short */
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

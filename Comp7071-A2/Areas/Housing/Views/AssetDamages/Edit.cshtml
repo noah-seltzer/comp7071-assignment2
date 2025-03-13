@@ -1,0 +1,84 @@
+@model Comp7071_A2.Areas.Housing.Models.AssetDamage
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>AssetDamage</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="AssetID" class="control-label"></label>
+                @if (ViewBag.AssetID != null)
+                {
+                    <select asp-for="AssetID" class="form-control" asp-items="ViewBag.AssetID"></select>
+                }
+                else
+                {
+                    <span class="text-danger">Asset list is empty.</span>
+                }                <span asp-validation-for="AssetID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RenterID" class="control-label"></label>
+                @if (ViewBag.RenterID != null)
+                {
+                    <select asp-for="RenterID" class="form-control" asp-items="ViewBag.RenterID"></select>
+                }
+                else
+                {
+                    <span class="text-danger">Renter list is empty.</span>
+                }                <span asp-validation-for="RenterID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecordedDate" class="control-label"></label>
+                <input asp-for="RecordedDate" class="form-control" />
+                <span asp-validation-for="RecordedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FixedDate" class="control-label"></label>
+                <input asp-for="FixedDate" class="form-control" />
+                <span asp-validation-for="FixedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @if (Model.DamageImages != null && Model.DamageImages.Count > 0)
+                {
+                    <div>
+                        <label>Existing Damage Photos</label>
+                        @foreach (var damageImage in Model.DamageImages)
+                        {
+                            var base64Photo = Convert.ToBase64String(damageImage.Photo);
+                            <img src="data:image/jpeg;base64,@base64Photo" alt="Existing Photo" style="max-width: 100px; max-height: 100px;"/>
+
+                        }
+                        <label for="damagePhotos">Upload Additional Damage Images:</label>
+                        <input type="file" name="damagePhotos" class="form-control" multiple/>
+                    </div>
+                }
+                else
+                {
+                    <label for="damagePhotos">Upload Damage Images(You may select multiple):</label>
+                    <input type="file" name="damagePhotos" class="form-control" multiple/>
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

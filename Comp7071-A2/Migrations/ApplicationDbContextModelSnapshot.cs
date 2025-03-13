@@ -53,10 +53,13 @@ namespace Comp7071_A2.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("AssetID")
+                    b.Property<Guid>("AssetID")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("RenterID")
+                    b.Property<decimal>("RentAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RenterID")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -68,7 +71,7 @@ namespace Comp7071_A2.Migrations
 
                     b.HasIndex("RenterID");
 
-                    b.ToTable("Application");
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ApplicationReference", b =>
@@ -89,13 +92,18 @@ namespace Comp7071_A2.Migrations
 
                     b.HasIndex("ContactID");
 
-                    b.ToTable("ApplicationReference");
+                    b.ToTable("ApplicationReferences");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Asset", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AssetType")
+                        .IsRequired()
+                        .HasMaxLength(13)
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("BuildingID")
@@ -122,12 +130,57 @@ namespace Comp7071_A2.Migrations
                     b.HasIndex("RenterID");
 
                     b.ToTable("Assets");
+
+                    b.HasDiscriminator<string>("AssetType").HasValue("Asset");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetDamage", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AssetID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("FixedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RecordedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RenterID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AssetID");
+
+                    b.HasIndex("RenterID");
+
+                    b.ToTable("AssetDamages");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Building", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("HousingGroupID")
@@ -141,6 +194,11 @@ namespace Comp7071_A2.Migrations
 
                     b.Property<int>("NumUnits")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 
@@ -177,7 +235,26 @@ namespace Comp7071_A2.Migrations
 
                     b.HasIndex("RenterID");
 
-                    b.ToTable("Contact");
+                    b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.DamageImage", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AssetDamageID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("BLOB");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AssetDamageID");
+
+                    b.ToTable("DamageImages");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.HousingGroup", b =>
@@ -217,78 +294,17 @@ namespace Comp7071_A2.Migrations
                     b.ToTable("HousingGroups");
                 });
 
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Locker", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AssetID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("LockerNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("LockerSize")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("SuiteID")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AssetID")
-                        .IsUnique();
-
-                    b.ToTable("Lockers");
-                });
-
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ParkingSpot", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AssetID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SpotNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("SuiteID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("VehicleID")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AssetID")
-                        .IsUnique();
-
-                    b.ToTable("ParkingSpots");
-                });
-
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ApplicationID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("AssetID")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("IdentityID")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -306,57 +322,9 @@ namespace Comp7071_A2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ApplicationID")
-                        .IsUnique();
-
-                    b.HasIndex("AssetID")
-                        .IsUnique();
+                    b.HasIndex("IdentityID");
 
                     b.ToTable("Renters");
-                });
-
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Suite", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("AssetID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Bathrooms")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Floor")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("LockerID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Occupants")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("ParkingSpotID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Rooms")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UnitNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AssetID")
-                        .IsUnique();
-
-                    b.HasIndex("LockerID")
-                        .IsUnique();
-
-                    b.HasIndex("ParkingSpotID")
-                        .IsUnique();
-
-                    b.ToTable("Suites");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Vehicle", b =>
@@ -385,6 +353,8 @@ namespace Comp7071_A2.Migrations
 
                     b.HasIndex("ParkingSpotID")
                         .IsUnique();
+
+                    b.HasIndex("RenterID");
 
                     b.ToTable("Vehicles");
                 });
@@ -749,12 +719,20 @@ namespace Comp7071_A2.Migrations
                         new
                         {
                             Id = "b5f0c6a4-45d7-4e18-94df-bc3b0e69c456",
-                            Name = "HousingAdmin"
+                            Name = "HousingAdmin",
+                            NormalizedName = "HOUSINGADMIN"
                         },
                         new
                         {
                             Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c6a4",
-                            Name = "User"
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "6a4d3c5f-95df-4e18-bc3b-0e69c457c234",
+                            Name = "Renter",
+                            NormalizedName = "RENTER"
                         });
                 });
 
@@ -928,6 +906,80 @@ namespace Comp7071_A2.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Locker", b =>
+                {
+                    b.HasBaseType("Comp7071_A2.Areas.Housing.Models.Asset");
+
+                    b.Property<int>("LockerNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LockerSize")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("SuiteID")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Locker");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ParkingSpot", b =>
+                {
+                    b.HasBaseType("Comp7071_A2.Areas.Housing.Models.Asset");
+
+                    b.Property<int>("SpotNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("SuiteID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("VehicleID")
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("Assets", t =>
+                        {
+                            t.Property("SuiteID")
+                                .HasColumnName("ParkingSpot_SuiteID");
+                        });
+
+                    b.HasDiscriminator().HasValue("ParkingSpot");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Suite", b =>
+                {
+                    b.HasBaseType("Comp7071_A2.Areas.Housing.Models.Asset");
+
+                    b.Property<int>("Bathrooms")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Floor")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("LockerID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Occupants")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ParkingSpotID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Rooms")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UnitNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("LockerID")
+                        .IsUnique();
+
+                    b.HasIndex("ParkingSpotID")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("Suite");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Manager", b =>
                 {
                     b.HasBaseType("Comp7071_A2.Areas.ManageCare.Models.Employee");
@@ -978,12 +1030,16 @@ namespace Comp7071_A2.Migrations
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Application", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
-                        .WithMany()
-                        .HasForeignKey("AssetID");
+                        .WithMany("Applications")
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
-                        .WithMany()
-                        .HasForeignKey("RenterID");
+                        .WithMany("Applications")
+                        .HasForeignKey("RenterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
 
@@ -1030,6 +1086,25 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Renter");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetDamage", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
+                        .WithMany("AssetDamages")
+                        .HasForeignKey("AssetID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
+                        .WithMany("AssetDamages")
+                        .HasForeignKey("RenterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Renter");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Building", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.HousingGroup", "HousingGroup")
@@ -1050,6 +1125,17 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Renter");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.DamageImage", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.AssetDamage", "AssetDamage")
+                        .WithMany("DamageImages")
+                        .HasForeignKey("AssetDamageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssetDamage");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.HousingGroup", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Manager")
@@ -1061,68 +1147,15 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Locker", b =>
-                {
-                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
-                        .WithOne()
-                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Locker", "AssetID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Asset");
-                });
-
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ParkingSpot", b =>
-                {
-                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
-                        .WithOne()
-                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.ParkingSpot", "AssetID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Asset");
-                });
-
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
                 {
-                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Application", "Application")
-                        .WithOne()
-                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Renter", "ApplicationID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
-                        .WithOne()
-                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Renter", "AssetID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Application");
-
-                    b.Navigation("Asset");
-                });
-
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Suite", b =>
-                {
-                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
-                        .WithOne()
-                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Suite", "AssetID")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Identity")
+                        .WithMany()
+                        .HasForeignKey("IdentityID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Locker", "Locker")
-                        .WithOne("Suite")
-                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Suite", "LockerID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Comp7071_A2.Areas.Housing.Models.ParkingSpot", "ParkingSpot")
-                        .WithOne("Suite")
-                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Suite", "ParkingSpotID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Asset");
-
-                    b.Navigation("Locker");
-
-                    b.Navigation("ParkingSpot");
+                    b.Navigation("Identity");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Vehicle", b =>
@@ -1132,7 +1165,15 @@ namespace Comp7071_A2.Migrations
                         .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Vehicle", "ParkingSpotID")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
+                        .WithMany()
+                        .HasForeignKey("RenterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ParkingSpot");
+
+                    b.Navigation("Renter");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Employee", b =>
@@ -1277,6 +1318,23 @@ namespace Comp7071_A2.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Suite", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Locker", "Locker")
+                        .WithOne("Suite")
+                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Suite", "LockerID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.ParkingSpot", "ParkingSpot")
+                        .WithOne("Suite")
+                        .HasForeignKey("Comp7071_A2.Areas.Housing.Models.Suite", "ParkingSpotID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Locker");
+
+                    b.Navigation("ParkingSpot");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRManager", b =>
                 {
                     b.HasOne("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee", null)
@@ -1291,21 +1349,28 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("ApplicationReferences");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Asset", b =>
+                {
+                    b.Navigation("Applications");
+
+                    b.Navigation("AssetDamages");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetDamage", b =>
+                {
+                    b.Navigation("DamageImages");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
                 {
                     b.Navigation("ApplicationReferences");
                 });
 
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Locker", b =>
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Renter", b =>
                 {
-                    b.Navigation("Suite");
-                });
+                    b.Navigation("Applications");
 
-            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ParkingSpot", b =>
-                {
-                    b.Navigation("Suite");
-
-                    b.Navigation("Vehicle");
+                    b.Navigation("AssetDamages");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Customer", b =>
@@ -1331,6 +1396,18 @@ namespace Comp7071_A2.Migrations
             modelBuilder.Entity("Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HRSchedule", b =>
                 {
                     b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Locker", b =>
+                {
+                    b.Navigation("Suite");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.ParkingSpot", b =>
+                {
+                    b.Navigation("Suite");
+
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Manager", b =>
