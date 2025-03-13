@@ -124,7 +124,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         {
             var asset = await _context.Assets
                 .Include(a => a.Applications)
-                .ThenInclude(a => a.Renter) // Include Renter details
+                .ThenInclude(a => a.Renter)
                 .FirstOrDefaultAsync(a => a.ID == assetId);
 
             if (asset == null)
