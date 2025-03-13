@@ -1,3 +1,4 @@
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
@@ -13,6 +14,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
         public string Emergency_Contact { get; set; }
 
         public string Job_Title { get; set; }
+    
+        public string? UserId { get; set; }
 
         public string Employment_Type { get; set; }
 

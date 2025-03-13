@@ -60,9 +60,9 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
         {
 
 
-            //gets the user making the changes and checks if they're a manager
+
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.ID.ToString() == currentUserId);
+            var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.UserId == currentUserId);
 
             if (currentEmployee == null || currentEmployee.Job_Title != "Manager")
             {
@@ -109,10 +109,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
             }
 
 
-            //gets the user making the changes and checks if they're a manager
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.ID.ToString() == currentUserId);
-
+            var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.UserId == currentUserId);
             if (currentEmployee == null || currentEmployee.Job_Title != "Manager")
             {
                 ModelState.AddModelError(string.Empty, "Only managers can edit employee details.");
@@ -168,7 +166,7 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
 
             //gets the user making the changes and checks if they're a manager
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.ID.ToString() == currentUserId);
+            var currentEmployee = await _context.HREmployees.FirstOrDefaultAsync(e => e.UserId == currentUserId);
 
             if (currentEmployee == null || currentEmployee.Job_Title != "Manager")
             {
