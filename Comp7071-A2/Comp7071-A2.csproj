@@ -43,6 +43,8 @@
 
   <ItemGroup>
     <None Remove="app.db" />
+    <None Remove="app.db-shm" />
+    <None Remove="app.db-wal" />
   </ItemGroup>
 
 </Project>

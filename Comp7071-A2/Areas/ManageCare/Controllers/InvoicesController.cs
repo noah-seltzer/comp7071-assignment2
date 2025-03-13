@@ -253,6 +253,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         }
     }
 
+
     public class InvoiceReportViewModel
     {
         public int Year { get; set; }

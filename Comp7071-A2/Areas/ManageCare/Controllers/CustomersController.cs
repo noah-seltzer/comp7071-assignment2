@@ -17,7 +17,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         // GET: ManageCare/Customers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            return View(await _context.Customers.Include(c => c.Invoices).Include(c => c.Schedules).ToListAsync());
         }
 
         // GET: ManageCare/Customers/Details/5
@@ -29,14 +29,29 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             }
 
             var customer = await _context.Customers
-                .Include(c => c.Invoices)
                 .Include(c => c.Schedules)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
-            if (customer == null)
-            {
+
+            if (customer == null) {
                 return NotFound();
             }
+
+            var invoices = await (
+                   from inv in _context.Invoices.Include(inv => inv.Lines)
+                   where inv.CustomerId == id
+                   select inv
+                ).ToListAsync();
+
+            var schedule = await (
+                   from sche in _context.Schedule.Include(s => s.Service)
+                   where sche.Customers.Any(c => c.Id == id)
+                   select sche
+                ).ToListAsync();
+
+
+            
+            customer.Invoices = invoices;
+            customer.Schedules = schedule;
 
             return View(customer);
         }

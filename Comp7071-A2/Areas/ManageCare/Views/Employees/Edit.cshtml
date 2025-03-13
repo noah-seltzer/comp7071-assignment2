@@ -33,9 +33,8 @@
                 <span asp-validation-for="EmergencyContactPhone" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="JobTitle" class="control-label"></label>
-                <input asp-for="JobTitle" class="form-control" />
-                <span asp-validation-for="JobTitle" class="text-danger"></span>
+                <label for="selectedCertifications" class="control-label">Certifications</label>
+                <select id="selectedCertifications" name="selectedCertifications" class="form-control" asp-items="ViewBag.Certifications" multiple></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

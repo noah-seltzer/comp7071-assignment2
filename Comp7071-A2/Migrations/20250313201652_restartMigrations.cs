@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Comp7071_A2.Migrations
 {
     /// <inheritdoc />
-    public partial class AssetDamages : Migration
+    public partial class restartMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,7 +53,7 @@ namespace Comp7071_A2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Certification",
+                name: "Certifications",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -62,7 +62,7 @@ namespace Comp7071_A2.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Certification", x => x.Id);
+                    table.PrimaryKey("PK_Certifications", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,29 +102,15 @@ namespace Comp7071_A2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HREmployees",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Adderess = table.Column<string>(type: "TEXT", nullable: false),
-                    Emergency_Contact = table.Column<string>(type: "TEXT", nullable: false),
-                    Job_Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Employment_Type = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HREmployees", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "HRSchedules",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "TEXT", nullable: false),
                     Start_Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    End_Date = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    End_Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Start_Time = table.Column<TimeOnly>(type: "TEXT", nullable: false),
                     Hours_Scheduled = table.Column<float>(type: "REAL", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     Recurrance = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -328,9 +314,9 @@ namespace Comp7071_A2.Migrations
                 {
                     table.PrimaryKey("PK_CertificationEmployee", x => new { x.CertificationsId, x.EmployeesId });
                     table.ForeignKey(
-                        name: "FK_CertificationEmployee_Certification_CertificationsId",
+                        name: "FK_CertificationEmployee_Certifications_CertificationsId",
                         column: x => x.CertificationsId,
-                        principalTable: "Certification",
+                        principalTable: "Certifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -342,33 +328,14 @@ namespace Comp7071_A2.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PayPeriods",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Start_Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    End_Date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Rate = table.Column<float>(type: "REAL", nullable: false),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    HREmployeeID = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PayPeriods", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_PayPeriods_HREmployees_HREmployeeID",
-                        column: x => x.HREmployeeID,
-                        principalTable: "HREmployees",
-                        principalColumn: "ID");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Shifts",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "TEXT", nullable: false),
                     Hours_Worked = table.Column<float>(type: "REAL", nullable: false),
+                    Hours_Scheduled = table.Column<float>(type: "REAL", nullable: false),
                     Start_Time = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    End_Time = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     HRScheduleID = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
@@ -413,9 +380,9 @@ namespace Comp7071_A2.Migrations
                 {
                     table.PrimaryKey("PK_ServiceCertification", x => new { x.CertificationsId, x.ServicesId });
                     table.ForeignKey(
-                        name: "FK_ServiceCertification_Certification_CertificationsId",
+                        name: "FK_ServiceCertification_Certifications_CertificationsId",
                         column: x => x.CertificationsId,
-                        principalTable: "Certification",
+                        principalTable: "Certifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -604,7 +571,8 @@ namespace Comp7071_A2.Migrations
                     ID = table.Column<Guid>(type: "TEXT", nullable: false),
                     RenterID = table.Column<Guid>(type: "TEXT", nullable: false),
                     AssetID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false)
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    RentAmount = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -720,6 +688,62 @@ namespace Comp7071_A2.Migrations
                         principalTable: "AssetDamages",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HREmployees",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Adderess = table.Column<string>(type: "TEXT", nullable: false),
+                    Emergency_Contact = table.Column<string>(type: "TEXT", nullable: false),
+                    Job_Title = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    Employment_Type = table.Column<string>(type: "TEXT", nullable: false),
+                    HRManagerID = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HREmployees", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HRManagers",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HRManagers", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_HRManagers_HREmployees_ID",
+                        column: x => x.ID,
+                        principalTable: "HREmployees",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PayPeriods",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Start_Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    End_Date = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Rate = table.Column<float>(type: "REAL", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    HREmployeeID = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PayPeriods", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_PayPeriods_HREmployees_HREmployeeID",
+                        column: x => x.HREmployeeID,
+                        principalTable: "HREmployees",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.InsertData(
@@ -867,6 +891,11 @@ namespace Comp7071_A2.Migrations
                 column: "ManagerID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HREmployees_HRManagerID",
+                table: "HREmployees",
+                column: "HRManagerID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_InvoiceLines_InvoiceId",
                 table: "InvoiceLines",
                 column: "InvoiceId");
@@ -911,11 +940,22 @@ namespace Comp7071_A2.Migrations
                 name: "IX_Vehicles_RenterID",
                 table: "Vehicles",
                 column: "RenterID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_HREmployees_HRManagers_HRManagerID",
+                table: "HREmployees",
+                column: "HRManagerID",
+                principalTable: "HRManagers",
+                principalColumn: "ID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_HREmployees_HRManagers_HRManagerID",
+                table: "HREmployees");
+
             migrationBuilder.DropTable(
                 name: "ApplicationReferences");
 
@@ -983,10 +1023,7 @@ namespace Comp7071_A2.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "HREmployees");
-
-            migrationBuilder.DropTable(
-                name: "Certification");
+                name: "Certifications");
 
             migrationBuilder.DropTable(
                 name: "HRSchedules");
@@ -1011,6 +1048,12 @@ namespace Comp7071_A2.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "HRManagers");
+
+            migrationBuilder.DropTable(
+                name: "HREmployees");
         }
     }
 }

@@ -72,6 +72,43 @@ namespace test
             var registerButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
             registerButton.Click();
 
+            // Fill in required fields
+            var nameInput = _driver.FindElement(By.Id("Employee_Name"));
+            nameInput.SendKeys("Test User");
+
+            var addressInput = _driver.FindElement(By.Id("Employee_Adderess"));
+            addressInput.SendKeys("123 Test Street");
+
+            var emergencyContactInput = _driver.FindElement(By.Id("Employee_Emergency_Contact"));
+            emergencyContactInput.SendKeys("123-456-7890");
+
+            // Select first option in Job Title dropdown
+            var jobTitleSelect = new SelectElement(_driver.FindElement(By.Id("Employee_Job_Title")));
+            jobTitleSelect.SelectByIndex(1);  // Skip "Select job title", pick first option (Manager)
+
+            // Select first option in Employment Type dropdown
+            var employmentTypeSelect = new SelectElement(_driver.FindElement(By.Id("Employee_Employment_Type")));
+            employmentTypeSelect.SelectByIndex(1);  // Skip "Select employment type", pick first option (Hourly)
+
+            // Click Submit button
+            var submitButton = _driver.FindElement(By.Id("submitButton"));
+            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView();", submitButton);
+            submitButton.Click();
+
+            Thread.Sleep(500);
+
+            _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+
+            emailInput = _driver.FindElement(By.Id("Input_Email"));
+            emailInput.SendKeys(testEmail);
+
+            passwordInput = _driver.FindElement(By.Id("Input_Password"));
+            passwordInput.SendKeys("Test123!");
+
+            var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+            loginButton.Click();
+
+            // Wait and verify the user menu is updated (logged-in state)
             var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello testuser')]"));
             Assert.NotNull(userMenu);
         }
