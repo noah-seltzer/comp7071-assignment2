@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Suites</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -28,25 +28,25 @@
                 @Html.DisplayNameFor(model => model.Bathrooms)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Locker)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ParkingSpot)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.IsAvailable)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.RentAmount)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Locker)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParkingSpot)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.HousingGroup)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Renter)
+                @Html.DisplayNameFor(model => model.Building)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Building)
+                @Html.DisplayNameFor(model => model.Renter)
             </th>
             <th></th>
         </tr>
@@ -76,13 +76,40 @@
                 @Html.DisplayFor(modelItem => item.RentAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HousingGroup.ManagerID)
+                @{if (item.Locker != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Locker.LockerNumber)
+                }
+                else
+                {
+                    @:None
+                }}
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Renter.IdentityID)
+                @{if (item.ParkingSpot != null)
+                {
+                    @Html.DisplayFor(modelItem => item.ParkingSpot.SpotNumber)
+                }
+                else
+                {
+                    @:None
+                }} 
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Building.ID)
+                @Html.DisplayFor(modelItem => item.HousingGroup.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Building.Address)
+            </td>
+            <td>
+                @{if (item.Renter != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Renter.Identity.Email)
+                }
+                else
+                {
+                    @:None
+                }}
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

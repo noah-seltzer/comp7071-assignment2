@@ -43,9 +43,29 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Locker)
         </dt>
+        <dd class = "col-sm-10">
+            @{if (Model.Locker != null)
+            {
+                @Html.DisplayFor(model => model.Locker.LockerNumber)
+            } 
+            else
+            {
+                @:No locker assigned
+            }}
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ParkingSpot)
         </dt>
+        <dd class=" col-sm-10">
+            @{if (Model.ParkingSpot != null)
+            {
+                @Html.DisplayFor(model => model.ParkingSpot.SpotNumber)
+            }
+            else
+            {
+                @:No parking spot assigned
+            }}
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsAvailable)
         </dt>
@@ -62,19 +82,26 @@
             @Html.DisplayNameFor(model => model.HousingGroup)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HousingGroup.ManagerID)
+            @Html.DisplayFor(model => model.HousingGroup.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Renter)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Renter.IdentityID)
+            @{if (Model.Renter != null)
+            {
+                @Html.DisplayFor(model => model.Renter.Name)
+            }
+            else
+            {
+                @:Unassigned
+            }}
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Building)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Building.ID)
+            @Html.DisplayFor(model => model.Building.Address)
         </dd>
     </dl>
 </div>

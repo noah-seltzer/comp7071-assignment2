@@ -13,6 +13,12 @@
         display: inline-block;  
     }
 
+    th p {
+        padding: 5px;
+        display: inline-block;
+        margin: 0;
+    }
+
     th a:hover {
         text-decoration: underline; 
         color: #0056b3;
@@ -78,7 +84,9 @@
                 </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AssetDamages)
+                <p>
+                    @Html.DisplayNameFor(model => model.AssetDamages)
+                </p>
             </th>
             <th></th>
         </tr>
