@@ -31,7 +31,14 @@
       var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         selectable: false,
-        events: shifts
+        events: shifts,
+        eventClick: (info) => {
+            const id = info.event._def.publicId
+            var url = '@Url.Action("edit", "HRShifts", new {id = "_id"})'
+            url = url.replace('_id', id)
+            url += '?returnController=HRSchedules&returnMethod=Index'
+            window.location.href = url;
+        }
       });
       calendar.render();
     });

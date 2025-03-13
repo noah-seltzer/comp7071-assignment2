@@ -1,10 +1,7 @@
-﻿namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
-{
+﻿using Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Enums;
 
-    public enum ShiftStatus
-    {
-        Upcoming, Sick, Worked, Vacation
-    }
+namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models
+{
     public class Shift
     {
 

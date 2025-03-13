@@ -1,75 +1,82 @@
 ﻿@model Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Models.HREmployee
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 }
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 <script>
-    var model = @Html.Raw(Json.Serialize(@Model))
+	var model = @Html.Raw(Json.Serialize(@Model))
 
-    var shifts = []
-    model.shifts.forEach(s => {
-        shifts.push({
-            title: m.name,
-            id: s.id,
-            start: s.start_Time,
-            startStr: s.start_Time,
-            end:s.end_Time,
-            endStr:s.end_Time,
-        })
-    })
+	var shifts = []
+	model.shifts.forEach(s => {
+		shifts.push({
+			title: m.name,
+			id: s.id,
+			start: s.start_Time,
+			startStr: s.start_Time,
+			end:s.end_Time,
+			endStr:s.end_Time,
+		})
+	})
 
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        selectable: false,
-        events: shifts
-      });
-      calendar.render();
-    });
+	document.addEventListener('DOMContentLoaded', function() {
+	  var calendarEl = document.getElementById('calendar');
+	  var calendar = new FullCalendar.Calendar(calendarEl, {
+		initialView: 'dayGridMonth',
+		selectable: false,
+		events: shifts,
+		eventClick: (info) => {
+			const id = info.event._def.publicId
+			var url = '@Url.Action("edit", "HRShifts", new { id = "_id" })'
+			url = url.replace('_id', id)
+			url += '?returnController=HRSchedules&returnMethod=Details/' + "@Model.ID.ToString()"
+			window.location.href = url;
+		}
+	  });
+	  calendar.render();
+	});
 
 </script>
 <h1>Details</h1>
 
 <div>
-    <h4>HREmployee</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Adderess)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Adderess)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Emergency_Contact)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Emergency_Contact)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Job_Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Job_Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Employment_Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employment_Type)
-        </dd>
-    </dl>
+	<h4>HREmployee</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Adderess)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Adderess)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Emergency_Contact)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Emergency_Contact)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Job_Title)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Job_Title)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Employment_Type)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Employment_Type)
+		</dd>
+	</dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
+	<a asp-action="Index">Back to List</a>
 </div>
 <div id="calendar"></div>
