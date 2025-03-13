@@ -23,7 +23,13 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ParkingSpots
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ParkingSpots.Include(p => p.Asset).Include(p => p.Suite).Include(p => p.Vehicle);
+            var applicationDbContext = _context.ParkingSpots
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
+                .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
+                .Include(p => p.Renter)
+                .ThenInclude(r => r.Identity);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,9 +42,11 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var parkingSpot = await _context.ParkingSpots
-                .Include(p => p.Asset)
-                .Include(p => p.Suite)
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
                 .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
+                .Include(p => p.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)
             {
@@ -51,9 +59,25 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ParkingSpots/Create
         public IActionResult Create()
         {
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID");
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID");
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name");
+            var renters = _context.Renters
+                .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Name })
+                .ToList();
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["RenterID"] = new SelectList(renters, "Value", "Text");
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text");
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text");
             return View();
         }
 
@@ -62,7 +86,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,AssetID,SuiteID,VehicleID,SpotNumber")] ParkingSpot parkingSpot)
+        public async Task<IActionResult> Create([Bind("SpotNumber,SuiteID,VehicleID,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] ParkingSpot parkingSpot)
         {
             if (ModelState.IsValid)
             {
@@ -71,10 +95,26 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", parkingSpot.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", parkingSpot.SuiteID);
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID", parkingSpot.VehicleID);
-            return View(parkingSpot);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address");
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name");
+            var renters = _context.Renters
+                .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Name })
+                .ToList();
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["RenterID"] = new SelectList(renters, "Value", "Text");
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text");
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text");
+            return View();
         }
 
         // GET: Housing/ParkingSpots/Edit/5
@@ -85,14 +125,34 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
 
-            var parkingSpot = await _context.ParkingSpots.FindAsync(id);
+            var parkingSpot = await _context.ParkingSpots
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
+                .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
+                .Include(p => p.Renter)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)
             {
                 return NotFound();
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", parkingSpot.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", parkingSpot.SuiteID);
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID", parkingSpot.VehicleID);
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address", parkingSpot.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", parkingSpot.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", parkingSpot.RenterID);
+
+            // Suites filtered by selected Housing Group
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text", parkingSpot.SuiteID);
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text", parkingSpot.VehicleID);
             return View(parkingSpot);
         }
 
@@ -101,7 +161,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,AssetID,SuiteID,VehicleID,SpotNumber")] ParkingSpot parkingSpot)
+        public async Task<IActionResult> Edit(Guid id, [Bind("SpotNumber,SuiteID,VehicleID,ID,HousingGroupID,RenterID,BuildingID,IsAvailable,RentAmount")] ParkingSpot parkingSpot)
         {
             if (id != parkingSpot.ID)
             {
@@ -128,9 +188,24 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", parkingSpot.AssetID);
-            ViewData["SuiteID"] = new SelectList(_context.Suites, "ID", "ID", parkingSpot.SuiteID);
-            ViewData["VehicleID"] = new SelectList(_context.Vehicles, "ID", "ID", parkingSpot.VehicleID);
+
+            ViewData["BuildingID"] = new SelectList(_context.Buildings, "ID", "Address", parkingSpot.BuildingID);
+            ViewData["HousingGroupID"] = new SelectList(_context.HousingGroups, "ID", "Name", parkingSpot.HousingGroupID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", parkingSpot.RenterID);
+
+            // Suites filtered by selected Housing Group
+            var suites = _context.Suites
+                .Select(s => new SelectListItem { Value = s.ID.ToString(), Text = "Unit " + s.UnitNumber })
+                .ToList();
+            suites.Insert(0, new SelectListItem { Value = "", Text = "None" });
+            ViewData["SuiteID"] = new SelectList(suites, "Value", "Text", parkingSpot.SuiteID);
+
+            // Vehicles (Include "None" option)
+            var vehicles = _context.Vehicles
+                .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
+                .ToList();
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text", parkingSpot.VehicleID);
             return View(parkingSpot);
         }
 
@@ -143,9 +218,11 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             }
 
             var parkingSpot = await _context.ParkingSpots
-                .Include(p => p.Asset)
-                .Include(p => p.Suite)
+                .Include(p => p.Building)
+                .Include(p => p.HousingGroup)
                 .Include(p => p.Vehicle)
+                .Include(p => p.Suite)
+                .Include(p => p.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (parkingSpot == null)
             {

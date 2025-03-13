@@ -10,26 +10,63 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-area="Housing" asp-controller="Lockers" asp-action="Create">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AssetID" class="control-label"></label>
-                <select asp-for="AssetID" class ="form-control" asp-items="ViewBag.AssetID"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SuiteID" class="control-label"></label>
-                <select asp-for="SuiteID" class ="form-control" asp-items="ViewBag.SuiteID"></select>
-            </div>
+
+            <!-- Locker Number -->
             <div class="form-group">
                 <label asp-for="LockerNumber" class="control-label"></label>
                 <input asp-for="LockerNumber" class="form-control" />
                 <span asp-validation-for="LockerNumber" class="text-danger"></span>
             </div>
+
+            <!-- Locker Size Dropdown -->
             <div class="form-group">
                 <label asp-for="LockerSize" class="control-label"></label>
-                <input asp-for="LockerSize" class="form-control" />
+                <select asp-for="LockerSize" class="form-control" asp-items="ViewBag.LockerSizeOptions"></select>
                 <span asp-validation-for="LockerSize" class="text-danger"></span>
             </div>
+
+            <!-- Housing Group (Dropdown with Name) -->
+            <div class="form-group">
+                <label asp-for="HousingGroupID" class="control-label"></label>
+                <select asp-for="HousingGroupID" class="form-control" asp-items="ViewBag.HousingGroupID" id="HousingGroupDropdown">
+                    <option value="">Select a Housing Group</option>
+                </select>
+                <span asp-validation-for="HousingGroupID" class="text-danger"></span>
+            </div>
+
+            <!-- Building Dropdown (Filtered by Housing Group) -->
+            <div class="form-group">
+                <label asp-for="BuildingID" class="control-label"></label>
+                <select asp-for="BuildingID" class="form-control" asp-items="ViewBag.BuildingID" id="BuildingDropdown">
+                    <option value="">Select a Building</option>
+                </select>
+                <span asp-validation-for="BuildingID" class="text-danger"></span>
+            </div>
+
+            <!-- Renter Dropdown (Includes "None" Option) -->
+            <div class="form-group">
+                <label asp-for="RenterID" class="control-label"></label>
+                <select asp-for="RenterID" class="form-control" asp-items="ViewBag.RenterID">
+                </select>
+                <span asp-validation-for="RenterID" class="text-danger"></span>
+            </div>
+
+            <!-- Availability -->
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="IsAvailable" />
+                <label class="form-check-label">@Html.DisplayNameFor(model => model.IsAvailable)</label>
+            </div>
+
+            <!-- Rent Amount -->
+            <div class="form-group">
+                <label asp-for="RentAmount" class="control-label"></label>
+                <input asp-for="RentAmount" class="form-control" />
+                <span asp-validation-for="RentAmount" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -38,9 +75,38 @@
 </div>
 
 <div>
-    <a asp-area="Housing" asp-controller="Lockers" asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const housingGroupDropdown = document.getElementById("HousingGroupDropdown");
+            const buildingDropdown = document.getElementById("BuildingDropdown");
+
+            housingGroupDropdown.addEventListener("change", function () {
+                const selectedHousingGroupId = this.value;
+
+                // Clear existing options
+                buildingDropdown.innerHTML = '<option value="">Select a Building</option>';
+
+                if (selectedHousingGroupId) {
+                    fetch(`/Housing/Lockers/GetBuildingsByHousingGroup?housingGroupId=${selectedHousingGroupId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(building => {
+                                const option = document.createElement("option");
+                                option.value = building.value;
+                                option.textContent = building.text;
+                                buildingDropdown.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error("Error fetching buildings:", error));
+                }
+            });
+        });
+    </script>
 }

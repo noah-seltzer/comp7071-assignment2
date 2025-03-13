@@ -1,31 +1,40 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Comp7071_A2.Areas.Housing.Models;
 using Comp7071_A2.Data;
 
-namespace Comp7071_A2.Areas.Housing.Models
+namespace Comp7071_A2.Areas.Housing.Controllers
 {
     [Area("Housing")]
     public class RentersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<RentersController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public RentersController(ApplicationDbContext context)
+        public RentersController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Housing/Renters
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Renters.Include(r => r.Application).Include(r => r.Asset);
-            return View(await applicationDbContext.ToListAsync());
+            var renters = await _context.Renters
+                .Include(r => r.Identity)
+                .Include(r => r.Applications) 
+                .ThenInclude(a => a.Asset)      
+                .ToListAsync();
+
+            return View(renters);
         }
+
 
         // GET: Housing/Renters/Details/5
         public async Task<IActionResult> Details(Guid? id)
@@ -36,8 +45,7 @@ namespace Comp7071_A2.Areas.Housing.Models
             }
 
             var renter = await _context.Renters
-                .Include(r => r.Application)
-                .Include(r => r.Asset)
+                .Include(r => r.Identity)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (renter == null)
             {
@@ -48,10 +56,20 @@ namespace Comp7071_A2.Areas.Housing.Models
         }
 
         // GET: Housing/Renters/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "ID");
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID");
+            var renters = await _context.Renters.Select(r => r.IdentityID).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
+            var availableUsers = users
+                .Where(u => !renters.Contains(u.Id))
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Email
+                })
+                .ToList();
+
+            ViewData["IdentityID"] = new SelectList(availableUsers, "Value", "Text");
             return View();
         }
 
@@ -60,18 +78,36 @@ namespace Comp7071_A2.Areas.Housing.Models
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,ApplicationID,AssetID,Name,DateOfBirth,Photo,PhoneNumber,Email")] Renter renter)
+        public async Task<IActionResult> Create([Bind("ID,IdentityID,Name,DateOfBirth,Photo,PhoneNumber")] Renter renter)
         {
             if (ModelState.IsValid)
             {
                 renter.ID = Guid.NewGuid();
-                renter.DateOfBirth = renter.DateOfBirth.Date;
                 _context.Add(renter);
                 await _context.SaveChangesAsync();
+
+                var user = await _userManager.FindByIdAsync(renter.IdentityID);
+                if (user != null && !await _userManager.IsInRoleAsync(user, "Renter"))
+                {
+                    await _userManager.AddToRoleAsync(user, "Renter");
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status", renter.ApplicationID);
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", renter.AssetID);
+            
+            var renters = await _context.Renters.Select(r => r.IdentityID).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
+            var availableUsers = users
+                .Where(u => !renters.Contains(u.Id))
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Email
+                })
+                .ToList();
+
+            ViewData["IdentityID"] = new SelectList(availableUsers, "Value", "Text");
+
             return View(renter);
         }
 
@@ -83,13 +119,15 @@ namespace Comp7071_A2.Areas.Housing.Models
                 return NotFound();
             }
 
-            var renter = await _context.Renters.FindAsync(id);
+            var renter = await _context.Renters
+                .Include(r => r.Identity)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (renter == null)
             {
                 return NotFound();
             }
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status", renter.ApplicationID);
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", renter.AssetID);
+            ViewData["IdentityID"] = new SelectList(_context.Users, "Id", "Id", renter.IdentityID);
             return View(renter);
         }
 
@@ -98,7 +136,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,ApplicationID,AssetID,Name,DateOfBirth,Photo,PhoneNumber,Email")] Renter renter)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,IdentityID,Name,DateOfBirth,Photo,PhoneNumber")] Renter renter)
         {
             if (id != renter.ID)
             {
@@ -125,8 +163,7 @@ namespace Comp7071_A2.Areas.Housing.Models
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "Status", renter.ApplicationID);
-            ViewData["AssetID"] = new SelectList(_context.Assets, "ID", "ID", renter.AssetID);
+            ViewData["IdentityID"] = new SelectList(_context.Users, "Id", "Id", renter.IdentityID);
             return View(renter);
         }
 
@@ -139,8 +176,7 @@ namespace Comp7071_A2.Areas.Housing.Models
             }
 
             var renter = await _context.Renters
-                .Include(r => r.Application)
-                .Include(r => r.Asset)
+                .Include(r => r.Identity)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (renter == null)
             {

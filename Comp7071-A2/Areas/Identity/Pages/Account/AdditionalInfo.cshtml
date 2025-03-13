@@ -1,0 +1,72 @@
+﻿@page
+@model AdditionalInfoModel
+@{
+    ViewData["Title"] = "Additional Information";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    var statusMessageClass = Model.StatusMessage.StartsWith("Error") ? "danger" : "success";
+    <div class="alert alert-@statusMessageClass" role="alert">
+        @Model.StatusMessage
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        
+        <form id="additionalInfoForm" method="post">
+            <h2>Please provide additional information</h2>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+            
+           
+            <input type="hidden" asp-for="UserId" />
+            
+            <div class="form-floating mb-3">
+                <input asp-for="Employee.Name" class="form-control" aria-required="true" />
+                <label asp-for="Employee.Name">Name</label>
+                <span asp-validation-for="Employee.Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Employee.Adderess" class="form-control" aria-required="true" />
+                <label asp-for="Employee.Adderess">Address</label>
+                <span asp-validation-for="Employee.Adderess" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Employee.Emergency_Contact" class="form-control" aria-required="true" />
+                <label asp-for="Employee.Emergency_Contact">Emergency Contact</label>
+                <span asp-validation-for="Employee.Emergency_Contact" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <select asp-for="Employee.Job_Title" class="form-select" aria-required="true" >
+                    <option value="">Select job title</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Employee">Employee</option>
+                </select>
+                <label asp-for="Employee.Job_Title">Job Title</label>
+                <span asp-validation-for="Employee.Job_Title" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <select asp-for="Employee.Employment_Type" class="form-select" aria-required="true">
+                    <option value="">Select employment type</option>
+                    <option value="Hourly">Hourly</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Contract">Contract</option>
+                </select>
+                <label asp-for="Employee.Employment_Type">Employment Type</label>
+                <span asp-validation-for="Employee.Employment_Type" class="text-danger"></span>
+            </div>
+
+            <button id="submitButton" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+            <div id="submissionStatus" class="mt-3 alert alert-info" style="display: none;"></div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+}

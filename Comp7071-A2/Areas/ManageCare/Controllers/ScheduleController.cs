@@ -66,35 +66,62 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             if (ModelState.IsValid)
             {
                 schedule.Id = Guid.NewGuid();
-                
+
                 // Add selected employees
                 if (selectedEmployees.Length > 0)
                 {
                     var employees = await _context.Employees
+                        .Include(e => e.Certifications)
                         .Where(e => selectedEmployees.Contains(e.Id))
                         .ToListAsync();
-                    
+
                     schedule.Employees = employees;
                 }
-                
+
+                // Check to see if the service exists
+                var ser = await (
+                    from service in _context.Services.Include(s => s.Certifications)
+                    where service.Id == schedule.ServiceId
+                    select service
+                ).FirstOrDefaultAsync();
+
+                if (ser == null)
+                {
+                    return NotFound("Service not found");
+                }
+
+                // Check to see if employees have appropriate certifications
+                var requiredCerts = ser.Certifications;
+                foreach (var emp in schedule.Employees)
+                {
+                    var hasCerts = requiredCerts.All(rc => emp.Certifications.Any(ec => ec.Id == rc.Id));
+                    if (!hasCerts)
+                    {
+                        // Add error message to TempData
+                        TempData["ErrorMessage"] = $"{emp.Name} does not have the required certifications.";
+                        return RedirectToAction(nameof(Create));
+                    }
+                }
+
                 // Add selected customers
                 if (selectedCustomers.Length > 0)
                 {
                     var customers = await _context.Customers
                         .Where(c => selectedCustomers.Contains(c.Id))
                         .ToListAsync();
-                    
+
                     schedule.Customers = customers;
                 }
-                
+
                 _context.Add(schedule);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
+            // If ModelState is invalid, repopulate the dropdowns
             ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name", schedule.ServiceId);
             ViewData["Employees"] = new MultiSelectList(_context.Employees, "Id", "Name", selectedEmployees);
-             ViewData["Customers"] = new MultiSelectList(_context.Customers, "Id", "Name", selectedCustomers);
+            ViewData["Customers"] = new MultiSelectList(_context.Customers, "Id", "Name", selectedCustomers);
             return View(schedule);
         }
 
@@ -158,7 +185,12 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                     {
                         foreach (var employeeId in selectedEmployees)
                         {
-                            var employee = await _context.Employees.FindAsync(employeeId);
+                            var employee = await (
+                                from emp in _context.Employees.Include(emp => emp.Certifications)
+                                where emp.Id == employeeId
+                                select emp
+                            ).FirstOrDefaultAsync();
+
                             if (employee != null)
                             {
                                 existingSchedule.Employees.Add(employee);
@@ -179,7 +211,32 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                             }
                         }
                     }
-                    
+
+                    // Check to see if the service exists
+                    var ser = await (
+                        from service in _context.Services.Include(s => s.Certifications)
+                        where service.Id == existingSchedule.ServiceId
+                        select service
+                    ).FirstOrDefaultAsync();
+
+                    if (ser == null)
+                    {
+                        return NotFound("Service not found");
+                    }
+
+                    // Check to see if employees have appropriate certifications
+                    var requiredCerts = ser.Certifications;
+                    foreach (var emp in existingSchedule.Employees)
+                    {
+                        var hasCerts = requiredCerts.All(rc => emp.Certifications.Any(ec => ec.Id == rc.Id));
+                        if (!hasCerts)
+                        {
+                            // Add error message to TempData
+                            TempData["ErrorMessage"] = $"{emp.Name} does not have the required certifications.";
+                            return RedirectToAction(nameof(Edit));
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

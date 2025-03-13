@@ -32,16 +32,25 @@
                                 <a class="nav-link text-dark" asp-area="Housing" asp-controller="Buildings" asp-action="Index">Housing</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Care</a>
+                                <a class="nav-link text-dark" asp-area="ManageCare" asp-page="/Index">Care</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="ManageHumanResourcesAndPayroll" asp-controller="HREmployees" asp-action="Index">Human Resources</a>
+                                <a class="nav-link text-dark" asp-area="ManageHumanResourcesAndPayroll" asp-page="/Index">Human Resources</a>
                             </li>
                         }
                         @if (ViewContext.RouteData.Values["area"]?.ToString() == "Housing")
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Housing" asp-controller="Assets" asp-action="Index">Assets</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="assetsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Assets
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="assetsDropdown">
+                                    <li><a class="dropdown-item" asp-area="Housing" asp-controller="Assets" asp-action="Index">All</a></li>
+                                    <li><a class="dropdown-item" asp-area="Housing" asp-controller="Suites" asp-action="Index">Suites</a></li>
+                                    <li><a class="dropdown-item" asp-area="Housing" asp-controller="Lockers" asp-action="Index">Lockers</a></li>
+                                    <li><a class="dropdown-item" asp-area="Housing" asp-controller="ParkingSpots" asp-action="Index">Parking Spots</a></li>
+                                    <li><a class="dropdown-item" asp-area="Housing" asp-controller="AssetDamages" asp-action="Index">Asset Damages</a></li>
+                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Housing" asp-controller="Applications" asp-action="Index">Applications</a>

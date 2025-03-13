@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -39,6 +39,12 @@
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Details.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Housing\Views\Renters\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="app.db" />
+    <None Remove="app.db-shm" />
+    <None Remove="app.db-wal" />
   </ItemGroup>
 
 </Project>

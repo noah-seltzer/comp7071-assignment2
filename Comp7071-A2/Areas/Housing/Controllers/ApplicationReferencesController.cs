@@ -23,7 +23,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ApplicationReferences
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ApplicationReference.Include(a => a.Application).Include(a => a.Contact);
+            var applicationDbContext = _context.ApplicationReferences.Include(a => a.Application).Include(a => a.Contact);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
 
-            var applicationReference = await _context.ApplicationReference
+            var applicationReference = await _context.ApplicationReferences
                 .Include(a => a.Application)
                 .Include(a => a.Contact)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -50,8 +50,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/ApplicationReferences/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "RenterID");
-            ViewData["ContactID"] = new SelectList(_context.Contact, "ID", "Email");
+            ViewData["ApplicationID"] = new SelectList(_context.Applications, "ID", "RenterID");
+            ViewData["ContactID"] = new SelectList(_context.Contacts, "ID", "Email");
             return View();
         }
 
@@ -69,8 +69,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "RenterID", applicationReference.ApplicationID);
-            ViewData["ContactID"] = new SelectList(_context.Contact, "ID", "Email", applicationReference.ContactID);
+            ViewData["ApplicationID"] = new SelectList(_context.Applications, "ID", "RenterID", applicationReference.ApplicationID);
+            ViewData["ContactID"] = new SelectList(_context.Contacts, "ID", "Email", applicationReference.ContactID);
             return View(applicationReference);
         }
 
@@ -82,13 +82,13 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
 
-            var applicationReference = await _context.ApplicationReference.FindAsync(id);
+            var applicationReference = await _context.ApplicationReferences.FindAsync(id);
             if (applicationReference == null)
             {
                 return NotFound();
             }
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "RenterID", applicationReference.ApplicationID);
-            ViewData["ContactID"] = new SelectList(_context.Contact, "ID", "Email", applicationReference.ContactID);
+            ViewData["ApplicationID"] = new SelectList(_context.Applications, "ID", "RenterID", applicationReference.ApplicationID);
+            ViewData["ContactID"] = new SelectList(_context.Contacts, "ID", "Email", applicationReference.ContactID);
             return View(applicationReference);
         }
 
@@ -124,8 +124,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationID"] = new SelectList(_context.Application, "ID", "RenterID", applicationReference.ApplicationID);
-            ViewData["ContactID"] = new SelectList(_context.Contact, "ID", "Email", applicationReference.ContactID);
+            ViewData["ApplicationID"] = new SelectList(_context.Applications, "ID", "RenterID", applicationReference.ApplicationID);
+            ViewData["ContactID"] = new SelectList(_context.Contacts, "ID", "Email", applicationReference.ContactID);
             return View(applicationReference);
         }
 
@@ -137,7 +137,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 return NotFound();
             }
 
-            var applicationReference = await _context.ApplicationReference
+            var applicationReference = await _context.ApplicationReferences
                 .Include(a => a.Application)
                 .Include(a => a.Contact)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -154,10 +154,10 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var applicationReference = await _context.ApplicationReference.FindAsync(id);
+            var applicationReference = await _context.ApplicationReferences.FindAsync(id);
             if (applicationReference != null)
             {
-                _context.ApplicationReference.Remove(applicationReference);
+                _context.ApplicationReferences.Remove(applicationReference);
             }
 
             await _context.SaveChangesAsync();
@@ -166,7 +166,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
 
         private bool ApplicationReferenceExists(Guid id)
         {
-            return _context.ApplicationReference.Any(e => e.ID == id);
+            return _context.ApplicationReferences.Any(e => e.ID == id);
         }
     }
 }

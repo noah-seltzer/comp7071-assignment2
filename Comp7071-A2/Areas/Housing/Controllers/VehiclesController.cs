@@ -23,7 +23,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Vehicles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Vehicles.Include(v => v.ParkingSpot);
+            var applicationDbContext = _context.Vehicles.Include(v => v.ParkingSpot).Include(v => v.Renter);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,6 +37,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
 
             var vehicle = await _context.Vehicles
                 .Include(v => v.ParkingSpot)
+                .Include(v => v.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (vehicle == null)
             {
@@ -49,7 +50,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         // GET: Housing/Vehicles/Create
         public IActionResult Create()
         {
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID");
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "SpotNumber");
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name");
             return View();
         }
 
@@ -67,7 +69,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID", vehicle.ParkingSpotID);
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "SpotNumber", vehicle.ParkingSpotID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", vehicle.RenterID);
             return View(vehicle);
         }
 
@@ -84,7 +87,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             {
                 return NotFound();
             }
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID", vehicle.ParkingSpotID);
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "SpotNumber", vehicle.ParkingSpotID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", vehicle.RenterID);
             return View(vehicle);
         }
 
@@ -120,7 +124,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "ID", vehicle.ParkingSpotID);
+            ViewData["ParkingSpotID"] = new SelectList(_context.ParkingSpots, "ID", "SpotNumber", vehicle.ParkingSpotID);
+            ViewData["RenterID"] = new SelectList(_context.Renters, "ID", "Name", vehicle.RenterID);
             return View(vehicle);
         }
 
@@ -134,6 +139,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
 
             var vehicle = await _context.Vehicles
                 .Include(v => v.ParkingSpot)
+                .Include(v => v.Renter)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (vehicle == null)
             {

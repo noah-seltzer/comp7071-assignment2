@@ -17,26 +17,50 @@
             @Html.DisplayFor(model => model.SpotNumber)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Asset)
+            Suite Number
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Asset.ID)
+            @Html.DisplayFor(model => model.Suite.UnitNumber)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Suite)
+            Vehicle ID
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Suite.ID)
+            @Html.DisplayFor(model => model.Vehicle.LicensePlate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Vehicle)
+            @Html.DisplayNameFor(model => model.IsAvailable)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vehicle.ID)
+            @Html.DisplayFor(model => model.IsAvailable)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RentAmount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RentAmount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Renter)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Renter.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HousingGroup)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HousingGroup.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Building)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Building.Address)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-area="Housing" asp-controller="ParkingSpots" asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
-    <a asp-area="Housing" asp-controller="ParkingSpots" asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

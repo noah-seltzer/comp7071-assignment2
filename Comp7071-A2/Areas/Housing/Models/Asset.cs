@@ -30,5 +30,31 @@ namespace Comp7071_A2.Areas.Housing.Models
         public virtual HousingGroup? HousingGroup { get; set; }
         public virtual Renter? Renter { get; set; }
         public virtual Building? Building { get; set; }
+        public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
+        public virtual ICollection<AssetDamage>? AssetDamages { get; set; }
+
+        [NotMapped] 
+        public string AssetType2
+        {
+            get
+            {
+                if (this is Locker) return "Locker";
+                if (this is ParkingSpot) return "ParkingSpot";
+                if (this is Suite) return "Suite";
+                return "Unknown";
+            }
+        }
+
+        [NotMapped]
+        public string ReadableName
+        {
+            get
+            {
+                if (this is Locker locker) return $"Locker {locker.LockerNumber}";
+                if (this is ParkingSpot parkingSpot) return $"Parking Spot {parkingSpot.SpotNumber}";
+                if (this is Suite suite) return $"Suite {suite.UnitNumber}";
+                return "Unknown";
+            }
+        }
     }
 }
