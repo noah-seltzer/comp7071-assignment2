@@ -175,5 +175,94 @@ namespace test
             // This method is called after each test
             _driver.Quit();
         }
+
+        [Fact]
+        public void CreateNewSuite()
+        {
+            _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+
+            var emailInput = _driver.FindElement(By.Id("Input_Email"));
+            emailInput.SendKeys("admin@housing.com");
+
+            var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+            passwordInput.SendKeys("Admin123!");
+
+            var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+            loginButton.Click();
+
+            var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello admin')]"));
+            Assert.NotNull(userMenu);
+
+            _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Suites/Create");
+
+            // Fill out suite details (skip LockerID, ParkingSpotID, and RenterID)
+            var unitNumberInput = _driver.FindElement(By.Id("UnitNumber"));
+            unitNumberInput.SendKeys("8101");
+
+            var floorInput = _driver.FindElement(By.Id("Floor"));
+            floorInput.SendKeys("1");
+
+            var occupantsInput = _driver.FindElement(By.Id("Occupants"));
+            occupantsInput.SendKeys("2");
+
+            var roomsInput = _driver.FindElement(By.Id("Rooms"));
+            roomsInput.SendKeys("3");
+
+            var bathroomsInput = _driver.FindElement(By.Id("Bathrooms"));
+            bathroomsInput.SendKeys("2");
+
+            // Select Housing Group
+            IWebElement housingGroupElement = _driver.FindElement(By.Id("HousingGroupID"));
+            SelectElement housingGroupSelect = new SelectElement(housingGroupElement);
+            housingGroupSelect.SelectByIndex(0);
+
+            // Select Building
+            IWebElement buildingElement = _driver.FindElement(By.Id("BuildingID"));
+            SelectElement buildingSelect = new SelectElement(buildingElement);
+            buildingSelect.SelectByIndex(0);
+
+            var rentAmountInput = _driver.FindElement(By.Id("RentAmount"));
+            rentAmountInput.SendKeys("1500.00");
+
+            var isAvailableCheckbox = _driver.FindElement(By.Id("IsAvailable"));
+            Thread.Sleep(500);
+            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView();", isAvailableCheckbox);
+            if (!isAvailableCheckbox.Selected)
+            {
+                isAvailableCheckbox.Click();
+            }
+
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+            var submitButton = wait.Until(driver => driver.FindElement(By.CssSelector("input[type='submit'][value='Create']")));
+
+            // Scroll to submit button and click
+            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView();", submitButton);
+            submitButton.Click();
+
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+
+            // Verify that the suite was created
+            var suiteEntry = _driver.FindElement(By.XPath("//td[contains(text(), '8101')]"));
+            Assert.NotNull(suiteEntry);
+
+            // Navigate to the delete page
+            var deleteLink = suiteEntry.FindElement(By.XPath("./following-sibling::td/a[contains(text(), 'Delete')]"));
+            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView(true);", deleteLink);
+            Thread.Sleep(500);
+            deleteLink.Click();
+            // wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(deleteLink)).Click();
+
+            // Confirm deletion
+            var confirmDeleteButton = wait.Until(driver => driver.FindElement(By.CssSelector("input[type='submit'][value='Delete']")));
+            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView(true);", confirmDeleteButton);
+            Thread.Sleep(500);
+            confirmDeleteButton.Click();
+
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+
+            // Verify the suite is deleted
+            var suiteList = _driver.FindElements(By.XPath($"//td[contains(text(), '8101')]"));
+            Assert.Empty(suiteList); // Ensure no elements found with '8101'
+        }
     }
 }
