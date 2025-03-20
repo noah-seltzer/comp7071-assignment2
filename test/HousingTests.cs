@@ -12,8 +12,9 @@ namespace test
     public class HousingTests : IDisposable
     {
         private readonly IWebDriver _driver;
-        private readonly string _baseUrl = "http://localhost:5155";
+        // private readonly string _baseUrl = "http://localhost:5155";
         // private readonly string _baseUrl = "http://localhost:5000";
+        private readonly string _baseUrl = "https://a2-test-bchxhed0hzgqepaw.canadacentral-01.azurewebsites.net/";
         private readonly HttpClient _httpClient;
         public HousingTests()
         {
@@ -45,7 +46,7 @@ namespace test
         [Fact]
         public async Task CreateNewRenter()
         {
-            string testEmail = "testuser4@housing.com";
+            string testEmail = "testuser5@housing.com";
 
             // Ensure user is deleted before registering
             await DeleteTestUserAsync(testEmail);
