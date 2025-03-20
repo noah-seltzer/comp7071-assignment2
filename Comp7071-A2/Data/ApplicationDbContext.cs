@@ -27,9 +27,9 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Contact> Contacts { get; set; } = default!;
     public DbSet<Application> Applications { get; set; } = default!;
     public DbSet<ApplicationReference> ApplicationReferences { get; set; } = default!;
-    
+
     public DbSet<AssetDamage> AssetDamages { get; set; }
-    
+
     public DbSet<DamageImage> DamageImages { get; set; }
 
     //***********************************************************************************
@@ -58,9 +58,9 @@ public class ApplicationDbContext : IdentityDbContext
     {
         base.OnModelCreating(modelBuilder);
 
-       
+
         modelBuilder.Entity<HREmployee>().ToTable("HREmployees");
-        
+
         modelBuilder.Entity<HRManager>()
             .ToTable("HRManagers");
 

@@ -36,7 +36,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(e => e.Schedule)
                 .ThenInclude(s => s.Employees)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (service == null)
             {
                 return NotFound();
@@ -94,7 +94,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             var service = await _context.Services
                 .Include(s => s.Certifications)
                 .FirstOrDefaultAsync(s => s.Id == id);
-                
+
             if (service == null)
             {
                 return NotFound();
@@ -195,7 +195,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             {
                 _context.Services.Remove(service);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -205,4 +205,4 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             return _context.Services.Any(e => e.Id == id);
         }
     }
-} 
+}

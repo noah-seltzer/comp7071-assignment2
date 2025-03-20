@@ -76,7 +76,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var vehicles = _context.Vehicles
                 .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
                 .ToList();
-            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text");
             return View();
         }
@@ -112,7 +112,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var vehicles = _context.Vehicles
                 .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
                 .ToList();
-            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text");
             return View();
         }
@@ -151,7 +151,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var vehicles = _context.Vehicles
                 .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
                 .ToList();
-            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text", parkingSpot.VehicleID);
             return View(parkingSpot);
         }
@@ -204,7 +204,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var vehicles = _context.Vehicles
                 .Select(v => new SelectListItem { Value = v.ID.ToString(), Text = v.LicensePlate })
                 .ToList();
-            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            vehicles.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["VehicleID"] = new SelectList(vehicles, "Value", "Text", parkingSpot.VehicleID);
             return View(parkingSpot);
         }

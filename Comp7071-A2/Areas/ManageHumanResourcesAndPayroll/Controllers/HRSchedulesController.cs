@@ -87,10 +87,10 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
                 var CurrentDate = DateOnly.FromDateTime(StartDate);
                 var EndDateOnly = DateOnly.FromDateTime(EndDate);
 
-                
+
                 List<Shift> shifts = new List<Shift>();
                 int compare = CurrentDate.CompareTo(EndDateOnly);
-                while(compare < 0)
+                while (compare < 0)
                 {
 
                     Shift shift = new Shift();
@@ -120,7 +120,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
                             if (CurrentDate.DayOfWeek == DayOfWeek.Friday)
                             {
                                 CurrentDate = CurrentDate.AddDays(3);
-                            } else
+                            }
+                            else
                             {
                                 CurrentDate = CurrentDate.AddDays(1);
                             }
@@ -129,7 +130,7 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
                     compare = CurrentDate.CompareTo(EndDateOnly);
                 }
 
-                
+
 
                 hRSchedule.ID = Guid.NewGuid();
                 hRSchedule.Shifts = shifts;

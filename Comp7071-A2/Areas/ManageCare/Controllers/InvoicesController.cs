@@ -37,7 +37,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(i => i.Customer)
                 .Include(i => i.Lines)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (invoice == null)
             {
                 return NotFound();
@@ -61,27 +61,27 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             if (ModelState.IsValid)
             {
                 invoice.Id = Guid.NewGuid();
-                
+
                 // Generate invoice lines based on customer's scheduled services
                 var customer = await _context.Customers
                     .Include(c => c.Schedules)
                     .ThenInclude(s => s.Service)
                     .FirstOrDefaultAsync(c => c.Id == invoice.CustomerId);
-                
+
                 if (customer != null && customer.Schedules != null)
                 {
                     // Find schedules within the invoice date range
                     var schedules = customer.Schedules
                         .Where(s => s.StartTime >= invoice.StartDate && s.EndTime <= invoice.EndDate)
                         .ToList();
-                    
+
                     foreach (var schedule in schedules)
                     {
                         if (schedule.Service != null)
                         {
                             // Calculate duration in hours
                             var duration = (schedule.EndTime - schedule.StartTime).TotalHours;
-                            
+
                             // Create invoice line
                             var line = new InvoiceLine
                             {
@@ -92,17 +92,17 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                                 UnitPrice = schedule.Service.Rate,
                                 Amount = schedule.Service.Rate * (decimal)duration
                             };
-                            
+
                             invoice.Lines.Add(line);
                         }
                     }
                 }
-                
+
                 _context.Add(invoice);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
             ViewData["Customers"] = new SelectList(_context.Customers, "Id", "Name", invoice.CustomerId);
             return View(invoice);
         }
@@ -118,12 +118,12 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             var invoice = await _context.Invoices
                 .Include(i => i.Lines)
                 .FirstOrDefaultAsync(i => i.Id == id);
-                
+
             if (invoice == null)
             {
                 return NotFound();
             }
-            
+
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Name", invoice.CustomerId);
             return View(invoice);
         }
@@ -158,7 +158,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
+
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Name", invoice.CustomerId);
             return View(invoice);
         }
@@ -174,7 +174,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             var invoice = await _context.Invoices
                 .Include(i => i.Customer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (invoice == null)
             {
                 return NotFound();
@@ -193,7 +193,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             {
                 _context.Invoices.Remove(invoice);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -210,7 +210,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(i => i.Customer)
                 .Include(i => i.Lines)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (invoice == null)
             {
                 return NotFound();
@@ -219,7 +219,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             // In a real application, you would send an email here
             // For now, we'll just show a success message
             TempData["SuccessMessage"] = $"Invoice #{invoice.Id} has been emailed to {invoice.Customer.Name}.";
-            
+
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -230,7 +230,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             var invoices = await _context.Invoices
                 .Include(i => i.Lines)
                 .ToListAsync();
-                
+
             var report = invoices
                 .GroupBy(i => new { i.StartDate.Year, i.StartDate.Month })
                 .Select(g => new InvoiceReportViewModel
@@ -243,7 +243,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .OrderByDescending(r => r.Year)
                 .ThenByDescending(r => r.Month)
                 .ToList();
-                
+
             return View(report);
         }
 
@@ -260,7 +260,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
         public int Month { get; set; }
         public int InvoiceCount { get; set; }
         public decimal TotalRevenue { get; set; }
-        
+
         public string MonthName => new DateTime(Year, Month, 1).ToString("MMMM");
     }
-} 
+}

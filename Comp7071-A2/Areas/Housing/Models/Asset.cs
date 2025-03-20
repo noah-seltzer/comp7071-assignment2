@@ -33,7 +33,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
         public virtual ICollection<AssetDamage>? AssetDamages { get; set; }
 
-        [NotMapped] 
+        [NotMapped]
         public string AssetType2
         {
             get

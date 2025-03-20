@@ -28,8 +28,8 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         {
             var renters = await _context.Renters
                 .Include(r => r.Identity)
-                .Include(r => r.Applications) 
-                .ThenInclude(a => a.Asset)      
+                .Include(r => r.Applications)
+                .ThenInclude(a => a.Asset)
                 .ToListAsync();
 
             return View(renters);
@@ -94,7 +94,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            
+
             var renters = await _context.Renters.Select(r => r.IdentityID).ToListAsync();
             var users = await _userManager.Users.ToListAsync();
             var availableUsers = users

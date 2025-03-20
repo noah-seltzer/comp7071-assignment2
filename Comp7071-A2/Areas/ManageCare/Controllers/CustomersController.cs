@@ -32,7 +32,8 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(c => c.Schedules)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (customer == null) {
+            if (customer == null)
+            {
                 return NotFound();
             }
 
@@ -49,7 +50,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 ).ToListAsync();
 
 
-            
+
             customer.Invoices = invoices;
             customer.Schedules = schedule;
 
@@ -154,7 +155,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             {
                 _context.Customers.Remove(customer);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -164,4 +165,4 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             return _context.Customers.Any(e => e.Id == id);
         }
     }
-} 
+}

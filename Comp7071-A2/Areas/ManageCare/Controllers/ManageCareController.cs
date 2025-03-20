@@ -7,4 +7,4 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
     {
         // Base controller for all ManageCare controllers
     }
-} 
+}

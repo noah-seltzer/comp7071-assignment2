@@ -26,25 +26,25 @@ jobs:
       - name: Run code analysis
         run: dotnet format -v d --verify-no-changes .\Comp7071-A2\Comp7071-A2.csproj
 
-  # unit-tests:
-  #   runs-on: windows-latest
-  #   permissions:
-  #     contents: read
-  #   needs: code-analysis
-  #   steps:
-  #     - uses: actions/checkout@v4
+  unit-tests:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    needs: code-analysis
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Set up .NET Core
-  #       uses: actions/setup-dotnet@v4
-  #       with:
-  #         dotnet-version: '9.x'
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
 
-  #     - name: Run xunit tests
-  #       run: dotnet test .\test\
+      - name: Run xunit tests
+        run: dotnet test .\test\
 
   build:
     runs-on: windows-latest
-    needs: code-analysis
+    needs: unit-tests
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -67,26 +67,6 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
-  selenium-tests:
-      runs-on: windows-latest
-      needs: build
-      steps:
-        - uses: actions/checkout@v4
-
-        - name: Set up .NET Core
-          uses: actions/setup-dotnet@v4
-          with:
-            dotnet-version: '9.x'
-
-        - name: Install Chrome & ChromeDriver
-          run: |
-            choco install googlechrome --no-progress --force
-            choco install chromedriver --version=LATEST --no-progress --force
-            echo "Chrome and ChromeDriver installed"
-
-        - name: Run Selenium tests
-          run: dotnet test .\test\ --filter FullyQualifiedName~test.AuthTests
 
 
   deploy:

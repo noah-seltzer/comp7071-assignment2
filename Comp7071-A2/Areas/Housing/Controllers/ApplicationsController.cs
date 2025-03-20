@@ -43,7 +43,7 @@ namespace Comp7071_A2.Areas.Housing.Models
 
             if (!applications.Any())
             {
-                return View("NoApplications"); 
+                return View("NoApplications");
             }
 
             return View(applications);
@@ -199,7 +199,7 @@ namespace Comp7071_A2.Areas.Housing.Models
 
             var application = await _context.Applications
                 .Include(a => a.Renter)
-                .ThenInclude(r => r.Identity)  
+                .ThenInclude(r => r.Identity)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (application == null)

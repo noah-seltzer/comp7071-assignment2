@@ -130,7 +130,7 @@ namespace Comp7071_A2.Data
                 Bathrooms = 2
             };
             context.Suites.Add(suite);
-            
+
             // Create Asset Damage
             var assetDamage = new AssetDamage
             {
@@ -186,7 +186,8 @@ namespace Comp7071_A2.Data
         private static async Task<IdentityUser?> CreateUser(UserManager<IdentityUser> userManager, string email, string password, string[] roles)
         {
             var user = await userManager.FindByEmailAsync(email);
-            if (user != null) {
+            if (user != null)
+            {
                 return user;
             }
             var newUser = new IdentityUser

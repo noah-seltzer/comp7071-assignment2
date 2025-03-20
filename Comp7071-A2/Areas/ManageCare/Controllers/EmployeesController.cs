@@ -38,7 +38,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .ThenInclude(s => s.Service)
 
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (employee == null)
             {
                 return NotFound();
@@ -72,14 +72,14 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 var certSet = new HashSet<Guid>(selectedCertifications);
                 var certs =
                     (from certification in _context.Certifications
-                    where certSet.Any(c => certification.Id == c)
-                    select certification).ToList();
+                     where certSet.Any(c => certification.Id == c)
+                     select certification).ToList();
 
                 if (certs.Count() != certSet.Count())
                     return NotFound("Certification not found");
 
 
-                employee.Certifications = certs; 
+                employee.Certifications = certs;
                 employee.Id = Guid.NewGuid();
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
@@ -226,7 +226,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             {
                 _context.Employees.Remove(employee);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -236,4 +236,4 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             return _context.Employees.Any(e => e.Id == id);
         }
     }
-} 
+}
