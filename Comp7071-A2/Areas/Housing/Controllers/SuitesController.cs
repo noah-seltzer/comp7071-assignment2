@@ -123,13 +123,13 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var lockers = _context.Lockers
                 .Select(l => new SelectListItem { Value = l.ID.ToString(), Text = "Locker " + l.LockerNumber })
                 .ToList();
-            lockers.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            lockers.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["LockerID"] = new SelectList(lockers, "Value", "Text");
 
             var parkingSpots = _context.ParkingSpots
                 .Select(p => new SelectListItem { Value = p.ID.ToString(), Text = "Spot " + p.SpotNumber })
                 .ToList();
-            parkingSpots.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            parkingSpots.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["ParkingSpotID"] = new SelectList(parkingSpots, "Value", "Text");
 
             return View();
@@ -156,19 +156,19 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 .Where(r => r.Identity != null)
                 .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Identity.Email })
                 .ToList();
-            renters.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["RenterID"] = new SelectList(renters, "Value", "Text");
 
             var lockers = _context.Lockers
                 .Select(l => new SelectListItem { Value = l.ID.ToString(), Text = "Locker " + l.LockerNumber })
                 .ToList();
-            lockers.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            lockers.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["LockerID"] = new SelectList(lockers, "Value", "Text");
 
             var parkingSpots = _context.ParkingSpots
                 .Select(p => new SelectListItem { Value = p.ID.ToString(), Text = "Spot " + p.SpotNumber })
                 .ToList();
-            parkingSpots.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            parkingSpots.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["ParkingSpotID"] = new SelectList(parkingSpots, "Value", "Text");
 
             return View(suite);
@@ -214,19 +214,19 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 .Where(r => r.Identity != null)
                 .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Identity.Email })
                 .ToList();
-            renters.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["RenterID"] = new SelectList(renters, "Value", "Text");
 
             var lockers = _context.Lockers
                 .Select(l => new SelectListItem { Value = l.ID.ToString(), Text = "Locker " + l.LockerNumber })
                 .ToList();
-            lockers.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            lockers.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["LockerID"] = new SelectList(lockers, "Value", "Text");
 
             var parkingSpots = _context.ParkingSpots
                 .Select(p => new SelectListItem { Value = p.ID.ToString(), Text = "Spot " + p.SpotNumber })
                 .ToList();
-            parkingSpots.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            parkingSpots.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["ParkingSpotID"] = new SelectList(parkingSpots, "Value", "Text");
 
             return View(suite);

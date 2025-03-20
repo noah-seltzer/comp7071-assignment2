@@ -19,16 +19,16 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         {
             _context = context;
         }
-        
+
         public async Task<IActionResult> Index(string search, string assetType, string sortOrder)
         {
             var assets = _context.Assets
                 .Include(a => a.Renter)
                 .Include(a => a.HousingGroup)
                 .Include(a => a.AssetDamages)
-                .Include(a => a.Applications) 
+                .Include(a => a.Applications)
                 .AsQueryable();
-            
+
             // Searching across multiple columns
             if (!string.IsNullOrEmpty(search))
             {
@@ -58,7 +58,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 "availability_asc" => assets.OrderBy(a => a.IsAvailable),
                 "availability_desc" => assets.OrderByDescending(a => a.IsAvailable),
                 "rentAmount_asc" => assets.OrderBy(a => (double)a.RentAmount),
-                "rentAmount_desc" => assets.OrderByDescending(a => (double)a.RentAmount), 
+                "rentAmount_desc" => assets.OrderByDescending(a => (double)a.RentAmount),
                 "renter_asc" => assets.OrderBy(a => a.Renter != null ? a.Renter.Name : ""),
                 "renter_desc" => assets.OrderByDescending(a => a.Renter != null ? a.Renter.Name : ""),
                 "housingGroup_asc" => assets.OrderBy(a => a.HousingGroup != null ? a.HousingGroup.Name : ""),

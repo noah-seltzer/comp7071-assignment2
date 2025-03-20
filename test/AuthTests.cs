@@ -135,7 +135,7 @@ namespace test
             IWebElement selectElement = _driver.FindElement(By.Id("IdentityID"));
             SelectElement select = new SelectElement(selectElement);
             select.SelectByIndex(1);
-            
+
             var nameInput = _driver.FindElement(By.Id("Name"));
             nameInput.SendKeys("Test Renter");
 
@@ -147,7 +147,7 @@ namespace test
 
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
             var submitButton = wait.Until(driver => driver.FindElement(By.Id("create-button")));
-    
+
             /**
             * Scroll to the submit button before clicking it.
             * This is necessary because the button is not clickable if it is not on the screen.
@@ -160,7 +160,7 @@ namespace test
             var renter = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Renter')]"));
             Assert.NotNull(renter);
         }
-        
+
         [Fact]
         public void AssetDamageTest()
         {
@@ -174,7 +174,7 @@ namespace test
 
             var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
             loginButton.Click();
-            
+
             // Go to create new asset damage
             Thread.Sleep(500);
             _driver.FindElement(By.LinkText("Housing")).Click();
@@ -185,16 +185,16 @@ namespace test
             Thread.Sleep(500);
             _driver.FindElement(By.LinkText("Create New")).Click();
             Thread.Sleep(500);
-            
+
             // Fill out create new form
             IWebElement selectAssetElement = _driver.FindElement(By.Id("AssetID"));
             SelectElement selectAsset = new SelectElement(selectAssetElement);
             selectAsset.SelectByIndex(1);
-            
+
             IWebElement selectRenterElement = _driver.FindElement(By.Id("RenterID"));
             SelectElement selectRenter = new SelectElement(selectRenterElement);
             selectRenter.SelectByIndex(1);
-            
+
             var descriptionInput = _driver.FindElement(By.Id("Description"));
             descriptionInput.SendKeys("Test Damage");
 
@@ -203,7 +203,7 @@ namespace test
 
             var submitButton = _driver.FindElement(By.Id("create-asset-damage"));
             submitButton.Click();
-            
+
             var assetDamage = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Damage')]"));
             Assert.NotNull(assetDamage);
         }

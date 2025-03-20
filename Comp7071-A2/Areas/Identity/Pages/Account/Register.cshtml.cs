@@ -122,16 +122,16 @@ namespace Comp7071_A2.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
                     Console.WriteLine($"User created with ID: {user.Id}");
-                   
-                    
+
+
                     // Store the user ID in TempData before redirecting
                     TempData["UserId"] = user.Id;
-                    
-                    
+
+
                     // Redirect to the AdditionalInfo page with the userId as a query parameter
                     var additionalInfoPage = Url.Page("./AdditionalInfo", new { userId = user.Id });
-                    
-                    
+
+
                     return RedirectToPage("./AdditionalInfo", new { userId = user.Id });
                 }
                 foreach (var error in result.Errors)

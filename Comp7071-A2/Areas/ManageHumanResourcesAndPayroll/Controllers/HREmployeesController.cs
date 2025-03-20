@@ -114,7 +114,8 @@ namespace Comp7071_A2.Areas.ManageHumanResourcesAndPayroll.Controllers
             {
                 ModelState.AddModelError(string.Empty, "Only managers can edit employee details.");
                 return View(hREmployee);
-            } else if (currentEmployee.ID == id)
+            }
+            else if (currentEmployee.ID == id)
             {
                 ModelState.AddModelError(string.Empty, "You cannot edit yourself");
                 return View(hREmployee);

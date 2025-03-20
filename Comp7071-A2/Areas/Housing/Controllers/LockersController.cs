@@ -139,9 +139,9 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             var renters = _context.Renters.Include(r => r.Identity)
                 .Select(r => new SelectListItem { Value = r.ID.ToString(), Text = r.Identity.Email })
                 .ToList();
-            renters.Insert(0, new SelectListItem { Value = "", Text = "None" }); 
+            renters.Insert(0, new SelectListItem { Value = "", Text = "None" });
             ViewData["RenterID"] = new SelectList(renters, "Value", "Text", locker.RenterID);
-    
+
             return View(locker);
         }
 

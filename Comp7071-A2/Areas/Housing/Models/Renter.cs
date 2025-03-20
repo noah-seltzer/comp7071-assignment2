@@ -28,7 +28,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         [MaxLength(100)]
         [Phone]
         public string PhoneNumber { get; set; }
-        
+
         public virtual ICollection<AssetDamage>? AssetDamages { get; set; }
         public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
         // This is in the IdentityUser

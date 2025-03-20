@@ -30,24 +30,24 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 TotalRevenue = await _context.Invoices
                     .SelectMany(i => i.Lines)
                     .SumAsync(l => l.Amount),
-                
+
                 RecentCustomers = await _context.Customers
                     .OrderByDescending(c => c.Id)
                     .Take(5)
                     .ToListAsync(),
-                
+
                 PopularServices = await _context.Services
                     .OrderByDescending(s => s.Schedule.Count)
                     .Take(5)
                     .ToListAsync(),
-                
+
                 RecentInvoices = await _context.Invoices
                     .Include(i => i.Customer)
                     .Include(i => i.Lines)
                     .OrderByDescending(i => i.StartDate)
                     .Take(5)
                     .ToListAsync(),
-                
+
                 UpcomingSchedules = await _context.Schedule
                     .Include(s => s.Service)
                     .Include(s => s.Customers)
@@ -57,7 +57,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                     .Take(5)
                     .ToListAsync()
             };
-            
+
             return View(viewModel);
         }
 
@@ -74,4 +74,4 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
-} 
+}
