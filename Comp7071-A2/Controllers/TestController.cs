@@ -27,7 +27,7 @@ namespace Comp7071_A2.Controllers
         [HttpDelete("delete-user/{email}")]
         public async Task<IActionResult> DeleteUser(string email)
         {
-            if (email != "testuser4@housing.com")
+            if (!email.StartsWith("testuser"))
             {
                 return BadRequest("Only testuser can be deleted");
             }
