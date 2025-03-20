@@ -12,8 +12,7 @@ namespace test
     public class AuthTests : IDisposable
     {
         private readonly IWebDriver _driver;
-        // private readonly string _baseUrl = "http://localhost:5155";
-        private readonly string _baseUrl = "http://localhost:5000";
+        private readonly string _baseUrl = "https://a2-test-bchxhed0hzgqepaw.canadacentral-01.azurewebsites.net/";
         private readonly HttpClient _httpClient;
         public AuthTests()
         {
