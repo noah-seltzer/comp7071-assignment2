@@ -12,7 +12,8 @@ namespace test
     public class AuthTests : IDisposable
     {
         private readonly IWebDriver _driver;
-        private readonly string _baseUrl = "http://localhost:5155";
+        // private readonly string _baseUrl = "http://localhost:5155";
+        private readonly string _baseUrl = "http://localhost:5000";
         private readonly HttpClient _httpClient;
         public AuthTests()
         {
