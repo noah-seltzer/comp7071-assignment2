@@ -1,0 +1,126 @@
+@model Comp7071_A2.Areas.Housing.Models.AssetInvoice
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>AssetInvoice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RenterId" class="control-label">Renter</label>
+                <select asp-for="RenterId" class="form-control" asp-items="ViewBag.RenterId">
+                    <option value="">-- Select a Renter --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="AssetId" class="control-label">Asset</label>
+                <select asp-for="AssetId" class="form-control" asp-items="ViewBag.AssetId">
+                    <option value="">-- Select an Asset --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const renterDropdown = document.getElementById('RenterId');
+            const assetDropdown = document.getElementById('AssetId');
+
+            const originalRenterOptions = renterDropdown.innerHTML;
+            const originalAssetOptions = assetDropdown.innerHTML;
+
+            renterDropdown.addEventListener('change', function () {
+                var renterId = this.value;
+
+                if (!renterId) {
+                    assetDropdown.innerHTML = originalAssetOptions;
+                    return;
+                }
+                
+                if (renterId) {
+                    fetch(`/Housing/AssetInvoices/GetAssetsByRenter?renterId=${renterId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            var validAsset = data.some(asset => asset.id === assetDropdown.value)
+                            if (!assetDropdown.value || !validAsset) {
+                                assetDropdown.innerHTML = '<option value="">-- Select an Asset --</option>';
+                                data.forEach(item => {
+                                    assetDropdown.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error during fetch:', error);
+                        });
+                }
+            });
+
+            assetDropdown.addEventListener('change', function () {
+                var assetId = this.value;
+
+                if (!assetId) {
+                    renterDropdown.innerHTML = originalRenterOptions;
+                    return;
+                }
+                
+                if (assetId) {
+                    fetch(`/Housing/AssetInvoices/GetRentersByAsset?assetId=${assetId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data) {
+                                if (!renterDropdown.value || (renterDropdown.value !== data.id)) {
+                                    renterDropdown.innerHTML = '<option value="">-- Select a Renter --</option>';
+                                    if (data) {
+                                        renterDropdown.innerHTML += `<option value="${data.id}">${data.name}</option>`;
+                                    } else {
+                                        renterDropdown.innerHTML = '<option value="">No Renters For Asset</option>';
+                                    }
+                                }
+                            } else {
+                                renterDropdown.innerHTML = '<option value="">No Renters For Asset</option>';
+                            }
+
+                        })
+                        .catch(error => {
+                            console.error('Error during fetch:', error);
+                        });
+                }
+            });
+        });
+    </script>
+}

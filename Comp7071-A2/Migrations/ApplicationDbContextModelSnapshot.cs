@@ -167,6 +167,62 @@ namespace Comp7071_A2.Migrations
                     b.ToTable("AssetDamages");
                 });
 
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetInvoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AssetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RenterId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("RenterId");
+
+                    b.ToTable("AssetInvoice");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetInvoiceLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.ToTable("AssetInvoiceLine");
+                });
+
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Building", b =>
                 {
                     b.Property<Guid>("ID")
@@ -1076,8 +1132,9 @@ namespace Comp7071_A2.Migrations
                         .HasForeignKey("HousingGroupID");
 
                     b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
-                        .WithMany()
-                        .HasForeignKey("RenterID");
+                        .WithMany("Assets")
+                        .HasForeignKey("RenterID")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Building");
 
@@ -1103,6 +1160,36 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Asset");
 
                     b.Navigation("Renter");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetInvoice", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Asset", "Asset")
+                        .WithMany("AssetInvoices")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.Renter", "Renter")
+                        .WithMany("AssetInvoices")
+                        .HasForeignKey("RenterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Renter");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetInvoiceLine", b =>
+                {
+                    b.HasOne("Comp7071_A2.Areas.Housing.Models.AssetInvoice", "Invoice")
+                        .WithMany("Lines")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Building", b =>
@@ -1354,11 +1441,18 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("AssetDamages");
+
+                    b.Navigation("AssetInvoices");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetDamage", b =>
                 {
                     b.Navigation("DamageImages");
+                });
+
+            modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.AssetInvoice", b =>
+                {
+                    b.Navigation("Lines");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.Housing.Models.Contact", b =>
@@ -1371,6 +1465,10 @@ namespace Comp7071_A2.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("AssetDamages");
+
+                    b.Navigation("AssetInvoices");
+
+                    b.Navigation("Assets");
                 });
 
             modelBuilder.Entity("Comp7071_A2.Areas.ManageCare.Models.Customer", b =>
