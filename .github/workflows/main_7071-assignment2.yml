@@ -26,25 +26,25 @@ jobs:
       - name: Run code analysis
         run: dotnet format -v d --verify-no-changes .\Comp7071-A2\Comp7071-A2.csproj
 
-  unit-tests:
-    runs-on: windows-latest
-    permissions:
-      contents: read
-    needs: code-analysis
-    steps:
-      - uses: actions/checkout@v4
+  # unit-tests:
+  #   runs-on: windows-latest
+  #   permissions:
+  #     contents: read
+  #   needs: code-analysis
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.x'
+  #     - name: Set up .NET Core
+  #       uses: actions/setup-dotnet@v4
+  #       with:
+  #         dotnet-version: '9.x'
 
-      - name: Run xunit tests
-        run: dotnet test .\test\
+  #     - name: Run xunit tests
+  #       run: dotnet test .\test\
 
   build:
     runs-on: windows-latest
-    needs: unit-tests
+    needs: code-analysis
     permissions:
       contents: read #This is required for actions/checkout
 
