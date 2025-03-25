@@ -12,7 +12,7 @@ namespace Comp7071_A2.Areas.Housing.Models
 
         [ForeignKey("Suite")]
         public Guid? SuiteID { get; set; }
-        
+
         public virtual Suite? Suite { get; set; }
     }
 }

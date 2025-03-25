@@ -39,7 +39,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(s => s.Employees)
                 .Include(s => s.Customers)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (schedule == null)
             {
                 return NotFound();
@@ -137,12 +137,12 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(s => s.Employees)
                 .Include(s => s.Customers)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (schedule == null)
             {
                 return NotFound();
             }
-            
+
             ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name", schedule.ServiceId);
             ViewData["Employees"] = new MultiSelectList(_context.Employees, "Id", "Name", schedule.Employees?.Select(e => e.Id));
             ViewData["Customers"] = new MultiSelectList(_context.Customers, "Id", "Name", schedule.Customers?.Select(c => c.Id));
@@ -168,17 +168,17 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                         .Include(s => s.Employees)
                         .Include(s => s.Customers)
                         .FirstOrDefaultAsync(s => s.Id == id);
-                    
+
                     if (existingSchedule == null)
                     {
                         return NotFound();
                     }
-                    
+
                     // Update scalar properties
                     existingSchedule.StartTime = schedule.StartTime;
                     existingSchedule.EndTime = schedule.EndTime;
                     existingSchedule.ServiceId = schedule.ServiceId;
-                    
+
                     // Update employees
                     existingSchedule.Employees.Clear();
                     if (selectedEmployees != null && selectedEmployees.Length > 0)
@@ -197,7 +197,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                             }
                         }
                     }
-                    
+
                     // Update customers
                     existingSchedule.Customers.Clear();
                     if (selectedCustomers != null && selectedCustomers.Length > 0)
@@ -252,7 +252,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
+
             ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name", schedule.ServiceId);
             ViewData["Employees"] = new MultiSelectList(_context.Employees, "Id", "Name", selectedEmployees);
             ViewData["Customers"] = new MultiSelectList(_context.Customers, "Id", "Name", selectedCustomers);
@@ -272,7 +272,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(s => s.Employees)
                 .Include(s => s.Customers)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (schedule == null)
             {
                 return NotFound();
@@ -291,7 +291,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             {
                 _context.Schedule.Remove(schedule);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -301,4 +301,4 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             return _context.Schedule.Any(e => e.Id == id);
         }
     }
-} 
+}

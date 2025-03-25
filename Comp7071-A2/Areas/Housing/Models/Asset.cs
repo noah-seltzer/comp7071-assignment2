@@ -34,7 +34,7 @@ namespace Comp7071_A2.Areas.Housing.Models
         public virtual ICollection<AssetDamage> AssetDamages { get; set; } = new List<AssetDamage>();
         public virtual ICollection<AssetInvoice> AssetInvoices { get; set; } = new List<AssetInvoice>();
 
-        [NotMapped] 
+        [NotMapped]
         public string AssetType2
         {
             get

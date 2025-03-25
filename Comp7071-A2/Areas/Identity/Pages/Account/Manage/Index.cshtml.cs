@@ -10,7 +10,7 @@ public class IndexModel : PageModel
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
     //gets employee data
-    private readonly ApplicationDbContext _context; 
+    private readonly ApplicationDbContext _context;
 
     public IndexModel(
         UserManager<IdentityUser> userManager,
@@ -105,7 +105,7 @@ public class IndexModel : PageModel
             }
         }
 
-       
+
         var employee = await _context.HREmployees
             .FirstOrDefaultAsync(e => e.UserId == user.Id);
 
@@ -114,7 +114,7 @@ public class IndexModel : PageModel
             employee.Name = Input.Name;
             employee.Adderess = Input.Address;
             employee.Emergency_Contact = Input.EmergencyContact;
-          
+
 
             await _context.SaveChangesAsync();
         }

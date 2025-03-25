@@ -7,11 +7,11 @@ public class DamageImage
 {
     [Key]
     public Guid ID { get; set; }
-    
+
     [ForeignKey("AssetDamage")]
     public Guid? AssetDamageID { get; set; }
-    
-    public byte[]? Photo  { get; set; }
-    
+
+    public byte[]? Photo { get; set; }
+
     public virtual AssetDamage AssetDamage { get; set; }
 }

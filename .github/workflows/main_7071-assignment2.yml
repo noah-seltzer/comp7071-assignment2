@@ -69,7 +69,6 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
 
-
   deploy:
     runs-on: windows-latest
     if: github.ref == 'refs/heads/main'

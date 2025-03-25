@@ -33,7 +33,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 .Include(c => c.Services)
                 .Include(c => c.Employees)
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (certification == null)
             {
                 return NotFound();
@@ -58,7 +58,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             {
                 certification.Id = Guid.NewGuid();
                 certification.Services = new List<Service>(); // Initialize the Services collection
-                
+
                 // Add selected services
                 if (selectedServices != null && selectedServices.Length > 0)
                 {
@@ -71,12 +71,12 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                         }
                     }
                 }
-                
+
                 _context.Add(certification);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            
+
             ViewData["Services"] = new MultiSelectList(_context.Services, "Id", "Name");
             return View(certification);
         }
@@ -92,15 +92,15 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             var certification = await _context.Set<Certification>()
                 .Include(c => c.Services)
                 .FirstOrDefaultAsync(c => c.Id == id);
-                
+
             if (certification == null)
             {
                 return NotFound();
             }
-            
+
             var selectedServices = certification.Services.Select(s => s.Id).ToArray();
             ViewData["Services"] = new MultiSelectList(_context.Services, "Id", "Name", selectedServices);
-            
+
             return View(certification);
         }
 
@@ -122,15 +122,15 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                     var existingCertification = await _context.Set<Certification>()
                         .Include(c => c.Services)
                         .FirstOrDefaultAsync(c => c.Id == id);
-                    
+
                     if (existingCertification == null)
                     {
                         return NotFound();
                     }
-                    
+
                     // Update scalar properties
                     existingCertification.Name = certification.Name;
-                    
+
                     // Update services
                     existingCertification.Services.Clear();
                     if (selectedServices != null && selectedServices.Length > 0)
@@ -144,7 +144,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                             }
                         }
                     }
-                    
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -160,13 +160,13 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
+
             var selectedServicesIds = await _context.Set<Certification>()
                 .Include(c => c.Services)
                 .Where(c => c.Id == id)
                 .SelectMany(c => c.Services.Select(s => s.Id))
                 .ToArrayAsync();
-                
+
             ViewData["Services"] = new MultiSelectList(_context.Services, "Id", "Name", selectedServicesIds);
             return View(certification);
         }
@@ -181,7 +181,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
 
             var certification = await _context.Set<Certification>()
                 .FirstOrDefaultAsync(m => m.Id == id);
-                
+
             if (certification == null)
             {
                 return NotFound();
@@ -200,7 +200,7 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             {
                 _context.Set<Certification>().Remove(certification);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -210,4 +210,4 @@ namespace Comp7071_A2.Areas.ManageCare.Controllers
             return _context.Set<Certification>().Any(e => e.Id == id);
         }
     }
-} 
+}
