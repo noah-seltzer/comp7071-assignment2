@@ -120,6 +120,7 @@ namespace Comp7071_A2.Data
             {
                 HousingGroupID = housingGroup.ID,
                 BuildingID = building.ID,
+                RenterID = renter1.ID,
                 IsAvailable = true,
                 RentAmount = 1000,
 
