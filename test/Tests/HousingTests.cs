@@ -14,21 +14,111 @@ public class HousingTests : BaseTest
     }
     
     [Fact]
-    public void CreateNewRenter()
+    public void HousingAccountLoginTest()
     {
-        _loginPage.GoToLoginPage();
-        _loginPage.Login("admin@housing.com", "Admin123!");
-        Assert.True(_loginPage.IsLoggedIn("admin"));
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+        Thread.Sleep(300);
+
+        var emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys("admin@housing.com");
+
+        var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Admin123!");
+
+        var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        loginButton.Click();
+
+        var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello admin')]"));
+        Assert.NotNull(userMenu);
+    }
+    
+    [Fact]
+    public async Task CreateNewRenter()
+    {
+        string testEmail = "testuser5@housing.com";
+
+        // Ensure user is deleted before registering
+        await DeleteTestUserAsync(testEmail);
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Register");
+
+        var emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys(testEmail);
+
+        var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Test123!");
+
+        var confirmPasswordInput = _driver.FindElement(By.Id("Input_ConfirmPassword"));
+        confirmPasswordInput.SendKeys("Test123!");
+
+        var registerButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        registerButton.Click();
+
+        // Fill in required fields
+        var nameInput = _driver.FindElement(By.Id("Employee_Name"));
+        nameInput.SendKeys("Test User");
+
+        var addressInput = _driver.FindElement(By.Id("Employee_Adderess"));
+        addressInput.SendKeys("123 Test Street");
+
+        var emergencyContactInput = _driver.FindElement(By.Id("Employee_Emergency_Contact"));
+        emergencyContactInput.SendKeys("123-456-7890");
+
+        // Select first option in Job Title dropdown
+        var jobTitleSelect = new SelectElement(_driver.FindElement(By.Id("Employee_Job_Title")));
+        jobTitleSelect.SelectByIndex(1);  // Skip "Select job title", pick first option (Manager)
+
+        // Select first option in Employment Type dropdown
+        var employmentTypeSelect = new SelectElement(_driver.FindElement(By.Id("Employee_Employment_Type")));
+        employmentTypeSelect.SelectByIndex(1);  // Skip "Select employment type", pick first option (Hourly)
+
+        // Click Submit button
+        var submitButton = _driver.FindElement(By.Id("submitButton"));
+        ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView();", submitButton);
+        submitButton.Click();
+
+        Thread.Sleep(500);
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+        Thread.Sleep(300);
+
+        emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys("admin@housing.com");
+
+        passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Admin123!");
+
+        var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        loginButton.Click();
+
+        var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello admin')]"));
+        Assert.NotNull(userMenu);
 
         _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Renters/Create");
-    
-        new SelectElement(_driver.FindElement(By.Id("IdentityID"))).SelectByIndex(1);
-    
-        _driver.FindElement(By.Id("Name")).SendKeys("Test Renter");
-        _driver.FindElement(By.Id("DateOfBirth")).SendKeys("1990\t0119");
-        _driver.FindElement(By.Id("PhoneNumber")).SendKeys("1234567890");
+        IWebElement selectElement = _driver.FindElement(By.Id("IdentityID"));
+        SelectElement select = new SelectElement(selectElement);
+        select.SelectByIndex(1);
 
-        WaitAndClick(By.Id("create-button"));
+        nameInput = _driver.FindElement(By.Id("Name"));
+        nameInput.SendKeys("Test Renter");
+
+        var dateOfBirthInput = _driver.FindElement(By.Id("DateOfBirth"));
+        dateOfBirthInput.SendKeys("1990\t0119");
+
+        var phoneNumberInput = _driver.FindElement(By.Id("PhoneNumber"));
+        phoneNumberInput.SendKeys("1234567890");
+
+        var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+        submitButton = wait.Until(driver => driver.FindElement(By.Id("create-button")));
+
+        /**
+        * Scroll to the submit button before clicking it.
+        * This is necessary because the button is not clickable if it is not on the screen.
+        */
+        ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView();", submitButton);
+        submitButton.Click();
+
+        _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
 
         var renter = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Renter')]"));
         Assert.NotNull(renter);
@@ -37,9 +127,20 @@ public class HousingTests : BaseTest
     [Fact]
     public void CreateNewSuite()
     {
-        _loginPage.GoToLoginPage();
-        _loginPage.Login("admin@housing.com", "Admin123!");
-        Assert.True(_loginPage.IsLoggedIn("admin"));
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+        Thread.Sleep(300);
+
+        var emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys("admin@housing.com");
+
+        var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Admin123!");
+
+        var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        loginButton.Click();
+
+        var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello admin')]"));
+        Assert.NotNull(userMenu);
 
         _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Suites/Create");
 
@@ -114,12 +215,20 @@ public class HousingTests : BaseTest
     }
     
     [Fact]
-    public void CreateAssetDamageTest()
+    public void AssetDamageTest()
     {
-        _loginPage.GoToLoginPage();
-        _loginPage.Login("admin@housing.com", "Admin123!");
-        Assert.True(_loginPage.IsLoggedIn("admin"));
-        
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+        Thread.Sleep(300);
+
+        var emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys("admin@housing.com");
+
+        var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Admin123!");
+
+        var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        loginButton.Click();
+
         // Go to create new asset damage
         Thread.Sleep(500);
         _driver.FindElement(By.LinkText("Housing")).Click();
@@ -130,16 +239,16 @@ public class HousingTests : BaseTest
         Thread.Sleep(500);
         _driver.FindElement(By.LinkText("Create New")).Click();
         Thread.Sleep(500);
-            
+
         // Fill out create new form
         IWebElement selectAssetElement = _driver.FindElement(By.Id("AssetID"));
         SelectElement selectAsset = new SelectElement(selectAssetElement);
         selectAsset.SelectByIndex(1);
-            
+
         IWebElement selectRenterElement = _driver.FindElement(By.Id("RenterID"));
         SelectElement selectRenter = new SelectElement(selectRenterElement);
         selectRenter.SelectByIndex(1);
-            
+
         var descriptionInput = _driver.FindElement(By.Id("Description"));
         descriptionInput.SendKeys("Test Damage");
 
@@ -148,9 +257,111 @@ public class HousingTests : BaseTest
 
         var submitButton = _driver.FindElement(By.Id("create-asset-damage"));
         submitButton.Click();
-            
+
         var assetDamage = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Damage')]"));
         Assert.NotNull(assetDamage);
+    }
+    
+    [Fact]
+    public void LockersPagesAvailableToAdmin()
+    {
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+        Thread.Sleep(300);
+
+        var emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys("admin@housing.com");
+
+        var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Admin123!");
+
+        var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        loginButton.Click();
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Lockers");
+        Thread.Sleep(300);
+
+        var createNew = _driver.FindElements(By.XPath($"//a[contains(text(), 'Create New')]"));
+        Assert.NotNull(createNew);
+
+        var lockersTitle = _driver.FindElement(By.XPath($"//h1[contains(text(), 'Lockers')]"));
+        Assert.NotNull(lockersTitle);
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Lockers/Create");
+        Thread.Sleep(300);
+
+        var createTitle = _driver.FindElements(By.XPath($"//h1[contains(text(), 'Create')]"));
+        Assert.NotNull(createNew);
+
+        lockersTitle = _driver.FindElement(By.XPath($"//h4[contains(text(), 'Locker')]"));
+        Assert.NotNull(lockersTitle);
+    }
+
+    [Fact]
+    public void SuitesPagesAvailableToAdmin()
+    {
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+        Thread.Sleep(300);
+
+        var emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys("admin@housing.com");
+
+        var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Admin123!");
+
+        var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        loginButton.Click();
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Suites");
+        Thread.Sleep(300);
+
+        var createNew = _driver.FindElements(By.XPath($"//a[contains(text(), 'Create New')]"));
+        Assert.NotNull(createNew);
+
+        var suitesTitle = _driver.FindElement(By.XPath($"//h1[contains(text(), 'Suites')]"));
+        Assert.NotNull(suitesTitle);
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Suites/Create");
+        Thread.Sleep(300);
+
+        var createTitle = _driver.FindElements(By.XPath($"//h1[contains(text(), 'Create')]"));
+        Assert.NotNull(createTitle);
+
+        suitesTitle = _driver.FindElement(By.XPath($"//h4[contains(text(), 'Suite')]"));
+        Assert.NotNull(suitesTitle);
+    }
+
+    [Fact]
+    public void ParkingSpotsPagesAvailableToAdmin()
+    {
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Identity/Account/Login");
+        Thread.Sleep(300);
+
+        var emailInput = _driver.FindElement(By.Id("Input_Email"));
+        emailInput.SendKeys("admin@housing.com");
+
+        var passwordInput = _driver.FindElement(By.Id("Input_Password"));
+        passwordInput.SendKeys("Admin123!");
+
+        var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
+        loginButton.Click();
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/ParkingSpots");
+        Thread.Sleep(300);
+
+        var createNew = _driver.FindElements(By.XPath($"//a[contains(text(), 'Create New')]"));
+        Assert.NotNull(createNew);
+
+        var parkingSpotsTitle = _driver.FindElement(By.XPath($"//h1[contains(text(), 'ParkingSpot Spots')]"));
+        Assert.NotNull(parkingSpotsTitle);
+
+        _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/ParkingSpots/Create");
+        Thread.Sleep(300);
+
+        var createTitle = _driver.FindElements(By.XPath($"//h1[contains(text(), 'Create')]"));
+        Assert.NotNull(createTitle);
+
+        parkingSpotsTitle = _driver.FindElement(By.XPath($"//h4[contains(text(), 'ParkingSpot')]"));
+        Assert.NotNull(parkingSpotsTitle);
     }
 
     [Fact]
@@ -161,13 +372,9 @@ public class HousingTests : BaseTest
         Assert.True(_loginPage.IsLoggedIn("admin"));
         
         // Go to create new invoice
-        Thread.Sleep(500);
         _driver.FindElement(By.LinkText("Housing")).Click();
-        Thread.Sleep(500);
         _driver.FindElement(By.LinkText("Invoices")).Click();
-        Thread.Sleep(500);
         _driver.FindElement(By.LinkText("Create New")).Click();
-        Thread.Sleep(500);
 
         // Select first renter (John Doe) 
         IWebElement selectRenterElement = _driver.FindElement(By.Id("RenterId"));
@@ -179,17 +386,13 @@ public class HousingTests : BaseTest
         SelectElement selectAsset = new SelectElement(selectAssetElement);
         selectAsset.SelectByIndex(1);
         
-        Thread.Sleep(500);
         _driver.FindElement(By.Id("StartDate")).SendKeys("03012025");
-        Thread.Sleep(500);
         _driver.FindElement(By.Id("EndDate")).SendKeys("06012025");
-        Thread.Sleep(1000);
         
         var submitButton = _driver.FindElement(By.Id("create-asset-invoice"));
         submitButton.Click();
         
         var assetInvoice = _driver.FindElement(By.XPath("//td[contains(text(), 'John Doe')]"));
-        Thread.Sleep(1000);
         Assert.NotNull(assetInvoice);
     }
 }
