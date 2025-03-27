@@ -12,7 +12,7 @@ public class HousingTests : BaseTest
     {
         _loginPage = new LoginPage(_driver, _baseUrl);
     }
-    
+
     [Fact]
     public void HousingAccountLoginTest()
     {
@@ -31,7 +31,7 @@ public class HousingTests : BaseTest
         var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello admin')]"));
         Assert.NotNull(userMenu);
     }
-    
+
     [Fact]
     public async Task CreateNewRenter()
     {
@@ -123,7 +123,7 @@ public class HousingTests : BaseTest
         var renter = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Renter')]"));
         Assert.NotNull(renter);
     }
-    
+
     [Fact]
     public void CreateNewSuite()
     {
@@ -213,7 +213,7 @@ public class HousingTests : BaseTest
         var suiteList = _driver.FindElements(By.XPath($"//td[contains(text(), '8101')]"));
         Assert.Empty(suiteList); // Ensure no elements found with '8101'
     }
-    
+
     [Fact]
     public void AssetDamageTest()
     {
@@ -261,7 +261,7 @@ public class HousingTests : BaseTest
         var assetDamage = _driver.FindElement(By.XPath("//td[contains(text(), 'Test Damage')]"));
         Assert.NotNull(assetDamage);
     }
-    
+
     [Fact]
     public void LockersPagesAvailableToAdmin()
     {
@@ -370,7 +370,7 @@ public class HousingTests : BaseTest
         _loginPage.GoToLoginPage();
         _loginPage.Login("admin@housing.com", "Admin123!");
         Assert.True(_loginPage.IsLoggedIn("admin"));
-        
+
         // Go to create new invoice
         _driver.FindElement(By.LinkText("Housing")).Click();
         _driver.FindElement(By.LinkText("Invoices")).Click();
@@ -385,13 +385,13 @@ public class HousingTests : BaseTest
         IWebElement selectAssetElement = _driver.FindElement(By.Id("AssetId"));
         SelectElement selectAsset = new SelectElement(selectAssetElement);
         selectAsset.SelectByIndex(1);
-        
+
         _driver.FindElement(By.Id("StartDate")).SendKeys("03012025");
         _driver.FindElement(By.Id("EndDate")).SendKeys("06012025");
-        
+
         var submitButton = _driver.FindElement(By.Id("create-asset-invoice"));
         submitButton.Click();
-        
+
         var assetInvoice = _driver.FindElement(By.XPath("//td[contains(text(), 'John Doe')]"));
         Assert.NotNull(assetInvoice);
     }

@@ -15,7 +15,7 @@ namespace test
         //protected readonly string _baseUrl = "http://localhost:5155";
         protected readonly string _baseUrl = "https://a2-test-bchxhed0hzgqepaw.canadacentral-01.azurewebsites.net/";
         protected readonly HttpClient _httpClient;
-        
+
         protected BaseTest()
         {
             _driver = new ChromeDriver();
