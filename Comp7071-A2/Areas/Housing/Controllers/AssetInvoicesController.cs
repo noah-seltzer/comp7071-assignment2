@@ -75,7 +75,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
         {
             var renter = _context.Renters
                 .Where(r => _context.Assets.Any(a => a.ID == assetId && a.RenterID == r.ID))
-                .Select(r => new { r.ID, r.Name})
+                .Select(r => new { r.ID, r.Name })
                 .FirstOrDefault();
             return Json(renter);
         }
@@ -99,10 +99,10 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                 {
                     return NotFound();
                 }
-                
+
                 // Calculate number of months of rent
                 int months = (int)Math.Ceiling((assetInvoice.EndDate - assetInvoice.StartDate).TotalDays / 30);
-                
+
                 foreach (var asset in renter.Assets)
                 {
                     var line = new AssetInvoiceLine
@@ -114,10 +114,10 @@ namespace Comp7071_A2.Areas.Housing.Controllers
                         UnitPrice = asset.RentAmount,
                         Amount = months * asset.RentAmount
                     };
-                    
+
                     assetInvoice.Lines.Add(line);
                 }
-                
+
                 _context.Add(assetInvoice);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

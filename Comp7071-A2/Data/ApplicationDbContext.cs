@@ -120,7 +120,7 @@ public class ApplicationDbContext : IdentityDbContext
             .WithOne(a => a.Renter)
             .HasForeignKey(a => a.RenterID)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         modelBuilder.Entity<Asset>()
             .HasMany(a => a.AssetDamages)
             .WithOne(ad => ad.Asset)
@@ -140,13 +140,13 @@ public class ApplicationDbContext : IdentityDbContext
             .WithOne(ad => ad.Renter)
             .HasForeignKey(ad => ad.RenterID)
             .IsRequired();
-        
+
         modelBuilder.Entity<Renter>()
             .HasMany(r => r.AssetInvoices)
             .WithOne(a => a.Renter)
             .HasForeignKey(a => a.RenterId)
             .IsRequired();
-        
+
         modelBuilder.Entity<Asset>()
             .HasMany(a => a.AssetInvoices)
             .WithOne(ai => ai.Asset)
@@ -197,7 +197,7 @@ public class ApplicationDbContext : IdentityDbContext
             .UsingEntity(j => j.ToTable("ServiceCertification"));
     }
 
-public DbSet<Comp7071_A2.Areas.Housing.Models.AssetInvoice> AssetInvoice { get; set; } = default!;
+    public DbSet<Comp7071_A2.Areas.Housing.Models.AssetInvoice> AssetInvoice { get; set; } = default!;
 
 
 }
