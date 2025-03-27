@@ -7,7 +7,7 @@ namespace test.Tests;
 public class AuthTests : BaseTest
 {
     private readonly LoginPage _loginPage;
-    
+
     public AuthTests()
     {
         _loginPage = new LoginPage(_driver, _baseUrl);
