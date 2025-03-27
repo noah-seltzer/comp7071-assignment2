@@ -1,4 +1,4 @@
-﻿using Comp7071_A2.Areas.Housing.Models;
+using Comp7071_A2.Areas.Housing.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -115,6 +115,12 @@ public class ApplicationDbContext : IdentityDbContext
             .HasForeignKey(c => c.RenterID)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Renter>()
+            .HasMany(r => r.Assets)
+            .WithOne(a => a.Renter)
+            .HasForeignKey(a => a.RenterID)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         modelBuilder.Entity<Asset>()
             .HasMany(a => a.AssetDamages)
             .WithOne(ad => ad.Asset)
@@ -133,6 +139,18 @@ public class ApplicationDbContext : IdentityDbContext
             .HasMany(r => r.AssetDamages)
             .WithOne(ad => ad.Renter)
             .HasForeignKey(ad => ad.RenterID)
+            .IsRequired();
+        
+        modelBuilder.Entity<Renter>()
+            .HasMany(r => r.AssetInvoices)
+            .WithOne(a => a.Renter)
+            .HasForeignKey(a => a.RenterId)
+            .IsRequired();
+        
+        modelBuilder.Entity<Asset>()
+            .HasMany(a => a.AssetInvoices)
+            .WithOne(ai => ai.Asset)
+            .HasForeignKey(ai => ai.AssetId)
             .IsRequired();
 
         //********************************************************************
@@ -178,6 +196,8 @@ public class ApplicationDbContext : IdentityDbContext
             .WithMany(s => s.Certifications)
             .UsingEntity(j => j.ToTable("ServiceCertification"));
     }
+
+public DbSet<Comp7071_A2.Areas.Housing.Models.AssetInvoice> AssetInvoice { get; set; } = default!;
 
 
 }

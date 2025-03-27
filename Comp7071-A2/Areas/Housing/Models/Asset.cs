@@ -31,7 +31,8 @@ namespace Comp7071_A2.Areas.Housing.Models
         public virtual Renter? Renter { get; set; }
         public virtual Building? Building { get; set; }
         public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
-        public virtual ICollection<AssetDamage>? AssetDamages { get; set; }
+        public virtual ICollection<AssetDamage> AssetDamages { get; set; } = new List<AssetDamage>();
+        public virtual ICollection<AssetInvoice> AssetInvoices { get; set; } = new List<AssetInvoice>();
 
         [NotMapped]
         public string AssetType2
