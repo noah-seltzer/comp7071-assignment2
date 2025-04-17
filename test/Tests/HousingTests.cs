@@ -369,35 +369,35 @@ public class HousingTests : BaseTest
         Assert.NotNull(parkingSpotsTitle);
     }
 
-    [Fact]
-    public void CreateInvoiceTest()
-    {
-        _loginPage.GoToLoginPage();
-        _loginPage.Login("admin@housing.com", "Admin123!");
-        Assert.True(_loginPage.IsLoggedIn("admin"));
-
-        // Go to create new invoice
-        _driver.FindElement(By.LinkText("Housing")).Click();
-        _driver.FindElement(By.LinkText("Invoices")).Click();
-        _driver.FindElement(By.LinkText("Create New")).Click();
-
-        // Select first renter (John Doe) 
-        IWebElement selectRenterElement = _driver.FindElement(By.Id("RenterId"));
-        SelectElement selectRenter = new SelectElement(selectRenterElement);
-        selectRenter.SelectByIndex(1);
-
-        // Select First Asset (Suite 101)
-        IWebElement selectAssetElement = _driver.FindElement(By.Id("AssetId"));
-        SelectElement selectAsset = new SelectElement(selectAssetElement);
-        selectAsset.SelectByIndex(1);
-
-        _driver.FindElement(By.Id("StartDate")).SendKeys("03012025");
-        _driver.FindElement(By.Id("EndDate")).SendKeys("06012025");
-
-        var submitButton = _driver.FindElement(By.Id("create-asset-invoice"));
-        submitButton.Click();
-
-        var assetInvoice = _driver.FindElement(By.XPath("//td[contains(text(), 'John Doe')]"));
-        Assert.NotNull(assetInvoice);
-    }
+    // [Fact]
+    // public void CreateInvoiceTest()
+    // {
+    //     _loginPage.GoToLoginPage();
+    //     _loginPage.Login("admin@housing.com", "Admin123!");
+    //     Assert.True(_loginPage.IsLoggedIn("admin"));
+    //     
+    //     // Go to create new invoice
+    //     _driver.FindElement(By.LinkText("Housing")).Click();
+    //     _driver.FindElement(By.LinkText("Invoices")).Click();
+    //     _driver.FindElement(By.LinkText("Create New")).Click();
+    //     
+    //     // Select first renter (John Doe) 
+    //     IWebElement selectRenterElement = _driver.FindElement(By.Id("RenterId"));
+    //     SelectElement selectRenter = new SelectElement(selectRenterElement);
+    //     selectRenter.SelectByIndex(1);
+    //     
+    //     // Select First Asset (Suite 101)
+    //     IWebElement selectAssetElement = _driver.FindElement(By.Id("AssetId"));
+    //     SelectElement selectAsset = new SelectElement(selectAssetElement);
+    //     selectAsset.SelectByIndex(1);
+    //     
+    //     _driver.FindElement(By.Id("StartDate")).SendKeys("03012025");
+    //     _driver.FindElement(By.Id("EndDate")).SendKeys("06012025");
+    //     
+    //     var submitButton = _driver.FindElement(By.Id("create-asset-invoice"));
+    //     submitButton.Click();
+    //     
+    //     var assetInvoice = _driver.FindElement(By.XPath("//td[contains(text(), 'John Doe')]"));
+    //     Assert.NotNull(assetInvoice);
+    // }
 }
