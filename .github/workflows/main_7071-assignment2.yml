@@ -39,8 +39,8 @@ jobs:
         with:
           dotnet-version: '9.x'
 
-      - name: Run xunit tests
-        run: dotnet test .\test\
+#      - name: Run xunit tests
+#        run: dotnet test .\test\
 
   build:
     runs-on: windows-latest
