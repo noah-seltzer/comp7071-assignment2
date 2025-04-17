@@ -53,6 +53,8 @@ public class HousingTests : BaseTest
 
         var registerButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
         registerButton.Click();
+        Thread.Sleep(300);
+
 
         // Fill in required fields
         var nameInput = _driver.FindElement(By.Id("Employee_Name"));
@@ -90,6 +92,8 @@ public class HousingTests : BaseTest
 
         var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
         loginButton.Click();
+        Thread.Sleep(300);
+
 
         var userMenu = _driver.FindElement(By.XPath("//a[contains(text(), 'Hello admin')]"));
         Assert.NotNull(userMenu);
@@ -276,6 +280,7 @@ public class HousingTests : BaseTest
 
         var loginButton = _driver.FindElement(By.CssSelector("button[type='submit']"));
         loginButton.Click();
+        Thread.Sleep(300);
 
         _driver.Navigate().GoToUrl($"{_baseUrl}/Housing/Lockers");
         Thread.Sleep(300);
