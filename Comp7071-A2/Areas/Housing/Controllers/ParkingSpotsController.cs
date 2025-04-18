@@ -56,6 +56,7 @@ namespace Comp7071_A2.Areas.Housing.Controllers
             return View(parkingSpot);
         }
 
+        
         // GET: Housing/ParkingSpots/Create
         public IActionResult Create()
         {
